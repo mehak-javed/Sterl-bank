@@ -16,6 +16,7 @@ const files = {
   "accounts.json": bank.accounts,
   "transactions.json": bank.transactions,
   "payees.json": bank.payees,
+  "cards.json": bank.cards,
 };
 for (const [name, data] of Object.entries(files)) {
   writeFileSync(join(outDir, name), JSON.stringify(data, null, 2) + "\n");

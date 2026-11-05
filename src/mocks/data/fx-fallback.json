@@ -1,0 +1,122 @@
+[
+  {
+    "pair": "GBP/USD",
+    "quote": "USD",
+    "rate": 1.3469,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/EUR",
+    "quote": "EUR",
+    "rate": 1.1984,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/JPY",
+    "quote": "JPY",
+    "rate": 213.23,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/CHF",
+    "quote": "CHF",
+    "rate": 1.1008,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/AUD",
+    "quote": "AUD",
+    "rate": 1.9239,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/CAD",
+    "quote": "CAD",
+    "rate": 1.8786,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/NZD",
+    "quote": "NZD",
+    "rate": 2.3914,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/SEK",
+    "quote": "SEK",
+    "rate": 13.1339,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/NOK",
+    "quote": "NOK",
+    "rate": 12.465,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/DKK",
+    "quote": "DKK",
+    "rate": 8.9568,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/HKD",
+    "quote": "HKD",
+    "rate": 10.5751,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/SGD",
+    "quote": "SGD",
+    "rate": 1.7213,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/CNY",
+    "quote": "CNY",
+    "rate": 8.9791,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/INR",
+    "quote": "INR",
+    "rate": 127.38,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/ZAR",
+    "quote": "ZAR",
+    "rate": 22.153,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/PLN",
+    "quote": "PLN",
+    "rate": 5.2706,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/MXN",
+    "quote": "MXN",
+    "rate": 25.115,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/TRY",
+    "quote": "TRY",
+    "rate": 67.372,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/CZK",
+    "quote": "CZK",
+    "rate": 29.127,
+    "date": "2026-11-05"
+  },
+  {
+    "pair": "GBP/HUF",
+    "quote": "HUF",
+    "rate": 435.36,
+    "date": "2026-11-05"
+  }
+]

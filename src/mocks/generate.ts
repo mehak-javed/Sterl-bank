@@ -4,6 +4,7 @@ import type {
   Account,
   AccountType,
   BankData,
+  Card,
   Category,
   Customer,
   Payee,
@@ -141,7 +142,22 @@ export function generateBank(): BankData {
   transactions.sort((a, b) => byDateThenId(b, a)); // newest first for the screens
   checkBooksBalance(allAccounts, transactions);
 
-  return { customer, accounts: allAccounts, transactions, payees };
+  // 5. The debit card. Made last so adding it didn't change any of the data above:
+  //    every faker call shifts the random sequence for everything after it.
+  const cards: Card[] = [
+    {
+      id: faker.string.uuid(),
+      accountId: current,
+      brand: "Visa",
+      nameOnCard: `${customer.firstName} ${customer.lastName}`.toUpperCase(),
+      last4: "4242",
+      expiryMonth: 9,
+      expiryYear: REF_DATE.getUTCFullYear() + 3,
+      frozen: false,
+    },
+  ];
+
+  return { customer, accounts: allAccounts, transactions, payees, cards };
 }
 
 /**

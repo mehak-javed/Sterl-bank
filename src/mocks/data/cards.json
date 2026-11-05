@@ -1,0 +1,12 @@
+[
+  {
+    "id": "b0422f68-b03d-4d55-8c41-4607b817b005",
+    "accountId": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "brand": "Visa",
+    "nameOnCard": "NIKITA CRIST",
+    "last4": "4242",
+    "expiryMonth": 9,
+    "expiryYear": 2029,
+    "frozen": false
+  }
+]

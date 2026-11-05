@@ -73,9 +73,25 @@ export type Payee = {
   accountNumber: string;
 };
 
+/**
+ * A debit card. Only the last four digits are stored: 4242 comes from the published
+ * test card number 4242 4242 4242 4242, never a real card.
+ */
+export type Card = {
+  id: string;
+  accountId: string;
+  brand: "Visa";
+  nameOnCard: string;
+  last4: string;
+  expiryMonth: number; // 1-12
+  expiryYear: number;
+  frozen: boolean;
+};
+
 export type BankData = {
   customer: Customer;
   accounts: Account[];
   transactions: Transaction[]; // newest first
   payees: Payee[];
+  cards: Card[];
 };

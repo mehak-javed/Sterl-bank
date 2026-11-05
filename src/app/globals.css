@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
+/*
+ * Sterl brand palette
+ *   Indigo  #312C51   Plum  #48426D   Peach  #F0C38E   Coral  #F1AA9B
+ *
+ * Components never use these hex codes directly. They use ROLE tokens (background,
+ * surface, primary...), and each theme maps roles to colours. To re-brand Sterl you
+ * edit this file only.
+ *
+ * Every text/background pair was checked against WCAG AA (4.5:1 for normal text).
+ * Coral fails on white (1.92:1), so in light mode it's decoration only, never text.
+ *
+ * UiStoreProvider sets these attributes on <html>:
+ *   data-theme="light" | "dark"   (absent = follow the device setting)
+ *   data-contrast="high" | "normal"
+ *   data-text-size="large" | "normal"
+ */
+
+/* Light theme: warm off-white page, white cards, indigo text, indigo buttons with peach text. */
 :root {
+  --background: #f4f1ec;
+  --surface: #ffffff;
+  --foreground: #312c51;
+  --line: #dcd7e5;
+  --primary: #312c51;
+  --primary-foreground: #f0c38e;
+  --banner: #f0c38e;
+  --banner-foreground: #312c51;
+  --accent: #f1aa9b; /* decoration only in light mode */
+  --focus: #312c51;
+  --positive: #047857;
+  color-scheme: light;
+}
+
+/* Dark theme: the brand look. Indigo page, plum cards, peach buttons, coral highlights. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #312c51;
+    --surface: #48426d;
+    --foreground: #f5f2fa;
+    --line: #5e5884;
+    --primary: #f0c38e;
+    --primary-foreground: #312c51;
+    --banner: #f0c38e;
+    --banner-foreground: #312c51;
+    --accent: #f1aa9b;
+    --focus: #f1aa9b;
+    --positive: #6ee7b7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --background: #312c51;
+  --surface: #48426d;
+  --foreground: #f5f2fa;
+  --line: #5e5884;
+  --primary: #f0c38e;
+  --primary-foreground: #312c51;
+  --banner: #f0c38e;
+  --banner-foreground: #312c51;
+  --accent: #f1aa9b;
+  --focus: #f1aa9b;
+  --positive: #6ee7b7;
+  color-scheme: dark;
+}
+
+/* High contrast: accessibility beats branding. Pure black and white, strong borders. */
+:root[data-contrast="high"] {
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #ffffff;
+  --foreground: #000000;
+  --line: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --banner: #000000;
+  --banner-foreground: #ffffff;
+  --accent: #000000;
+  --focus: #000000;
+  --positive: #000000;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-contrast="high"]:not([data-theme="light"]) {
+    --background: #000000;
+    --surface: #000000;
+    --foreground: #ffffff;
+    --line: #ffffff;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --banner: #ffffff;
+    --banner-foreground: #000000;
+    --accent: #ffffff;
+    --focus: #ffffff;
+    --positive: #ffffff;
+  }
+}
+:root[data-contrast="high"][data-theme="dark"] {
+  --background: #000000;
+  --surface: #000000;
+  --foreground: #ffffff;
+  --line: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --banner: #ffffff;
+  --banner-foreground: #000000;
+  --accent: #ffffff;
+  --focus: #ffffff;
+  --positive: #ffffff;
+}
+
+/*
+ * Larger text: raise the root font size. Tailwind sizes text and spacing in rem
+ * (relative to this), so the whole layout scales together.
+ */
+:root[data-text-size="large"] {
+  font-size: 125%;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-banner: var(--banner);
+  --color-banner-foreground: var(--banner-foreground);
+  --color-accent: var(--accent);
+  --color-positive: var(--positive);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* A clearly visible keyboard focus ring everywhere (only for keyboard, not mouse clicks). */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
