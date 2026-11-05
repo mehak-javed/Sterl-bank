@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sterl",
+  // Pages set just their own name ("Cards"); the template turns it into "Cards · Sterl".
+  title: { default: "Sterl", template: "%s · Sterl" },
   description: "Sterl is a portfolio demo bank. Not a real bank. All data is fake.",
 };
 

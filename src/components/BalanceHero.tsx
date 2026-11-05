@@ -1,48 +1,34 @@
-"use client";
-
 import Link from "next/link";
-import { useAccounts } from "@/lib/api/queries";
 import { formatGBP, sumPence } from "@/lib/money";
+import { getAccounts } from "@/server/queries";
 
 /**
  * The one gold block on the dashboard: the customer's total balance.
- * Gold is reserved for the single most important thing on a page; if everything
- * is gold, nothing stands out.
+ *
+ * A SERVER Component (no "use client"): it can be async and await data directly.
+ * The browser receives finished HTML and none of this component's JavaScript.
+ * It has nothing to click except a Link, so it never needs to run in the browser.
  */
-export function BalanceHero() {
-  const { data: accounts, isPending, isError, refetch } = useAccounts(); // same cache as AccountsOverview: no extra request
-
-  const roundUps = accounts?.find((a) => a.type === "roundup");
+export async function BalanceHero() {
+  const accounts = await getAccounts();
+  const roundUps = accounts.find((a) => a.type === "roundup");
 
   return (
     <section
       aria-labelledby="balance-heading"
-      aria-busy={isPending}
       className="hero-gold flex flex-col gap-4 rounded-3xl p-6 shadow-lg sm:flex-row sm:items-end sm:justify-between"
     >
       <div>
         <h2 id="balance-heading" className="text-sm font-semibold tracking-wide uppercase">
           Total balance
         </h2>
-
-        {isPending ? (
-          <p className="mt-2 h-12 w-48 rounded-lg bg-hero-foreground/15 motion-safe:animate-pulse" aria-hidden="true" />
-        ) : isError ? (
-          <p role="alert" className="mt-2 flex items-center gap-3 font-medium">
-            We couldn&apos;t load your balance.
-            <button type="button" onClick={() => refetch()} className="underline underline-offset-4">
-              Try again
-            </button>
-          </p>
-        ) : (
-          <>
-            <p className="mt-1 text-4xl font-bold tracking-tight tabular-nums sm:text-5xl">{formatGBP(sumPence(accounts.map((a) => a.balancePence)))}</p>
-            <p className="mt-2 text-sm text-hero-foreground/75">
-              Across {accounts.length} accounts
-              {roundUps && <> · {formatGBP(roundUps.balancePence)} saved from round-ups</>}
-            </p>
-          </>
-        )}
+        <p className="mt-1 text-4xl font-bold tracking-tight tabular-nums sm:text-5xl">
+          {formatGBP(sumPence(accounts.map((a) => a.balancePence)))}
+        </p>
+        <p className="mt-2 text-sm text-hero-foreground/75">
+          Across {accounts.length} accounts
+          {roundUps && <> · {formatGBP(roundUps.balancePence)} saved from round-ups</>}
+        </p>
       </div>
 
       <Link
@@ -51,6 +37,17 @@ export function BalanceHero() {
       >
         Open FX desk →
       </Link>
+    </section>
+  );
+}
+
+/** Shown by <Suspense> while BalanceHero waits for data. Same size, so nothing jumps when it arrives. */
+export function BalanceHeroSkeleton() {
+  return (
+    <section aria-busy="true" aria-label="Total balance" className="hero-gold rounded-3xl p-6 shadow-lg">
+      <p className="text-sm font-semibold tracking-wide uppercase">Total balance</p>
+      <p className="mt-2 h-12 w-48 rounded-lg bg-hero-foreground/15 motion-safe:animate-pulse" aria-hidden="true" />
+      <p className="mt-2 h-5 w-64 rounded bg-hero-foreground/10" aria-hidden="true" />
     </section>
   );
 }

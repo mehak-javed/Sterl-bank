@@ -1,48 +1,54 @@
-"use client";
-
+import Link from "next/link";
 import { formatGBP } from "@/lib/money";
-import { useAccounts, useActiveAccountId } from "@/lib/api/queries";
-import { useUiStore } from "@/stores/UiStoreProvider";
-import { QueryError, SkeletonRows } from "./QueryStates";
+import { getAccounts } from "@/server/queries";
+import { AccountSelectButton } from "./AccountSelectButton";
+import { SkeletonRows } from "./QueryStates";
 
-export function AccountsOverview() {
-  const { data: accounts, isPending, isError, error, refetch } = useAccounts(); // server state
-  const activeId = useActiveAccountId();
-  const selectAccount = useUiStore((s) => s.selectAccount); // UI state
+/**
+ * Server Component: the list and every balance are rendered on the server.
+ * Only <AccountSelectButton> (the click to choose an account) runs in the browser.
+ */
+export async function AccountsOverview() {
+  const accounts = await getAccounts(); // same request as BalanceHero: React cache() shares it
 
   return (
-    <section aria-labelledby="accounts-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
+    <section aria-labelledby="accounts-heading" className="glass rounded-2xl p-4">
       <h2 id="accounts-heading" className="mb-3 text-lg font-semibold text-heading">
         Your accounts
       </h2>
-
-      {isPending ? (
-        <SkeletonRows rows={3} />
-      ) : isError ? (
-        <QueryError message={`We couldn't load your accounts. ${error.message}`} onRetry={() => refetch()} />
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {accounts.map((account) => (
-            <li key={account.id}>
-              {/* A real <button>: keyboard and screen-reader friendly for free. */}
-              <button
-                type="button"
-                onClick={() => selectAccount(account.id)}
-                aria-pressed={account.id === activeId}
-                className="flex w-full items-center justify-between rounded-lg border border-line p-3 text-left aria-pressed:border-2 aria-pressed:border-primary"
-              >
-                <span>
-                  <span className="block font-medium">{account.name}</span>
-                  <span className="block text-sm text-muted">
-                    {account.sortCode} · {account.accountNumber}
-                  </span>
+      <ul className="flex flex-col gap-2">
+        {accounts.map((account) => (
+          <li key={account.id} className="flex gap-2">
+            <AccountSelectButton accountId={account.id}>
+              {/* Server-rendered content passed into a Client Component as children. */}
+              <span>
+                <span className="block font-medium">{account.name}</span>
+                <span className="block text-sm text-muted">
+                  {account.sortCode} · {account.accountNumber}
                 </span>
-                <span className="font-semibold tabular-nums">{formatGBP(account.balancePence)}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+              </span>
+              <span className="font-semibold tabular-nums">{formatGBP(account.balancePence)}</span>
+            </AccountSelectButton>
+            {/* Next to the button, not inside it: HTML doesn't allow a link inside a button. */}
+            <Link
+              href={`/accounts/${account.id}`}
+              aria-label={`${account.name} details`}
+              className="grid place-items-center rounded-lg border border-line px-3 text-sm"
+            >
+              Details
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function AccountsOverviewSkeleton() {
+  return (
+    <section aria-busy="true" aria-label="Your accounts" className="glass rounded-2xl p-4">
+      <p className="mb-3 text-lg font-semibold text-heading">Your accounts</p>
+      <SkeletonRows rows={3} />
     </section>
   );
 }

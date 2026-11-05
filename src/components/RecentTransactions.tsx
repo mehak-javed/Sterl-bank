@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { formatGBP } from "@/lib/money";
 import { useActiveAccountId, useTransactions } from "@/lib/api/queries";
 import { QueryError, SkeletonRows } from "./QueryStates";
@@ -17,9 +18,14 @@ export function RecentTransactions() {
 
   return (
     <section aria-labelledby="transactions-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
-      <h2 id="transactions-heading" className="mb-3 text-lg font-semibold text-heading">
-        Recent transactions
-      </h2>
+      <div className="mb-3 flex items-baseline justify-between">
+        <h2 id="transactions-heading" className="text-lg font-semibold text-heading">
+          Recent transactions
+        </h2>
+        <Link href="/transactions" className="text-sm underline underline-offset-4">
+          See all
+        </Link>
+      </div>
 
       {isPending ? (
         <SkeletonRows rows={5} />
