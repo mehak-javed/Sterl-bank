@@ -31,5 +31,8 @@ Next.js (App Router) + React + TypeScript, Tailwind, Zustand, Redux Toolkit, Tan
 ## Where we are
 - Done: plan written and updated (Nov 4, 2026). Decided: website first; money foundation first.
 - Done (Nov 4, 2026): Next.js 16 app scaffolded (TS, Tailwind, ESLint, App Router, `src/`), demo banner in root layout, `git init` on `main`.
-- Next: first commit + push to my GitHub repo, then Week 1 Day 1–3: `src/lib/money.ts` (roundUp, formatGBP, toPence) with Vitest tests, then the seeded Faker generator.
+- Done (Nov 4, 2026): pushed to github.com/mehak-javed/Sterl-bank. Vitest set up; `src/lib/money.ts` has `formatGBP` (worked example, tested); `roundUp`/`toPence` are stubs for me with `it.todo` tests.
+- Done (Nov 5, 2026): I implemented roundUp + toPence (27 tests pass). Seeded generator `src/mocks/generate.ts` (seed 42, fixed REF_DATE 2026-11-01, double-entry transfers, balance self-check) → `npm run seed` writes `src/mocks/data/*.json`. Types in `src/types/bank.ts`.
+- Mehak is short on time: teach the technical points in code, don't assign extra tests.
+- Next: Week 1 Day 4, the Zustand store. Previous plan line, kept for reference: Week 1 Day 1–3: `src/lib/money.ts` (roundUp, formatGBP, toPence) with Vitest tests, then the seeded Faker generator.
 - Lesson 1 homework (in progress): tests for roundUp (347→53, 500→0, 3.5 throws); write `toPence("12.34")` without parseFloat*100.

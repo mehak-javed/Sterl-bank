@@ -1,0 +1,35 @@
+[
+  {
+    "id": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "customerId": "0d9b0fd3-2248-4649-9245-7c3890921ffc",
+    "type": "current",
+    "name": "Everyday Account",
+    "sortCode": "52-16-25",
+    "accountNumber": "14503109",
+    "currency": "GBP",
+    "openingBalancePence": 150000,
+    "balancePence": 125000
+  },
+  {
+    "id": "5c4ac976-5edf-41bf-921b-9d2c322da85e",
+    "customerId": "0d9b0fd3-2248-4649-9245-7c3890921ffc",
+    "type": "saver",
+    "name": "Rainy Day Saver",
+    "sortCode": "84-34-37",
+    "accountNumber": "52835961",
+    "currency": "GBP",
+    "openingBalancePence": 420000,
+    "balancePence": 480000
+  },
+  {
+    "id": "fa52c98e-c243-4b09-ace5-d1d26c23bbab",
+    "customerId": "0d9b0fd3-2248-4649-9245-7c3890921ffc",
+    "type": "roundup",
+    "name": "Round-up Pot",
+    "sortCode": "23-19-54",
+    "accountNumber": "49155608",
+    "currency": "GBP",
+    "openingBalancePence": 1250,
+    "balancePence": 26165
+  }
+]
