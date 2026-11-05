@@ -12,8 +12,8 @@ export function Watchlist({ rates }: { rates: Map<QuoteCurrency, ReferenceRate> 
   const [toAdd, setToAdd] = useState<QuoteCurrency | "">("");
 
   return (
-    <section aria-labelledby="watchlist-heading" className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="watchlist-heading" className="mb-3 text-lg font-semibold">
+    <section aria-labelledby="watchlist-heading" className="glass rounded-2xl p-4">
+      <h2 id="watchlist-heading" className="mb-3 text-lg font-semibold text-heading">
         Watchlist
       </h2>
 
@@ -34,13 +34,13 @@ export function Watchlist({ rates }: { rates: Map<QuoteCurrency, ReferenceRate> 
               <tr key={q} className="border-b border-line last:border-0">
                 <th scope="row" className="py-2 font-medium">GBP/{q}</th>
                 <td className="py-2 text-right font-mono tabular-nums">{r ? formatRate(r.rate) : "—"}</td>
-                <td className="py-2 text-right opacity-70">{r?.date ?? "—"}</td>
+                <td className="py-2 text-right text-muted">{r?.date ?? "—"}</td>
                 <td className="py-2 text-right">
                   <button
                     type="button"
                     onClick={() => dispatch(removeFromWatchlist(q))}
                     aria-label={`Remove GBP/${q} from watchlist`}
-                    className="rounded px-2 opacity-70 hover:opacity-100"
+                    className="rounded px-2 text-muted hover:text-foreground"
                   >
                     ✕
                   </button>

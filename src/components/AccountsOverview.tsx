@@ -11,8 +11,8 @@ export function AccountsOverview() {
   const selectAccount = useUiStore((s) => s.selectAccount); // UI state
 
   return (
-    <section aria-labelledby="accounts-heading" aria-busy={isPending} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="accounts-heading" className="mb-3 text-lg font-semibold">
+    <section aria-labelledby="accounts-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
+      <h2 id="accounts-heading" className="mb-3 text-lg font-semibold text-heading">
         Your accounts
       </h2>
 
@@ -33,7 +33,7 @@ export function AccountsOverview() {
               >
                 <span>
                   <span className="block font-medium">{account.name}</span>
-                  <span className="block text-sm opacity-70">
+                  <span className="block text-sm text-muted">
                     {account.sortCode} · {account.accountNumber}
                   </span>
                 </span>

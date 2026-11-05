@@ -16,8 +16,8 @@ export function RecentTransactions() {
   const { data: transactions, isPending, isError, error, refetch } = useTransactions(accountId, 10);
 
   return (
-    <section aria-labelledby="transactions-heading" aria-busy={isPending} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="transactions-heading" className="mb-3 text-lg font-semibold">
+    <section aria-labelledby="transactions-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
+      <h2 id="transactions-heading" className="mb-3 text-lg font-semibold text-heading">
         Recent transactions
       </h2>
 
@@ -26,7 +26,7 @@ export function RecentTransactions() {
       ) : isError ? (
         <QueryError message={`We couldn't load your transactions. ${error.message}`} onRetry={() => refetch()} />
       ) : transactions.length === 0 ? (
-        <p className="text-sm opacity-70">No transactions yet.</p>
+        <p className="text-sm text-muted">No transactions yet.</p>
       ) : (
         <ul className="divide-y divide-line">
           {transactions.map((t) => {
@@ -35,7 +35,7 @@ export function RecentTransactions() {
               <li key={t.id} className="flex items-center justify-between gap-4 py-2">
                 <span>
                   <span className="block font-medium">{t.description}</span>
-                  <span className="block text-sm opacity-70">
+                  <span className="block text-sm text-muted">
                     <time dateTime={t.date}>{dateFormat.format(new Date(t.date))}</time> · {t.category}
                   </span>
                 </span>

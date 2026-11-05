@@ -61,9 +61,9 @@ export function OrderTicket({ rates }: { rates: Map<QuoteCurrency, ReferenceRate
   }
 
   return (
-    <section aria-labelledby="ticket-heading" className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="ticket-heading" className="text-lg font-semibold">Order ticket</h2>
-      <p className="mb-3 text-sm opacity-70">Mock orders only: nothing is traded and no money moves.</p>
+    <section aria-labelledby="ticket-heading" className="glass rounded-2xl p-4">
+      <h2 id="ticket-heading" className="text-lg font-semibold text-heading">Order ticket</h2>
+      <p className="mb-3 text-sm text-muted">Mock orders only: nothing is traded and no money moves.</p>
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
@@ -107,7 +107,7 @@ export function OrderTicket({ rates }: { rates: Map<QuoteCurrency, ReferenceRate
             aria-describedby={error ? "ticket-error" : "ticket-preview"}
             className="rounded-md border border-line bg-background px-2 py-1 font-mono"
           />
-          <p id="ticket-preview" className="text-sm opacity-70">
+          <p id="ticket-preview" className="text-sm text-muted">
             {preview && rate ? `≈ ${preview} at ${formatRate(rate)}` : " "}
           </p>
         </div>
@@ -116,7 +116,7 @@ export function OrderTicket({ rates }: { rates: Map<QuoteCurrency, ReferenceRate
           <p id="ticket-error" role="alert" className="text-sm font-medium">{error}</p>
         )}
 
-        <button type="submit" className="rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground">
+        <button type="submit" className="rounded-xl btn-primary px-4 py-2 font-semibold">
           Place mock order
         </button>
 

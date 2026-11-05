@@ -19,7 +19,7 @@ export function FxDesk() {
 
   if (isPending) {
     return (
-      <div aria-busy="true" className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+      <div aria-busy="true" className="glass rounded-2xl p-4">
         <SkeletonRows rows={6} />
       </div>
     );
@@ -30,7 +30,7 @@ export function FxDesk() {
 
   return (
     <div className="flex flex-col gap-6">
-      <p role="status" className="rounded-lg border border-line p-3 text-sm">
+      <p role="status" className="glass rounded-xl p-3 text-sm">
         {data.source === "live"
           ? "Daily central-bank reference rates via Frankfurter. Not live prices and not for trading."
           : `Live reference rates are unavailable, so these are saved rates from ${data.rates[0]?.date}. Not for trading.`}

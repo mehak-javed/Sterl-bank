@@ -9,8 +9,8 @@ export function CardPanel() {
   const card = cards?.[0];
 
   return (
-    <section aria-labelledby="card-heading" aria-busy={isPending} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="card-heading" className="mb-3 text-lg font-semibold">
+    <section aria-labelledby="card-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
+      <h2 id="card-heading" className="mb-3 text-lg font-semibold text-heading">
         Your card
       </h2>
 
@@ -19,7 +19,7 @@ export function CardPanel() {
       ) : isError ? (
         <QueryError message={`We couldn't load your card. ${error.message}`} onRetry={() => refetch()} />
       ) : !card ? (
-        <p className="text-sm opacity-70">You don&apos;t have a card yet.</p>
+        <p className="text-sm text-muted">You don&apos;t have a card yet.</p>
       ) : (
         <div className="flex flex-col gap-3">
           <div className={`rounded-xl border-l-4 border-accent bg-background p-4 ${card.frozen ? "opacity-60" : ""}`}>
@@ -42,7 +42,7 @@ export function CardPanel() {
             onClick={() => setFrozen.mutate({ cardId: card.id, frozen: !card.frozen })}
             // Disabled while saving: one click = one request, no double-submits.
             disabled={setFrozen.isPending}
-            className="rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-50"
+            className="rounded-xl btn-primary px-4 py-2 font-semibold disabled:opacity-50"
           >
             {card.frozen ? "Unfreeze card" : "Freeze card"}
           </button>

@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 /*
- * Sterl brand palette
- *   Indigo  #312C51   Plum  #48426D   Peach  #F0C38E   Coral  #F1AA9B
+ * Sterl brand palette: black and gold
+ *   Black  #0B0B0C   Charcoal  #1C1C1E   Gold  #D4AF37   Light gold  #F7DD8B   Deep gold  #8A6A1F
  *
  * Components never use these hex codes directly. They use ROLE tokens (background,
- * surface, primary...), and each theme maps roles to colours. To re-brand Sterl you
- * edit this file only.
+ * surface, heading, primary...), and each theme maps roles to colours. To re-brand Sterl
+ * you edit this block only. (The previous indigo/peach palette was swapped out here.)
  *
- * Every text/background pair was checked against WCAG AA (4.5:1 for normal text).
- * Coral fails on white (1.92:1), so in light mode it's decoration only, never text.
+ * Every text/background pair was checked against WCAG AA (4.5:1 for normal text),
+ * including the worst case of text on glass over a gold glow.
+ * Bright gold fails as text on white (2.10:1), so light mode uses deep gold for headings.
  *
  * UiStoreProvider sets these attributes on <html>:
  *   data-theme="light" | "dark"   (absent = follow the device setting)
@@ -17,67 +18,119 @@
  *   data-text-size="large" | "normal"
  */
 
-/* Light theme: warm off-white page, white cards, indigo text, indigo buttons with peach text. */
+/* Light theme: ivory page, white glass, charcoal text, charcoal buttons with gold text. */
 :root {
-  --background: #f4f1ec;
+  --background: #faf7f0;
   --surface: #ffffff;
-  --foreground: #312c51;
-  --line: #dcd7e5;
-  --primary: #312c51;
-  --primary-foreground: #f0c38e;
-  --banner: #f0c38e;
-  --banner-foreground: #312c51;
-  --accent: #f1aa9b; /* decoration only in light mode */
-  --focus: #312c51;
+  --foreground: #1a1a1a;
+  --line: #e6dcc3;
+  --heading: #8a6a1f;
+  --primary: #1a1a1a;
+  --primary-foreground: #e2c15a;
+  --primary-fill: linear-gradient(135deg, #2b2b2b 0%, #111111 100%);
+  --hero-fill: linear-gradient(135deg, #f7dd8b 0%, #e8c766 45%, #c9a13b 100%);
+  --hero-foreground: #1a1406;
+  --hero-button: #1a1406;
+  --hero-button-foreground: #f7dd8b;
+  --banner: #1a1a1a;
+  --banner-foreground: #e2c15a;
+  --accent: #d4af37;
+  --focus: #8a6a1f;
   --positive: #047857;
+  --glass: rgb(255 255 255 / 0.62);
+  --glass-border: rgb(255 255 255 / 0.8);
+  --glass-highlight: rgb(255 255 255 / 0.9);
+  --glass-shadow: rgb(26 26 26 / 0.08);
+  --glow-1: rgb(233 210 138 / 0.45);
+  --glow-2: rgb(243 227 179 / 0.45);
+  --glow-3: rgb(217 192 138 / 0.45);
   color-scheme: light;
 }
 
-/* Dark theme: the brand look. Indigo page, plum cards, peach buttons, coral highlights. */
+/* Dark theme (default): near-black page, charcoal glass, gold headings, gold gradient buttons. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --background: #312c51;
-    --surface: #48426d;
-    --foreground: #f5f2fa;
-    --line: #5e5884;
-    --primary: #f0c38e;
-    --primary-foreground: #312c51;
-    --banner: #f0c38e;
-    --banner-foreground: #312c51;
-    --accent: #f1aa9b;
-    --focus: #f1aa9b;
+    --background: #0b0b0c;
+    --surface: #1c1c1e;
+    --foreground: #f5f1e6;
+    --line: #3a3426;
+    --heading: #e2c15a;
+    --primary: #d4af37;
+    --primary-foreground: #1a1406;
+    --primary-fill: linear-gradient(135deg, #f7dd8b 0%, #d4af37 50%, #a67c1f 100%);
+    --hero-fill: linear-gradient(135deg, #f7dd8b 0%, #e8c766 45%, #c9a13b 100%);
+    --hero-foreground: #1a1406;
+    --hero-button: #1a1406;
+    --hero-button-foreground: #f7dd8b;
+    --banner: #d4af37;
+    --banner-foreground: #1a1406;
+    --accent: #d4af37;
+    --focus: #f7dd8b;
     --positive: #6ee7b7;
+    --glass: rgb(28 28 30 / 0.65);
+    --glass-border: rgb(212 175 55 / 0.22);
+    --glass-highlight: rgb(247 221 139 / 0.12);
+    --glass-shadow: rgb(0 0 0 / 0.5);
+    --glow-1: rgb(212 175 55 / 0.22);
+    --glow-2: rgb(138 106 31 / 0.22);
+    --glow-3: rgb(247 221 139 / 0.22);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --background: #312c51;
-  --surface: #48426d;
-  --foreground: #f5f2fa;
-  --line: #5e5884;
-  --primary: #f0c38e;
-  --primary-foreground: #312c51;
-  --banner: #f0c38e;
-  --banner-foreground: #312c51;
-  --accent: #f1aa9b;
-  --focus: #f1aa9b;
+  --background: #0b0b0c;
+  --surface: #1c1c1e;
+  --foreground: #f5f1e6;
+  --line: #3a3426;
+  --heading: #e2c15a;
+  --primary: #d4af37;
+  --primary-foreground: #1a1406;
+  --primary-fill: linear-gradient(135deg, #f7dd8b 0%, #d4af37 50%, #a67c1f 100%);
+  --hero-fill: linear-gradient(135deg, #f7dd8b 0%, #e8c766 45%, #c9a13b 100%);
+  --hero-foreground: #1a1406;
+  --hero-button: #1a1406;
+  --hero-button-foreground: #f7dd8b;
+  --banner: #d4af37;
+  --banner-foreground: #1a1406;
+  --accent: #d4af37;
+  --focus: #f7dd8b;
   --positive: #6ee7b7;
+  --glass: rgb(28 28 30 / 0.65);
+  --glass-border: rgb(212 175 55 / 0.22);
+  --glass-highlight: rgb(247 221 139 / 0.12);
+  --glass-shadow: rgb(0 0 0 / 0.5);
+  --glow-1: rgb(212 175 55 / 0.22);
+  --glow-2: rgb(138 106 31 / 0.22);
+  --glow-3: rgb(247 221 139 / 0.22);
   color-scheme: dark;
 }
 
-/* High contrast: accessibility beats branding. Pure black and white, strong borders. */
+/* High contrast: accessibility beats branding. Pure black and white, solid panels. */
 :root[data-contrast="high"] {
   --background: #ffffff;
   --surface: #ffffff;
   --foreground: #000000;
   --line: #000000;
+  --heading: #000000;
   --primary: #000000;
   --primary-foreground: #ffffff;
+  --primary-fill: #000000;
+  --hero-fill: var(--foreground);
+  --hero-foreground: var(--background);
+  --hero-button: var(--background);
+  --hero-button-foreground: var(--foreground);
   --banner: #000000;
   --banner-foreground: #ffffff;
   --accent: #000000;
   --focus: #000000;
   --positive: #000000;
+  --glass: var(--surface);
+  --glass-border: var(--line);
+  --glass-highlight: transparent;
+  --glass-shadow: transparent;
+  --glow-1: transparent;
+  --glow-2: transparent;
+  --glow-3: transparent;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-contrast="high"]:not([data-theme="light"]) {
@@ -85,13 +138,26 @@
     --surface: #000000;
     --foreground: #ffffff;
     --line: #ffffff;
+    --heading: #ffffff;
     --primary: #ffffff;
     --primary-foreground: #000000;
+    --primary-fill: #ffffff;
+    --hero-fill: var(--foreground);
+    --hero-foreground: var(--background);
+    --hero-button: var(--background);
+    --hero-button-foreground: var(--foreground);
     --banner: #ffffff;
     --banner-foreground: #000000;
     --accent: #ffffff;
     --focus: #ffffff;
     --positive: #ffffff;
+    --glass: var(--surface);
+    --glass-border: var(--line);
+    --glass-highlight: transparent;
+    --glass-shadow: transparent;
+    --glow-1: transparent;
+    --glow-2: transparent;
+    --glow-3: transparent;
   }
 }
 :root[data-contrast="high"][data-theme="dark"] {
@@ -99,13 +165,26 @@
   --surface: #000000;
   --foreground: #ffffff;
   --line: #ffffff;
+  --heading: #ffffff;
   --primary: #ffffff;
   --primary-foreground: #000000;
+  --primary-fill: #ffffff;
+  --hero-fill: var(--foreground);
+  --hero-foreground: var(--background);
+  --hero-button: var(--background);
+  --hero-button-foreground: var(--foreground);
   --banner: #ffffff;
   --banner-foreground: #000000;
   --accent: #ffffff;
   --focus: #ffffff;
   --positive: #ffffff;
+  --glass: var(--surface);
+  --glass-border: var(--line);
+  --glass-highlight: transparent;
+  --glass-shadow: transparent;
+  --glow-1: transparent;
+  --glow-2: transparent;
+  --glow-3: transparent;
 }
 
 /*
@@ -120,6 +199,10 @@
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-button: var(--hero-button);
+  --color-hero-button-foreground: var(--hero-button-foreground);
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -127,6 +210,8 @@
   --color-banner-foreground: var(--banner-foreground);
   --color-accent: var(--accent);
   --color-positive: var(--positive);
+  /* Secondary text: 80% of the main text colour (checked: still 4.5:1 on glass over glows). */
+  --color-muted: color-mix(in srgb, var(--foreground) 80%, transparent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -135,6 +220,75 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+  accent-color: var(--accent); /* radio buttons and checkboxes in brand gold, not browser blue */
+}
+
+/*
+ * The glow behind the glass. Glass only looks like glass if there's colour behind it to blur.
+ * Fixed to the screen, behind everything (z-index -1), and it never catches clicks.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, var(--glow-1), transparent 38%),
+    radial-gradient(circle at 88% 12%, var(--glow-2), transparent 34%),
+    radial-gradient(circle at 75% 85%, var(--glow-3), transparent 40%);
+}
+
+/*
+ * The frosted-glass panel. Usage: className="glass rounded-2xl p-4".
+ * backdrop-filter blurs whatever is BEHIND the panel (the glows), not the panel itself.
+ */
+@utility glass {
+  background-color: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight); /* thin light edge along the top, like real glass */
+  -webkit-backdrop-filter: blur(18px) saturate(140%); /* Safari */
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/*
+ * Fallbacks: solid panels when blur isn't supported, when the user's device asks for
+ * less transparency, or in high contrast. These target .glass directly: a plain :root
+ * rule would lose to the more specific :root[data-theme="dark"] rules above.
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: var(--surface);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background-color: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  body::before {
+    display: none;
+  }
+}
+:root[data-contrast="high"] .glass {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The main call-to-action button: a gold gradient in dark mode, charcoal in light, solid in high contrast. */
+@utility btn-primary {
+  background: var(--primary-fill);
+  color: var(--primary-foreground);
+}
+
+/* The one "hero" block per page: solid gold. Text inside uses text-hero-foreground. */
+@utility hero-gold {
+  background: var(--hero-fill);
+  color: var(--hero-foreground);
+  --focus: var(--hero-foreground); /* a gold focus ring would vanish on gold, so use the dark text colour */
 }
 
 /* A clearly visible keyboard focus ring everywhere (only for keyboard, not mouse clicks). */

@@ -13,11 +13,11 @@ export function OrderBlotter() {
   const positions = useFxSelector(selectPositions);
 
   return (
-    <section aria-labelledby="blotter-heading" className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="blotter-heading" className="mb-3 text-lg font-semibold">Orders</h2>
+    <section aria-labelledby="blotter-heading" className="glass rounded-2xl p-4">
+      <h2 id="blotter-heading" className="mb-3 text-lg font-semibold text-heading">Orders</h2>
 
       {orders.length === 0 ? (
-        <p className="text-sm opacity-70">No orders yet. Place one with the order ticket.</p>
+        <p className="text-sm text-muted">No orders yet. Place one with the order ticket.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[32rem] text-left text-sm">

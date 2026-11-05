@@ -88,3 +88,17 @@ export function toPence(input: string): Pence {
   assertPence(result); // catches amounts too big to store exactly
   return result;
 }
+
+/**
+ * Adds up pence amounts exactly. Integers add without rounding error, so a total of
+ * many balances is always to the penny. Throws if the total gets too big to be exact.
+ */
+export function sumPence(amounts: readonly Pence[]): Pence {
+  let total = 0;
+  for (const amount of amounts) {
+    assertPence(amount);
+    total += amount;
+  }
+  assertPence(total);
+  return total;
+}

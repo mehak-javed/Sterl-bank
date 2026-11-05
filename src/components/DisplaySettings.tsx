@@ -19,8 +19,8 @@ export function DisplaySettings() {
   const toggleLargeText = useUiStore((s) => s.toggleLargeText);
 
   return (
-    <section aria-labelledby="display-settings-heading" className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <h2 id="display-settings-heading" className="text-lg font-semibold">
+    <section aria-labelledby="display-settings-heading" className="glass rounded-2xl p-4">
+      <h2 id="display-settings-heading" className="text-lg font-semibold text-heading">
         Display settings
       </h2>
 
