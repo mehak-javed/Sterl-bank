@@ -72,6 +72,39 @@ Example: `/api/accounts/{id}/transactions?category=Groceries&from=2026-10-01&to=
 returns `{items, page, size, totalItems, totalPages}`. Each item's `balanceAfterPence` is the
 account's real balance after it, even when filtered.
 
+### Transfers between your own accounts
+
+`POST /api/transfers` with an `Idempotency-Key` header (8–64 of `A–Z a–z 0–9 _ -`; a UUID is ideal)
+and a JSON body:
+
+```json
+{ "fromAccountId": "…", "toAccountId": "…", "amountPence": 2500, "reference": "Coffee fund" }
+```
+
+| What happens | Response |
+| --- | --- |
+| First time | `201 Created`, `Location: /api/transfers/{id}`, the transfer with balances after |
+| Same key, same request again (a retry) | `200 OK`, `Idempotent-Replayed: true`, the **original** result; no money moves |
+| Same key, different request | `422`: a key belongs to one transfer |
+| Not enough money | `422`, nothing written (the key can then be reused) |
+| Not one of the customer's own accounts | `404` |
+| Amount not a whole number of pence (`12.99`, `"100"`), 0, negative, over £10,000, unknown field, same account twice, missing key | `400` |
+
+How it stays safe, all in one database transaction:
+
+1. **Claim the key** (`INSERT … ON CONFLICT DO NOTHING` on `idempotency_records`). A duplicate in
+   flight waits on the primary key, then replays the first result.
+2. **Lock both accounts** with `SELECT … FOR UPDATE`, **always in id order**, so parallel transfers
+   can't both spend the same money and opposite-direction transfers can't deadlock.
+3. **Check the balance** after the lock.
+4. **Write both ledger legs and the audit entry.** The database re-checks that the legs sum to zero at commit.
+
+Tests prove it with real concurrency: 10 identical requests at once move money once; 20 parallel £20
+transfers from £261.65 let exactly 13 through; 20 opposite-direction transfers finish with no deadlock.
+Removing the lock made all 20 succeed (−£138.35); locking in request order caused `deadlock detected`.
+
+`GET /api/transfers/{id}` returns one transfer (404 if it isn't the customer's).
+
 Errors are RFC 9457 problem details (`application/problem+json`), e.g.
 `{"status":400,"title":"Bad Request","detail":"size: must be less than or equal to 100"}`.
 

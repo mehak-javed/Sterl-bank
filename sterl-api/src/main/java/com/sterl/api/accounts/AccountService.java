@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sterl.api.common.CurrentCustomer;
 import com.sterl.api.common.PageResponse;
 
 /**
@@ -26,19 +27,21 @@ public class AccountService {
 	static final ZoneId UK = ZoneId.of("Europe/London");
 
 	private final AccountRepository accounts;
+	private final CurrentCustomer currentCustomer;
 
-	public AccountService(AccountRepository accounts) {
+	public AccountService(AccountRepository accounts, CurrentCustomer currentCustomer) {
 		this.accounts = accounts;
+		this.currentCustomer = currentCustomer;
 	}
 
 	public List<AccountResponse> listAccounts() {
-		return accounts.findCustomerAccounts();
+		return accounts.findCustomerAccounts(currentCustomer.id());
 	}
 
 	public AccountResponse getAccount(UUID id) {
-		// The same 404 for "doesn't exist" and "isn't yours" (e.g. an internal account), so the API
-		// never reveals which ids exist.
-		return accounts.findCustomerAccount(id)
+		// The same 404 for "doesn't exist", "is internal" and "isn't yours", so the API never reveals
+		// which ids exist.
+		return accounts.findCustomerAccount(currentCustomer.id(), id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No account with id " + id + "."));
 	}
 
