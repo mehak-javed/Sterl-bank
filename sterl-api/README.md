@@ -54,6 +54,26 @@ Rules the database enforces itself:
 | `GET /actuator/health/liveness` | Is the process healthy, or should it be restarted? |
 | `GET /actuator/health/readiness` | Can it take traffic right now? |
 | `GET /actuator/info` | Name and demo disclaimer |
+| `GET /api/accounts` | The customer's accounts, balances calculated from the ledger |
+| `GET /api/accounts/{id}` | One account (404 if it doesn't exist or isn't the customer's) |
+| `GET /api/accounts/{id}/transactions` | The statement, newest first, one page at a time |
+
+Statement query parameters (all optional):
+
+| Parameter | Meaning | Rules |
+| --- | --- | --- |
+| `category` | Exact category, e.g. `Groceries` | up to 40 characters |
+| `kind` | `card`, `salary`, `direct_debit`, `standing_order`, `transfer`, `roundup`, `opening_balance` | one of these |
+| `from`, `to` | First and last day to include, e.g. `2026-10-01` | whole UK days (Europe/London); `from` ≤ `to` |
+| `q` | Text to find in the description, case-insensitive; `%` and `_` are plain text | up to 50 characters |
+| `page`, `size` | Page number from 0; rows per page (default 20) | `page` 0–10,000; `size` 1–100 |
+
+Example: `/api/accounts/{id}/transactions?category=Groceries&from=2026-10-01&to=2026-10-31&size=20`
+returns `{items, page, size, totalItems, totalPages}`. Each item's `balanceAfterPence` is the
+account's real balance after it, even when filtered.
+
+Errors are RFC 9457 problem details (`application/problem+json`), e.g.
+`{"status":400,"title":"Bad Request","detail":"size: must be less than or equal to 100"}`.
 
 Other Actuator endpoints (`env`, `beans`, `heapdump`…) are deliberately not exposed: they would
 reveal configuration and internals. A test (`HealthEndpointTests`) keeps it that way.
