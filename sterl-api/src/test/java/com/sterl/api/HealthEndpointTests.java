@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
+
+import com.sterl.api.support.SterlIntegrationTest;
 
 /**
  * The health endpoint is how AWS and monitoring decide whether the API is alive,
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
  * <p>MockMvc sends real HTTP requests through the full Spring stack (routing, JSON,
  * security later) without opening a network port, so the tests are fast and reliable.
  */
-@SpringBootTest
+@SterlIntegrationTest
 @AutoConfigureMockMvc
 class HealthEndpointTests {
 
