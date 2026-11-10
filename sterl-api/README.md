@@ -46,6 +46,38 @@ Rules the database enforces itself:
 | Money is whole pence | `BIGINT` columns only; a test fails if any float/money column appears |
 | Balances can't drift | No balance column: `account_balances` sums the entries; `account_statement` uses a window function for the running balance |
 
+## Logging in
+
+Everything under `/api/accounts` and `/api/transfers` needs a logged-in customer; only health checks
+and the login endpoints are public. Demo logins (fake people): [docs/demo-accounts.md](../docs/demo-accounts.md).
+
+1. `GET /api/auth/csrf` sets an `XSRF-TOKEN` cookie.
+2. `POST /api/auth/login` with `{"email": "…", "password": "…"}` and the cookie's value in an
+   `X-XSRF-TOKEN` header. Success: `200` with the profile, plus a `SESSION` cookie
+   (HttpOnly, Secure, SameSite=Lax). Failure: `401 "Email or password is incorrect."`, the same
+   answer for a wrong password and an unknown email.
+3. Login replaces the CSRF token, so `GET /api/auth/csrf` again. From then on, every POST sends the
+   `SESSION` cookie and the `X-XSRF-TOKEN` header.
+
+| Endpoint | What it's for |
+| --- | --- |
+| `GET /api/auth/csrf` | Sets the CSRF cookie |
+| `POST /api/auth/login` | Logs in (10 failed attempts per address per minute, then `429` with `Retry-After`) |
+| `GET /api/auth/me` | Who is logged in (`401` if nobody) |
+| `POST /api/auth/logout` | Ends the session on the server (`204`) |
+
+How it's protected:
+
+| Protection | How |
+| --- | --- |
+| Passwords | Argon2id hashes only (`{argon2@SpringSecurity_v5_8}` prefix so the algorithm can be upgraded); max 128 characters so a huge input can't tie up the server |
+| Sessions | Stored in PostgreSQL (Spring Session JDBC), 15-minute idle timeout; new session id at login (no session fixation); the password hash is erased from the session |
+| Who sees what | Every query is filtered by the logged-in customer (`CurrentCustomer`); someone else's id gets `404`, never `403`, so ids can't be probed |
+| CSRF | Token required on every POST, including login and logout |
+| Headers | CSP `default-src 'none'`, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy: no-referrer`, `Cache-Control: no-store`, HSTS over HTTPS |
+| Guessing | Failed-login throttling per network address; every attempt in the audit log |
+| Deny by default | Any endpoint not explicitly public needs a login; banking needs the `CUSTOMER` role |
+
 ## Endpoints so far
 
 | Endpoint | What it's for |

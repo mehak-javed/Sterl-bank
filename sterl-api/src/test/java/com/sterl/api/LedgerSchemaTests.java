@@ -54,7 +54,7 @@ class LedgerSchemaTests {
 				""").query(String.class).list();
 
 		assertThat(unbalanced).isEmpty();
-		assertThat(jdbc.sql("SELECT COUNT(*) FROM ledger_transactions").query(Long.class).single()).isEqualTo(618);
+		assertThat(jdbc.sql("SELECT COUNT(*) FROM ledger_transactions").query(Long.class).single()).isEqualTo(630); // 618 + 12 (V5)
 	}
 
 	@Test
