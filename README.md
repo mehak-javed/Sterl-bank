@@ -1,6 +1,10 @@
 # Sterl
 
 [![CI](https://github.com/mehak-javed/Sterl-bank/actions/workflows/ci.yml/badge.svg)](https://github.com/mehak-javed/Sterl-bank/actions/workflows/ci.yml)
+[![API CI](https://github.com/mehak-javed/Sterl-bank/actions/workflows/api.yml/badge.svg)](https://github.com/mehak-javed/Sterl-bank/actions/workflows/api.yml)
+[![CodeQL](https://github.com/mehak-javed/Sterl-bank/actions/workflows/codeql.yml/badge.svg)](https://github.com/mehak-javed/Sterl-bank/actions/workflows/codeql.yml)
+
+Security: see [SECURITY.md](SECURITY.md).
 
 > **Sterl is a portfolio demo. Not a real bank. All data is fake.**
 

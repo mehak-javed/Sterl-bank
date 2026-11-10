@@ -1,0 +1,44 @@
+# Dependabot: opens pull requests to update our dependencies, so known security holes in libraries
+# get patched instead of sitting there unnoticed. Every update goes through CI like any other change,
+# so a breaking update can't reach main.
+#
+# Security fixes (Dependabot security updates) are switched on in the repo settings and arrive
+# straight away; the routine version updates below arrive weekly.
+version: 2
+
+updates:
+  # Front end: package.json / package-lock.json
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [dependencies, frontend]
+    groups:
+      # Small, low-risk updates come as ONE pull request instead of twenty.
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Java API: sterl-api/pom.xml (Spring Boot, PostgreSQL driver, Flyway...)
+  - package-ecosystem: maven
+    directory: "/sterl-api"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [dependencies, backend]
+    groups:
+      maven-minor-and-patch:
+        update-types: [minor, patch]
+
+  # The GitHub Actions our workflows use (checkout, setup-java, codeql-action...)
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    labels: [dependencies, ci]
+    groups:
+      github-actions:
+        patterns: ["*"]
