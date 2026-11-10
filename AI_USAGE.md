@@ -25,3 +25,10 @@ produced, how I checked it, and what I fixed, because AI output is only as good 
 | Nov 6 | CI workflow, PR template, user stories | Full CI run in a fresh clone | Typecheck needed Next's generated route types first (`next typegen`) |
 | Nov 6 | Credit risk page, nav helper with tests | 6 new Vitest tests, browser | Old nav used `startsWith`, so `/cards` would also match `/cardsharp`; now segment-aware |
 | Nov 6 | ADR-001, ADR-002, architecture diagram | My review | — |
+
+## Week 2 (from Nov 6, 2026)
+
+| Date | What the AI produced | How it was checked | What was found or fixed |
+| --- | --- | --- | --- |
+| Nov 6 | Spring Boot API skeleton (Spring Initializr), Actuator health, JUnit tests, Java CI | `./mvnw verify` (6 tests), ran the jar and called every endpoint with curl, CI green | Locked down Actuator so only `health` and `info` are public; a test proves `env`, `beans` and `heapdump` return 404. My first Java install was Oracle Java 8 (a runtime with no compiler); switched to Temurin 25 |
+| Nov 10 | Removed build output from git | `git ls-files` shows nothing under `sterl-api/target/` | A manual `git add .` had committed `target/` (a 24 MB jar); untracked it and confirmed `.gitignore` covers it |
