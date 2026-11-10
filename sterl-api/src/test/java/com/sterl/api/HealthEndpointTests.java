@@ -8,6 +8,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
+import com.sterl.api.support.LoggedIn;
 import com.sterl.api.support.SterlIntegrationTest;
 
 /**
@@ -50,9 +51,13 @@ class HealthEndpointTests {
 	@Test
 	void sensitiveActuatorEndpointsAreNotExposed() {
 		// env would show configuration (and any secrets in it); beans shows the app's internals.
-		assertThat(mvc.get().uri("/actuator/env")).hasStatus(HttpStatus.NOT_FOUND);
-		assertThat(mvc.get().uri("/actuator/beans")).hasStatus(HttpStatus.NOT_FOUND);
-		assertThat(mvc.get().uri("/actuator/heapdump")).hasStatus(HttpStatus.NOT_FOUND);
+		// Two layers: anonymous callers are stopped by login (401), and even a logged-in customer
+		// finds nothing there (404), because the endpoints aren't exposed at all.
+		LoggedIn customer = LoggedIn.asDemoCustomer(mvc);
+		for (String endpoint : new String[] {"/actuator/env", "/actuator/beans", "/actuator/heapdump"}) {
+			assertThat(mvc.get().uri(endpoint)).as(endpoint).hasStatus(HttpStatus.UNAUTHORIZED);
+			assertThat(customer.get(endpoint)).as(endpoint).hasStatus(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@Test

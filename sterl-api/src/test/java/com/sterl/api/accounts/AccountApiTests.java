@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
 import com.sterl.api.support.Fixtures;
+import com.sterl.api.support.LoggedIn;
 import com.sterl.api.support.SterlIntegrationTest;
 
 import tools.jackson.databind.JsonNode;
@@ -46,7 +48,15 @@ class AccountApiTests {
 	@Autowired
 	private MockMvcTester mvc;
 
+	/** The demo customer's browser: every request below carries her session cookie. */
+	private LoggedIn customer;
+
 	private final JsonMapper json = JsonMapper.builder().build();
+
+	@BeforeEach
+	void logIn() {
+		customer = LoggedIn.asDemoCustomer(mvc);
+	}
 
 	// ---------- GET /api/accounts ----------
 
@@ -78,7 +88,7 @@ class AccountApiTests {
 
 	@Test
 	void anUnknownAccountIsA404ProblemDetail() {
-		assertThat(mvc.get().uri("/api/accounts/7f000000-0000-4000-8000-000000000000"))
+		assertThat(customer.get("/api/accounts/7f000000-0000-4000-8000-000000000000"))
 				.hasStatus(HttpStatus.NOT_FOUND)
 				.hasContentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)
 				.bodyJson().extractingPath("$.status").isEqualTo(404);
@@ -87,14 +97,14 @@ class AccountApiTests {
 	@Test
 	void theBanksInternalAccountsAreNotVisible() {
 		// Same 404 as a missing id: the API never reveals that the internal account exists.
-		assertThat(mvc.get().uri("/api/accounts/" + CARD_SETTLEMENT_ACCOUNT)).hasStatus(HttpStatus.NOT_FOUND);
-		assertThat(mvc.get().uri("/api/accounts/" + CARD_SETTLEMENT_ACCOUNT + "/transactions"))
+		assertThat(customer.get("/api/accounts/" + CARD_SETTLEMENT_ACCOUNT)).hasStatus(HttpStatus.NOT_FOUND);
+		assertThat(customer.get("/api/accounts/" + CARD_SETTLEMENT_ACCOUNT + "/transactions"))
 				.hasStatus(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
 	void anIdThatIsNotAUuidIsA400() {
-		assertThat(mvc.get().uri("/api/accounts/not-a-uuid"))
+		assertThat(customer.get("/api/accounts/not-a-uuid"))
 				.hasStatus(HttpStatus.BAD_REQUEST)
 				.hasContentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON);
 	}
@@ -227,7 +237,7 @@ class AccountApiTests {
 				"&kind=bogus", "&from=2026-13-01", "&from=2026-10-31&to=2026-10-01",
 				"&q=" + "x".repeat(51)));
 		for (String query : bad) {
-			assertThat(mvc.get().uri(statement(EVERYDAY_ACCOUNT, query)))
+			assertThat(customer.get(statement(EVERYDAY_ACCOUNT, query)))
 					.as(query)
 					.hasStatus(HttpStatus.BAD_REQUEST)
 					.hasContentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON);
@@ -236,7 +246,7 @@ class AccountApiTests {
 
 	@Test
 	void aValidationErrorSaysWhichParameterIsWrongAndWhy() {
-		assertThat(mvc.get().uri(statement(EVERYDAY_ACCOUNT, "&size=500")))
+		assertThat(customer.get(statement(EVERYDAY_ACCOUNT, "&size=500")))
 				.hasStatus(HttpStatus.BAD_REQUEST)
 				.bodyJson().extractingPath("$.detail").asString()
 				.isEqualTo("size: must be less than or equal to 100");
@@ -244,7 +254,7 @@ class AccountApiTests {
 
 	@Test
 	void transactionsOfAnUnknownAccountAreA404() {
-		assertThat(mvc.get().uri("/api/accounts/7f000000-0000-4000-8000-000000000000/transactions"))
+		assertThat(customer.get("/api/accounts/7f000000-0000-4000-8000-000000000000/transactions"))
 				.hasStatus(HttpStatus.NOT_FOUND);
 	}
 
@@ -255,7 +265,7 @@ class AccountApiTests {
 	}
 
 	private JsonNode getOk(String uri) {
-		MvcTestResult result = mvc.get().uri(uri).exchange();
+		MvcTestResult result = customer.get(uri).exchange();
 		assertThat(result).as(uri).hasStatusOk();
 		try {
 			return json.readTree(result.getResponse().getContentAsString());

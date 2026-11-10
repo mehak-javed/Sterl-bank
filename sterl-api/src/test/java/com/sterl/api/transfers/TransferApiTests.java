@@ -30,6 +30,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
+import com.sterl.api.support.LoggedIn;
 import com.sterl.api.support.SterlIntegrationTest;
 
 import tools.jackson.databind.JsonNode;
@@ -46,7 +47,7 @@ class TransferApiTests {
 	private static final long EVERYDAY_BALANCE = 125_000; // £1,250.00 in the seed
 	private static final long SAVER_BALANCE = 480_000;    // £4,800.00
 	private static final long ROUNDUP_BALANCE = 26_165;   // £261.65
-	private static final long SEEDED_LEDGER_TRANSACTIONS = 618;
+	private static final long SEEDED_LEDGER_TRANSACTIONS = 630; // 618 from the front-end fixtures + 12 for the 4 extra customers (V5)
 
 	@Autowired
 	private MockMvcTester mvc;
@@ -59,8 +60,21 @@ class TransferApiTests {
 
 	private final JsonMapper json = JsonMapper.builder().build();
 
-	/** These tests move money, so every test starts (and ends) with the freshly seeded bank. */
+	/** The demo customer's browser: session cookie on every request, CSRF token on every POST. */
+	private LoggedIn customer;
+
+	/**
+	 * These tests move money, so every test starts with the freshly seeded bank, then logs in.
+	 * (One method, so the order is guaranteed: rebuilding the database also deletes all sessions.)
+	 */
 	@BeforeEach
+	void freshBankThenLogIn() {
+		flyway.clean();
+		flyway.migrate();
+		customer = LoggedIn.asDemoCustomer(mvc);
+	}
+
+	/** ...and leaves it fresh for the next test class. */
 	@AfterEach
 	void freshBank() {
 		flyway.clean();
@@ -87,7 +101,7 @@ class TransferApiTests {
 		assertThat(wholeLedgerTotal()).isZero(); // double entry: still sums to zero
 
 		// The Location header really leads to it.
-		assertThat(mvc.get().uri(result.getResponse().getHeader("Location"))).hasStatusOk()
+		assertThat(customer.get(result.getResponse().getHeader("Location"))).hasStatusOk()
 				.bodyJson().extractingPath("$.id").isEqualTo(transfer.get("id").asString());
 	}
 
@@ -116,7 +130,7 @@ class TransferApiTests {
 	void theNewTransferIsAtTheTopOfTheStatementWithTheRightBalance() {
 		read(post(newKey(), body(EVERYDAY_ACCOUNT, SAVER_ACCOUNT, 1_000, "Rent pot")));
 
-		assertThat(mvc.get().uri("/api/accounts/" + EVERYDAY_ACCOUNT + "/transactions?size=1"))
+		assertThat(customer.get("/api/accounts/" + EVERYDAY_ACCOUNT + "/transactions?size=1"))
 				.bodyJson()
 				.satisfies(page -> {
 					assertThat(page).extractingPath("$.items[0].description").isEqualTo("Rent pot");
@@ -221,7 +235,7 @@ class TransferApiTests {
 
 	@Test
 	void anUnknownTransferIsA404() {
-		assertThat(mvc.get().uri("/api/transfers/" + UUID.randomUUID())).hasStatus(HttpStatus.NOT_FOUND);
+		assertThat(customer.get("/api/transfers/" + UUID.randomUUID())).hasStatus(HttpStatus.NOT_FOUND);
 	}
 
 	// ---------- Bad input is rejected, never guessed at ----------
@@ -252,7 +266,7 @@ class TransferApiTests {
 	void theIdempotencyKeyIsRequiredAndChecked() {
 		String request = body(EVERYDAY_ACCOUNT, SAVER_ACCOUNT, 100, null);
 
-		assertThat(mvc.post().uri("/api/transfers").contentType(MediaType.APPLICATION_JSON).content(request))
+		assertThat(customer.post("/api/transfers").contentType(MediaType.APPLICATION_JSON).content(request))
 				.hasStatus(HttpStatus.BAD_REQUEST); // no header
 		assertThat(post("short", request)).hasStatus(HttpStatus.BAD_REQUEST);
 		assertThat(post("has spaces in it", request)).hasStatus(HttpStatus.BAD_REQUEST);
@@ -268,7 +282,7 @@ class TransferApiTests {
 	// ---------- helpers ----------
 
 	private MvcTestResult post(String key, String requestBody) {
-		return mvc.post().uri("/api/transfers")
+		return customer.post("/api/transfers")
 				.header("Idempotency-Key", key)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBody)
