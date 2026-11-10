@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Design reference recordings stay on your Mac, never in git (large, and not our own work).
+*.mp4
+*.mov

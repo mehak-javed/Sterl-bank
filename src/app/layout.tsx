@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cinzel, Geist, Geist_Mono } from "next/font/google";
 import { DemoBanner } from "@/components/DemoBanner";
 import { QueryProvider } from "@/components/QueryProvider";
 import { ReduxProvider } from "@/stores/fx/ReduxProvider";
@@ -16,6 +16,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Roman inscription capitals for the "STERL BANKING" logo. next/font downloads it at build time and
+// serves it from our own site: no request to Google from visitors' browsers.
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+
 export const metadata: Metadata = {
   // Pages set just their own name ("Cards"); the template turns it into "Cards · Sterl".
   title: { default: "Sterl", template: "%s · Sterl" },
@@ -29,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // Dark is the default, set in the server HTML so the very first paint is already dark
       // (no flash of light). UiStoreProvider changes it if the visitor saved another choice.
       data-theme="dark"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <UiStoreProvider>

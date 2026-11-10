@@ -3,6 +3,7 @@ import "server-only";
 
 import { cache } from "react";
 import { connection } from "next/server";
+import { latestSpendingMonth, summariseSpending, type MonthlySpending } from "@/lib/spending";
 import type { Account, Transaction } from "@/types/bank";
 import { findAccount, getRoundUpsEnabled, listAccounts, listTransactions } from "./bank-db";
 
@@ -45,4 +46,18 @@ export const getRoundUpSetting = cache(async (): Promise<boolean> => {
 export const getTransactions = cache(async (accountId: string, limit: number): Promise<Transaction[]> => {
   await simulateServerLatency();
   return listTransactions(accountId, limit);
+});
+
+/**
+ * Spending by category for the latest month with activity, across the customer's current accounts
+ * (savings pots don't have card spending). Summed on the server, so the browser only receives the
+ * few totals it draws, not hundreds of transactions.
+ */
+export const getMonthlySpending = cache(async (): Promise<MonthlySpending | null> => {
+  await simulateServerLatency();
+  const spendingTransactions = listAccounts()
+    .filter((a) => a.type === "current")
+    .flatMap((a) => listTransactions(a.id, Number.MAX_SAFE_INTEGER));
+  const month = latestSpendingMonth(spendingTransactions);
+  return month === null ? null : summariseSpending(spendingTransactions, month);
 });

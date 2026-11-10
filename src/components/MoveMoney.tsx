@@ -27,7 +27,7 @@ export async function MoveMoney() {
 
 export function MoveMoneySkeleton() {
   return (
-    <section aria-busy="true" aria-label="Move money" className="glass rounded-2xl p-4">
+    <section aria-busy="true" aria-label="Move money" className="glass rounded-3xl p-5">
       <p className="mb-3 text-lg font-semibold text-heading">Move money</p>
       <SkeletonRows rows={4} />
     </section>

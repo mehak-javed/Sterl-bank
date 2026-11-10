@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatGBP, roundUp, toPence } from "@/lib/money";
+import { formatGBP, roundUp, splitGBP, toPence } from "@/lib/money";
 
 describe("formatGBP", () => {
   it("formats pence as pounds", () => {
@@ -92,5 +92,20 @@ describe("toPence", () => {
 
   it("throws for amounts too large to store exactly", () => {
     expect(() => toPence("999999999999999999")).toThrow(TypeError);
+  });
+});
+
+describe("splitGBP", () => {
+  it("splits pounds from pence for display", () => {
+    expect(splitGBP(631165)).toEqual({ whole: "£6,311", fraction: ".65" });
+  });
+
+  it("keeps the minus sign with the pounds", () => {
+    expect(splitGBP(-500)).toEqual({ whole: "-£5", fraction: ".00" });
+  });
+
+  it("handles zero and a few pence", () => {
+    expect(splitGBP(0)).toEqual({ whole: "£0", fraction: ".00" });
+    expect(splitGBP(7)).toEqual({ whole: "£0", fraction: ".07" });
   });
 });

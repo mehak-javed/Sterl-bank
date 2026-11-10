@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/accounts/[id]">):
 export default function AccountPage({ params }: PageProps<"/accounts/[id]">) {
   return (
     <>
-      <Link href="/" className="self-start text-sm underline underline-offset-4">
+      <Link href="/dashboard" className="self-start text-sm underline underline-offset-4">
         ← Dashboard
       </Link>
       <Suspense fallback={<AccountDetailSkeleton />}>

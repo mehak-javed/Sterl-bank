@@ -37,10 +37,13 @@ export function TransferForm({ accounts, initialState }: { accounts: Account[]; 
     );
 
   const inputClass =
-    "rounded-lg border border-line bg-surface px-3 py-2 aria-invalid:border-2 aria-invalid:border-heading";
+    // w-full min-w-0: a <select> is otherwise as wide as its longest option, which pushed the
+    // whole page wider than a phone screen.
+    "w-full min-w-0 rounded-xl border border-line bg-surface-2 px-3 py-2.5 aria-invalid:border-2 aria-invalid:border-heading";
 
   return (
-    <section aria-labelledby="transfer-heading" className="glass rounded-2xl p-4">
+    // id="move-money": the dashboard's "Move money" quick action jumps here.
+    <section id="move-money" aria-labelledby="transfer-heading" className="rise-in glass scroll-mt-6 rounded-3xl p-5">
       <h2 id="transfer-heading" className="mb-3 text-lg font-semibold text-heading">
         Move money
       </h2>

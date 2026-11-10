@@ -20,7 +20,7 @@ export function AccountSelectButton({ accountId, children }: { accountId: string
       type="button"
       onClick={() => selectAccount(accountId)}
       aria-pressed={accountId === activeId}
-      className="flex flex-1 items-center justify-between rounded-lg border border-line p-3 text-left aria-pressed:border-2 aria-pressed:border-primary"
+      className="flex min-w-0 flex-1 items-center justify-between gap-3 rounded-2xl border border-line bg-surface-2/60 p-3 text-left transition-colors hover:bg-surface-2 aria-pressed:border-accent aria-pressed:bg-surface-2 aria-pressed:shadow-[inset_0_0_0_1px_var(--accent)]"
     >
       {children}
     </button>

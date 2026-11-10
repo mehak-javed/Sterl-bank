@@ -23,7 +23,7 @@ describe("isActivePath", () => {
 
 describe("NAV_LINKS", () => {
   it("includes the Credit risk desk", () => {
-    expect(NAV_LINKS).toContainEqual({ href: "/credit-risk", label: "Credit risk" });
+    expect(NAV_LINKS).toContainEqual(expect.objectContaining({ href: "/credit-risk", label: "Credit risk" }));
   });
 
   it("marks exactly one link active on every nav page", () => {
@@ -31,5 +31,15 @@ describe("NAV_LINKS", () => {
       const active = NAV_LINKS.filter((link) => isActivePath(href, link.href));
       expect(active).toHaveLength(1);
     }
+  });
+});
+
+describe("the phone tab bar", () => {
+  it("has exactly 4 tabs, so each stays big enough to tap", () => {
+    expect(NAV_LINKS.filter((link) => link.inTabBar)).toHaveLength(4);
+  });
+
+  it("uses short labels that fit under an icon", () => {
+    for (const link of NAV_LINKS) expect(link.short.length).toBeLessThanOrEqual(8);
   });
 });
