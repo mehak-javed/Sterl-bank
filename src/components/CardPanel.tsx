@@ -1,7 +1,9 @@
 "use client";
 
+import { Snowflake } from "lucide-react";
 import { useCards, useSetCardFrozen } from "@/lib/api/queries";
 import { QueryError, SkeletonRows } from "./QueryStates";
+import { PaymentCard } from "./ui/PaymentCard";
 
 export function CardPanel() {
   const { data: cards, isPending, isError, error, refetch } = useCards();
@@ -9,41 +11,37 @@ export function CardPanel() {
   const card = cards?.[0];
 
   return (
-    <section aria-labelledby="card-heading" aria-busy={isPending} className="glass rounded-2xl p-4">
-      <h2 id="card-heading" className="mb-3 text-lg font-semibold text-heading">
-        Your card
-      </h2>
+    <section aria-labelledby="card-heading" aria-busy={isPending} className="rise-in glass flex h-full flex-col gap-4 rounded-3xl p-5">
+      <div className="flex items-center justify-between">
+        <h2 id="card-heading" className="text-lg font-semibold text-heading">
+          Your card
+        </h2>
+        {card && (
+          // role="status": screen readers announce the change when the card is (un)frozen.
+          <p role="status" className="rounded-full border border-line px-3 py-1 text-xs font-semibold">
+            {card.frozen ? "Frozen" : "Active"}
+          </p>
+        )}
+      </div>
 
       {isPending ? (
-        <SkeletonRows rows={2} />
+        <SkeletonRows rows={3} />
       ) : isError ? (
         <QueryError message={`We couldn't load your card. ${error.message}`} onRetry={() => refetch()} />
       ) : !card ? (
         <p className="text-sm text-muted">You don&apos;t have a card yet.</p>
       ) : (
-        <div className="flex flex-col gap-3">
-          <div className={`rounded-xl border-l-4 border-accent bg-background p-4 ${card.frozen ? "opacity-60" : ""}`}>
-            <p className="font-mono tracking-widest">•••• •••• •••• {card.last4}</p>
-            <p className="mt-2 flex justify-between text-sm">
-              <span>{card.nameOnCard}</span>
-              <span>
-                {String(card.expiryMonth).padStart(2, "0")}/{String(card.expiryYear).slice(-2)}
-              </span>
-            </p>
-          </div>
-
-          {/* role="status": screen readers announce the change when the card is (un)frozen. */}
-          <p role="status" className="text-sm">
-            Status: <strong>{card.frozen ? "Frozen" : "Active"}</strong>
-          </p>
+        <div className="flex flex-col gap-4">
+          <PaymentCard card={card} />
 
           <button
             type="button"
             onClick={() => setFrozen.mutate({ cardId: card.id, frozen: !card.frozen })}
             // Disabled while saving: one click = one request, no double-submits.
             disabled={setFrozen.isPending}
-            className="rounded-xl btn-primary px-4 py-2 font-semibold disabled:opacity-50"
+            className={`flex items-center justify-center gap-2 rounded-2xl px-4 py-3 font-semibold disabled:opacity-50 ${card.frozen ? "btn-primary" : "btn-secondary"}`}
           >
+            <Snowflake aria-hidden="true" className="h-4 w-4" />
             {card.frozen ? "Unfreeze card" : "Freeze card"}
           </button>
 

@@ -37,10 +37,20 @@
   --accent: #d4af37;
   --focus: #8a6a1f;
   --positive: #047857;
-  --glass: rgb(255 255 255 / 0.62);
+  /* Redesign tokens: a second surface level, icon chips, the payment card. */
+  --surface-2: #f4efe2;
+  --chip: rgb(212 175 55 / 0.18);
+  --chip-foreground: #5c4612;
+  --card-fill: linear-gradient(135deg, #2c2c30 0%, #141416 55%, #3a2f12 100%);
+  --card-foreground: #f5f1e6;
+  --card-accent: #e2c15a;
+  /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+  --logo-1: #8a6a1f;
+  --logo-2: #5c4612;
+  --glass: rgb(255 255 255 / 0.78);
   --glass-border: rgb(255 255 255 / 0.8);
   --glass-highlight: rgb(255 255 255 / 0.9);
-  --glass-shadow: rgb(26 26 26 / 0.08);
+  --glass-shadow: rgb(26 26 26 / 0.06);
   --glow-1: rgb(233 210 138 / 0.45);
   --glow-2: rgb(243 227 179 / 0.45);
   --glow-3: rgb(217 192 138 / 0.45);
@@ -67,10 +77,20 @@
     --accent: #d4af37;
     --focus: #f7dd8b;
     --positive: #6ee7b7;
-    --glass: rgb(28 28 30 / 0.65);
-    --glass-border: rgb(212 175 55 / 0.22);
-    --glass-highlight: rgb(247 221 139 / 0.12);
-    --glass-shadow: rgb(0 0 0 / 0.5);
+    /* Redesign tokens: a second surface level, icon chips, the payment card. */
+    --surface-2: #232326;
+    --chip: rgb(212 175 55 / 0.14);
+    --chip-foreground: #f0d27a;
+    --card-fill: linear-gradient(135deg, #2c2c30 0%, #141416 55%, #3a2f12 100%);
+    --card-foreground: #f5f1e6;
+    --card-accent: #e2c15a;
+    /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+    --logo-1: #f7dd8b;
+    --logo-2: #c9a13b;
+    --glass: rgb(22 22 25 / 0.74);
+    --glass-border: rgb(212 175 55 / 0.14);
+    --glass-highlight: rgb(247 221 139 / 0.07);
+    --glass-shadow: rgb(0 0 0 / 0.45);
     --glow-1: rgb(212 175 55 / 0.22);
     --glow-2: rgb(138 106 31 / 0.22);
     --glow-3: rgb(247 221 139 / 0.22);
@@ -95,10 +115,20 @@
   --accent: #d4af37;
   --focus: #f7dd8b;
   --positive: #6ee7b7;
-  --glass: rgb(28 28 30 / 0.65);
-  --glass-border: rgb(212 175 55 / 0.22);
-  --glass-highlight: rgb(247 221 139 / 0.12);
-  --glass-shadow: rgb(0 0 0 / 0.5);
+  /* Redesign tokens: a second surface level, icon chips, the payment card. */
+  --surface-2: #232326;
+  --chip: rgb(212 175 55 / 0.14);
+  --chip-foreground: #f0d27a;
+  --card-fill: linear-gradient(135deg, #2c2c30 0%, #141416 55%, #3a2f12 100%);
+  --card-foreground: #f5f1e6;
+  --card-accent: #e2c15a;
+  /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+  --logo-1: #f7dd8b;
+  --logo-2: #c9a13b;
+  --glass: rgb(22 22 25 / 0.74);
+  --glass-border: rgb(212 175 55 / 0.14);
+  --glass-highlight: rgb(247 221 139 / 0.07);
+  --glass-shadow: rgb(0 0 0 / 0.45);
   --glow-1: rgb(212 175 55 / 0.22);
   --glow-2: rgb(138 106 31 / 0.22);
   --glow-3: rgb(247 221 139 / 0.22);
@@ -124,6 +154,15 @@
   --accent: #000000;
   --focus: #000000;
   --positive: #000000;
+  --surface-2: #ffffff;
+  --chip: transparent;
+  --chip-foreground: #000000;
+  --card-fill: #000000;
+  --card-foreground: #ffffff;
+  --card-accent: #ffffff;
+  /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+  --logo-1: #000000;
+  --logo-2: #000000;
   --glass: var(--surface);
   --glass-border: var(--line);
   --glass-highlight: transparent;
@@ -151,6 +190,15 @@
     --accent: #ffffff;
     --focus: #ffffff;
     --positive: #ffffff;
+    --surface-2: #000000;
+    --chip: transparent;
+    --chip-foreground: #ffffff;
+    --card-fill: #000000;
+    --card-foreground: #ffffff;
+    --card-accent: #ffffff;
+    /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+    --logo-1: #ffffff;
+    --logo-2: #ffffff;
     --glass: var(--surface);
     --glass-border: var(--line);
     --glass-highlight: transparent;
@@ -178,6 +226,15 @@
   --accent: #ffffff;
   --focus: #ffffff;
   --positive: #ffffff;
+  --surface-2: #000000;
+  --chip: transparent;
+  --chip-foreground: #ffffff;
+  --card-fill: #000000;
+  --card-foreground: #ffffff;
+  --card-accent: #ffffff;
+  /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
+  --logo-1: #ffffff;
+  --logo-2: #ffffff;
   --glass: var(--surface);
   --glass-border: var(--line);
   --glass-highlight: transparent;
@@ -210,10 +267,16 @@
   --color-banner-foreground: var(--banner-foreground);
   --color-accent: var(--accent);
   --color-positive: var(--positive);
+  --color-surface-2: var(--surface-2);
+  --color-chip: var(--chip);
+  --color-chip-foreground: var(--chip-foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-accent: var(--card-accent);
   /* Secondary text: 80% of the main text colour (checked: still 4.5:1 on glass over glows). */
   --color-muted: color-mix(in srgb, var(--foreground) 80%, transparent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cinzel);
 }
 
 body {
@@ -289,6 +352,152 @@ body::before {
   background: var(--hero-fill);
   color: var(--hero-foreground);
   --focus: var(--hero-foreground); /* a gold focus ring would vanish on gold, so use the dark text colour */
+}
+
+/* ---------- Redesign utilities ---------- */
+
+/* A quieter button for secondary actions, next to a btn-primary. */
+@utility btn-secondary {
+  background: var(--surface-2);
+  color: var(--foreground);
+  border: 1px solid var(--line);
+}
+
+/* A small rounded square holding an icon (account types, categories, actions). Size it with w-/h-. */
+@utility chip {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  background: var(--chip);
+  color: var(--chip-foreground);
+}
+:root[data-contrast="high"] .chip {
+  border: 1px solid var(--line);
+}
+
+/* The small uppercase label above a heading or a figure ("TOTAL BALANCE"). */
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* The payment card graphic: a dark metallic finish in every theme (it's a picture of an object). */
+@utility payment-card {
+  background: var(--card-fill);
+  color: var(--card-foreground);
+  box-shadow:
+    0 18px 40px rgb(0 0 0 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+:root[data-contrast="high"] .payment-card {
+  box-shadow: none;
+  border: 2px solid var(--line);
+}
+
+/* Gentle entrance for blocks, only for people who haven't asked their device for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .rise-in {
+    animation: rise-in 0.35s ease-out both;
+  }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/*
+ * The glass LOOK without the blur. backdrop-filter is expensive: on a long page with many blurred
+ * panels the browser failed to paint some of them at all (found while checking the home page).
+ * So: real blur only where something sits behind to blur (the header, the hero over the orbs),
+ * and `panel` everywhere else, including panels inside a glass card.
+ */
+@utility panel {
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
+/* ---------- Public site (logged-out pages) ---------- */
+
+/* Gold, metallic text for the second line of a headline. Plain text in high contrast. */
+@utility text-gold-gradient {
+  background: linear-gradient(100deg, #f7dd8b 0%, #d4af37 45%, #a67c1f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+:root[data-contrast="high"] .text-gold-gradient {
+  background: none;
+  color: var(--foreground);
+}
+/* In light mode the bright end of the gradient is too pale on ivory: use the deeper golds
+   (the light end, #8a6a1f, is 4.88:1 on light glass, so the logo and headlines read clearly). */
+:root[data-theme="light"] .text-gold-gradient {
+  background-image: linear-gradient(100deg, #8a6a1f 0%, #6b5216 60%, #5c4612 100%);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .text-gold-gradient {
+    background-image: linear-gradient(100deg, #8a6a1f 0%, #6b5216 60%, #5c4612 100%);
+  }
+}
+
+/* A polished gold sphere (pure CSS, no image). Decoration only: hidden in high contrast. */
+@utility orb {
+  border-radius: 9999px;
+  background: radial-gradient(circle at 32% 28%, #fff3c4 0%, #f0d27a 14%, #d4af37 38%, #8a6a1f 70%, #2b220c 100%);
+  box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+}
+:root[data-contrast="high"] .orb {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Slow floating, like the objects drifting around the glass card. */
+  .float-slow {
+    animation: float 7s ease-in-out infinite;
+  }
+  .float-slower {
+    animation: float 10s ease-in-out infinite reverse;
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(3deg);
+    }
+  }
+
+  /* The headline reveals left to right, once, when the page loads. */
+  .wipe-in {
+    animation: wipe-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .wipe-in-late {
+    animation: wipe-in 0.9s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @keyframes wipe-in {
+    from {
+      clip-path: inset(0 100% 0 0);
+      transform: translateY(8px);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      transform: none;
+    }
+  }
 }
 
 /* A clearly visible keyboard focus ring everywhere (only for keyboard, not mouse clicks). */

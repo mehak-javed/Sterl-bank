@@ -43,6 +43,17 @@ export function formatGBP(pence: Pence): string {
 }
 
 /**
+ * Splits a formatted amount so the pence can be shown smaller, as banking apps do:
+ *   631165 → { whole: "£6,311", fraction: ".65" }    -500 → { whole: "-£5", fraction: ".00" }
+ * Formatting still happens once, in formatGBP; this only cuts the finished string.
+ */
+export function splitGBP(pence: Pence): { whole: string; fraction: string } {
+  const formatted = formatGBP(pence);
+  const dot = formatted.lastIndexOf(".");
+  return { whole: formatted.slice(0, dot), fraction: formatted.slice(dot) };
+}
+
+/**
  * Round-up: how many pence to move to savings so a spend reaches the next whole pound.
  *   roundUp(347) → 53   (£3.47 → £4.00)
  *   roundUp(500) → 0    (already a whole pound)

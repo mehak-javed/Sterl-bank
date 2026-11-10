@@ -10,7 +10,7 @@ export async function RoundUpSetting() {
 
 export function RoundUpSettingSkeleton() {
   return (
-    <section aria-busy="true" aria-label="Round-ups" className="glass rounded-2xl p-4">
+    <section aria-busy="true" aria-label="Round-ups" className="glass rounded-3xl p-5">
       <p className="mb-3 text-lg font-semibold text-heading">Round-ups</p>
       <SkeletonRows rows={2} />
     </section>

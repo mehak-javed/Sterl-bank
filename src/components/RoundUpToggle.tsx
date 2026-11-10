@@ -28,7 +28,7 @@ export function RoundUpToggle({ enabled }: { enabled: boolean }) {
   }
 
   return (
-    <section aria-labelledby="roundups-heading" className="glass flex flex-col gap-3 rounded-2xl p-4">
+    <section aria-labelledby="roundups-heading" className="rise-in glass flex flex-col gap-3 rounded-3xl p-5">
       <h2 id="roundups-heading" className="text-lg font-semibold text-heading">
         Round-ups
       </h2>
