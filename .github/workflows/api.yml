@@ -25,8 +25,45 @@ jobs:
     defaults:
       run:
         working-directory: sterl-api
+
+    # A real PostgreSQL 18 (same major version as Postgres.app locally) runs next to the job,
+    # so the JUnit tests check the real constraints and triggers, not an imitation database.
+    # The password is a throwaway for this temporary CI container, never a real secret.
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: sterl
+          POSTGRES_PASSWORD: sterl-ci-only
+          POSTGRES_DB: sterl_test
+        ports:
+          - 5432:5432
+        # Wait until PostgreSQL accepts connections before the tests start.
+        options: >-
+          --health-cmd "pg_isready -U sterl -d sterl_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      STERL_TEST_DB_URL: jdbc:postgresql://localhost:5432/sterl_test
+      STERL_DB_USER: sterl
+      STERL_DB_PASSWORD: sterl-ci-only
+
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # The seed SQL is generated from the front end's JSON fixtures. If someone changed the JSON
+      # but forgot `npm run seed:sql`, the database would hold a different bank: fail early.
+      - name: Check the seed SQL matches the JSON fixtures
+        working-directory: .
+        run: |
+          npx --yes tsx@4 src/mocks/seed-sql.ts
+          git diff --exit-code -- sterl-api/src/main/resources/db/seed/
 
       - uses: actions/setup-java@v4
         with:

@@ -10,7 +10,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "typecheck": "next typegen && tsc --noEmit",
-    "seed": "tsx src/mocks/seed.ts",
+    "seed": "tsx src/mocks/seed.ts && tsx src/mocks/seed-sql.ts",
+    "seed:sql": "tsx src/mocks/seed-sql.ts",
     "fx:fallback": "tsx src/mocks/save-fx-fallback.ts"
   },
   "dependencies": {
