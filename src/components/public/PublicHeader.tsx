@@ -17,8 +17,8 @@ export const PUBLIC_LINKS = [
  */
 export function PublicHeader() {
   return (
-    <header className="sticky top-0 z-40 px-4 pt-4 sm:px-6">
-      <div className="glass mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-5">
+    <header className="sticky top-0 z-40 px-4 pt-4 sm:px-8 lg:px-12">
+      <div className="glass flex items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-5">
         <BrandMark href="/" label="Sterl home" />
 
         <nav aria-label="Main" className="hidden md:block">

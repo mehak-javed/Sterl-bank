@@ -76,7 +76,7 @@ export function AppShell({ customerName, children }: { customerName: string; chi
 
         {/* The one <main> per page lives here, so pages don't render their own.
             pb-28 on phones: room for the tab bar, so it never covers the last thing on the page. */}
-        <main id="main" tabIndex={-1} className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 pt-5 pb-28 lg:px-8 lg:pt-8 lg:pb-12">
+        <main id="main" tabIndex={-1} className="flex w-full flex-1 flex-col gap-6 px-4 pt-5 pb-28 lg:px-10 lg:pt-8 lg:pb-12">
           {children}
         </main>
       </div>

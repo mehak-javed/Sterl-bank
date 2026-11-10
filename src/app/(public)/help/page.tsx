@@ -14,7 +14,7 @@ const QUESTIONS = [
   },
   {
     q: "How do I try it?",
-    a: "Choose \"Try the demo\" to open a ready-made demo account. You can look at balances and spending, freeze the card, move money between accounts and switch round-ups on and off.",
+    a: 'Choose "Try the demo" to open a ready-made demo account. You can look at balances and spending, freeze the card, move money between accounts and switch round-ups on and off.',
   },
   {
     q: "Where does the data come from?",
@@ -36,18 +36,42 @@ const QUESTIONS = [
  */
 export default function HelpPage() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pt-12 sm:px-6">
-      <p className="eyebrow text-muted">Help</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
-        Questions, <span className="text-gold-gradient">answered</span>
-      </h1>
+    // Full width, in two columns on wide screens: the heading on the left, the answers on the right
+    // (long lines are hard to read, so the answers never stretch across the whole screen).
+    <div className="grid w-full grid-cols-1 gap-10 px-4 pt-12 sm:px-8 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:px-12">
+      <div>
+        <p className="eyebrow text-muted">Help</p>
+        <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+          Questions, <span className="text-gold-gradient">answered</span>
+        </h1>
+        <p className="mt-6 text-muted">
+          Still curious?{" "}
+          <Link
+            href="/dashboard"
+            className="font-semibold text-heading underline underline-offset-4"
+          >
+            Try the demo
+          </Link>{" "}
+          or read the{" "}
+          <a
+            href="https://github.com/mehak-javed/Sterl-bank"
+            className="font-semibold text-heading underline underline-offset-4"
+          >
+            source code
+          </a>
+          .
+        </p>
+      </div>
 
-      <div className="mt-10 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         {QUESTIONS.map(({ q, a }) => (
           <details key={q} className="panel group rounded-2xl p-5">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
               {q}
-              <span aria-hidden="true" className="chip h-8 w-8 shrink-0 text-lg transition-transform group-open:rotate-45">
+              <span
+                aria-hidden="true"
+                className="chip h-8 w-8 shrink-0 text-lg transition-transform group-open:rotate-45"
+              >
                 +
               </span>
             </summary>
@@ -55,18 +79,6 @@ export default function HelpPage() {
           </details>
         ))}
       </div>
-
-      <p className="mt-10 text-muted">
-        Still curious?{" "}
-        <Link href="/dashboard" className="font-semibold text-heading underline underline-offset-4">
-          Try the demo
-        </Link>{" "}
-        or read the{" "}
-        <a href="https://github.com/mehak-javed/Sterl-bank" className="font-semibold text-heading underline underline-offset-4">
-          source code
-        </a>
-        .
-      </p>
     </div>
   );
 }

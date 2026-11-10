@@ -73,9 +73,9 @@ export default function HomePage() {
   return (
     <>
       {/* ---------- Hero ---------- */}
-      <section aria-labelledby="hero-heading" className="relative isolate px-4 pt-8 sm:px-6 sm:pt-12">
+      <section aria-labelledby="hero-heading" className="relative isolate px-4 pt-8 sm:px-8 sm:pt-12 lg:px-12">
         <FloatingOrbs />
-        <div className="glass relative mx-auto grid max-w-6xl items-center gap-10 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[1.15fr_1fr]">
+        <div className="glass relative grid items-center gap-10 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[1.15fr_1fr]">
           {/* A gold coin breaking over the card's top edge, for depth (like the floating watch in the reference). */}
           <span
             aria-hidden="true"
@@ -129,7 +129,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------- Features ---------- */}
-      <section id="features" aria-labelledby="features-heading" className="mx-auto mt-24 w-full max-w-6xl scroll-mt-28 px-4 sm:px-6">
+      <section id="features" aria-labelledby="features-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
         <p className="eyebrow text-muted">Features</p>
         <h2 id="features-heading" className="mt-2 max-w-xl text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
           Everything you need, nothing you don&apos;t
@@ -148,7 +148,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------- How it works ---------- */}
-      <section id="how-it-works" aria-labelledby="how-heading" className="mx-auto mt-24 w-full max-w-6xl scroll-mt-28 px-4 sm:px-6">
+      <section id="how-it-works" aria-labelledby="how-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
         <p className="eyebrow text-muted">How it works</p>
         <h2 id="how-heading" className="mt-2 text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
           See Sterl in a minute
@@ -167,7 +167,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------- Security ---------- */}
-      <section aria-labelledby="security-heading" className="mx-auto mt-24 w-full max-w-6xl px-4 sm:px-6">
+      <section aria-labelledby="security-heading" className="mt-24 w-full px-4 sm:px-8 lg:px-12">
         <div className="panel grid gap-8 rounded-[2rem] p-8 sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
           <div>
             <span aria-hidden="true" className="chip h-14 w-14">
@@ -203,7 +203,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------- Final call to action: this page's one solid-gold block ---------- */}
-      <section aria-labelledby="cta-heading" className="mx-auto mt-24 w-full max-w-6xl px-4 sm:px-6">
+      <section aria-labelledby="cta-heading" className="mt-24 w-full px-4 sm:px-8 lg:px-12">
         <div className="hero-gold flex flex-col items-start gap-6 rounded-[2rem] p-8 sm:flex-row sm:items-center sm:justify-between sm:p-12">
           <div>
             <h2 id="cta-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">

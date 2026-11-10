@@ -4,7 +4,7 @@ import { PUBLIC_LINKS } from "./PublicHeader";
 
 export function PublicFooter() {
   return (
-    <footer className="mx-auto mt-24 w-full max-w-6xl border-t border-line px-4 py-10 sm:px-6">
+    <footer className="mt-24 w-full border-t border-line px-4 py-10 sm:px-8 lg:px-12">
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
         <div className="max-w-sm">
           <Logo className="w-44" />

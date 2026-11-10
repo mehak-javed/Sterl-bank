@@ -10,7 +10,9 @@ export function FloatingOrbs() {
       <span className="orb float-slow absolute -top-10 left-[6%] h-28 w-28 opacity-90 blur-[1px]" />
       <span className="orb float-slower absolute top-[18%] -right-10 h-44 w-44 opacity-80 blur-[2px]" />
       <span className="orb float-slow absolute bottom-[8%] -left-12 h-36 w-36 opacity-70 blur-[3px]" />
-      <span className="orb float-slower absolute -bottom-16 right-[18%] h-52 w-52 opacity-60 blur-[6px]" />
+      {/* Kept behind the card picture, not the text: through see-through glass, a sphere behind words
+          dropped "See how it works" to 3.5:1 contrast (measured). */}
+      <span className="orb float-slower absolute -bottom-20 left-[30%] h-52 w-52 opacity-60 blur-[6px]" />
     </div>
   );
 }

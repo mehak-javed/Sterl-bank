@@ -42,6 +42,18 @@ circles, a pill button plus a round play button, a thumbnail rail switching the 
 own colours, words and pictures. Pieces: `public/PublicHeader`, `PublicFooter`, `FloatingOrbs`,
 `HeroShowcase` (Card / App / Round-ups / Markets previews from fake data).
 
+**Full width:** pages use the whole screen (no `max-w-6xl` cap), with side padding
+`px-4 sm:px-8 lg:px-12`. Long text keeps its own limit (`max-w-md`/`max-w-2xl`, the Help page's
+two columns), because lines of more than about 75 characters are hard to read.
+
+**Mirror glass:** `glass` and `panel` are see-through (dark 34%, light 42% tint) with a diagonal
+reflection (`--sheen`) on top, so the gold spheres and glows show through. Rule: **no sphere behind
+text**. Measured: a sphere behind "See how it works" dropped it to 3.5 : 1; moved behind the card
+picture, it is 10 : 1. Devices that ask for less transparency, and high contrast, get solid panels.
+
+**Demo banner:** required on every page, but no coloured bar: the text sits on the page
+(light gold 11.3 : 1 in dark mode, deep gold 8.4 : 1 in light; solid black/white in high contrast).
+
 **Blur budget:** `glass` (real `backdrop-filter` blur) only where something sits behind to blur: the
 header and the hero. Everything else uses `panel` (same look, no blur). A page with 13 blurred panels
 failed to paint some of them.
@@ -58,8 +70,8 @@ failed to paint some of them.
 
 | Class | What it is |
 | --- | --- |
-| `glass` | A frosted panel with real blur (charcoal in dark mode, white in light), hairline gold-tinted border. Use sparingly |
-| `panel` | The same look without blur: the default for cards on long pages and panels inside a glass card |
+| `glass` | See-through mirror glass: light blur, thin tint, diagonal reflection, bright top edge. Use sparingly (header, hero) |
+| `panel` | The same see-through look and reflection without blur: the default for cards on long pages |
 | `text-gold-gradient` | Metallic gold text for a headline's second line (deep gold in light mode, plain in high contrast) |
 | `orb` | A CSS gold sphere for decoration (hidden in high contrast) |
 | `float-slow` / `float-slower` / `wipe-in` / `wipe-in-late` | Floating and headline-reveal animations (skipped for reduced motion) |

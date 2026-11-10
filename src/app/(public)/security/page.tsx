@@ -39,7 +39,7 @@ const PROTECTIONS = [
 
 export default function SecurityPage() {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pt-12 sm:px-6">
+    <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
       <p className="eyebrow text-muted">Security</p>
       <h1 className="mt-2 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
         Your money, <span className="text-gold-gradient">protected</span>
