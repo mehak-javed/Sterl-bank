@@ -1,0 +1,51 @@
+# CI: every push and pull request must pass these checks before it can be merged.
+# Same commands you run locally, so "it works on my machine" means "it works in CI".
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch cancels the older run: no wasted minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: this workflow only needs to read the code.
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Front end (lint, typecheck, test, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # No artificial delays or random 503s in CI: checks must be fast and never flaky.
+      STERL_SIMULATE_NETWORK: "off"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc # same Node version as local development
+          cache: npm
+
+      # npm ci installs exactly what package-lock.json says (npm install may update it).
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
+
+  # Week 2 (Day 8) adds a second job here: build and test the Java API (sterl-api) with JUnit.

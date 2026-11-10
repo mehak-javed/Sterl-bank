@@ -1,5 +1,7 @@
 # Sterl
 
+[![CI](https://github.com/mehak-javed/Sterl-bank/actions/workflows/ci.yml/badge.svg)](https://github.com/mehak-javed/Sterl-bank/actions/workflows/ci.yml)
+
 > **Sterl is a portfolio demo. Not a real bank. All data is fake.**
 
 A responsive demo banking web app: a personal banking dashboard plus a live (simulated) FX markets desk.
