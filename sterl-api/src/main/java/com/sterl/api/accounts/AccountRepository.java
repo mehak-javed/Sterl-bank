@@ -48,22 +48,27 @@ public class AccountRepository {
 		this.jdbc = jdbc;
 	}
 
-	/** The customer's accounts, never the bank's internal ones. Balances come from the ledger. */
-	public List<AccountResponse> findCustomerAccounts() {
-		// One demo customer for now; from Day 22 this is filtered by the logged-in customer.
+	/**
+	 * One customer's accounts, never the bank's internal ones. Balances come from the ledger.
+	 * The customer id always comes from {@code CurrentCustomer}, never from the request.
+	 */
+	public List<AccountResponse> findCustomerAccounts(UUID customerId) {
 		return jdbc.sql(ACCOUNT_COLUMNS + """
-				 WHERE a.type <> 'internal'
+				 WHERE a.customer_id = :customerId AND a.type <> 'internal'
 				 ORDER BY CASE a.type WHEN 'current' THEN 1 WHEN 'saver' THEN 2 ELSE 3 END, a.name
 				""")
+				.param("customerId", customerId)
 				.query(AccountRepository::toAccount)
 				.list();
 	}
 
-	public Optional<AccountResponse> findCustomerAccount(UUID id) {
+	/** Empty when the account doesn't exist, is internal, or belongs to someone else. */
+	public Optional<AccountResponse> findCustomerAccount(UUID customerId, UUID id) {
 		return jdbc.sql(ACCOUNT_COLUMNS + """
-				 WHERE a.id = :id AND a.type <> 'internal'
+				 WHERE a.id = :id AND a.customer_id = :customerId AND a.type <> 'internal'
 				""")
 				.param("id", id)
+				.param("customerId", customerId)
 				.query(AccountRepository::toAccount)
 				.optional();
 	}
