@@ -19,6 +19,16 @@ updates:
       # Small, low-risk updates come as ONE pull request instead of twenty.
       npm-minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # @types/node must match the Node version we RUN (.nvmrc = 24, the same in CI and on Vercel).
+      # Types for a newer Node would let code call functions that don't exist at runtime: it would
+      # compile, pass CI, and crash in production. Raise this together with .nvmrc, never alone.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # TypeScript 7 is the new natively compiled TypeScript; our Next.js 16 toolchain fails to build
+      # with it (PR #27, Nov 2026). Revisit when Next.js supports it.
+      - dependency-name: "typescript"
+        versions: [">=7"]
 
   # Java API: sterl-api/pom.xml (Spring Boot, PostgreSQL driver, Flyway...)
   - package-ecosystem: maven
