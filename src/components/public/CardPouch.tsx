@@ -20,31 +20,35 @@ const sample = (product: CardProduct): SampleCard => ({
 });
 
 /**
- * The cards in the pouch, back to front. Each one rests peeking out of the pouch at its own fan
- * angle, then takes its turn to slide right out, show itself, and slide back in.
+ * The cards in the pouch, back to front, each resting at its own fan angle and sideways spread.
  *   fan: its angle while it rests. shift: how far left/right it sits (%), so the fan spreads out.
- *   delay: when its turn comes (negative = already part-way through
- *   the cycle when the page opens, so the four take turns one after another).
+ *   Kept small (±8°, ±4%): at -13° and -7% the gold card's top corner hung outside the pouch.
+ * They leave and return one after another: card i starts i × 0.15s after the one before it.
+ * (Written as (i × 15) / 100: in floating point, 3 × 0.15 is 0.44999999999999996, not 0.45.)
  */
-const POUCH: { product: CardProduct; fan: number; shift: number; delay: number }[] = [
-  { product: "premier", fan: -13, shift: -7, delay: 0 },
-  { product: "travel", fan: -5, shift: -2.5, delay: -12 },
-  { product: "virtual", fan: 4, shift: 2.5, delay: -8 },
-  { product: "debit", fan: 12, shift: 7, delay: -4 },
+const POUCH: { product: CardProduct; fan: number; shift: number }[] = [
+  { product: "premier", fan: -8, shift: -4 },
+  { product: "travel", fan: -3, shift: -1.5 },
+  { product: "virtual", fan: 3, shift: 1.5 },
+  { product: "debit", fan: 8, shift: 4 },
 ];
 
 /**
- * A black-and-gold metal card pouch for the landing page, holding all four Sterl cards. One at a
- * time, each card slides up out of the pouch, holds for a moment so you can see it, and slides back
- * in, so the animation shows every card the bank offers. The whole pouch floats gently, tilted in 3D.
+ * A black-and-gold metal card pouch for the landing page, holding all four Sterl cards, on a loop:
+ *   open, cards fanned → the cards fly up out of the pouch and off the screen → the flap closes →
+ *   the flap opens → the cards drop back into the pouch → the flap closes over them → it opens again.
+ * The whole pouch floats gently, tilted in 3D.
  *
- * How the "inside the pouch" effect works: three flat layers inside one tilted scene. The pouch's
- * BACK panel is drawn first, the cards next, the pouch's FRONT panel last. So a card lower than the
- * front panel's top edge is hidden behind it (in the pouch), and a card that slides up appears.
+ * One shared clock: the cards and the flap all use the same cycle length (--pouch-cycle), and each
+ * keyframe list says WHEN in that cycle things happen, so they stay in sync forever.
+ *
+ * How the "inside the pouch" effect works: flat layers inside one tilted scene, painted in order:
+ * BACK panel, the cards, the FRONT panel, then the FLAP. A card below the front panel's top edge is
+ * hidden behind it (in the pouch); the closed flap covers the opening and the tops of the cards.
  *
  * Pure CSS (the card-pouch classes in globals.css): runs on the browser's compositor, no JavaScript,
- * no animation library. Speed and angles are CSS variables; see the comments there. Still (all
- * four cards peeking out in a fan) for people who asked their device for less motion.
+ * no animation library. Timing and angles are CSS variables; see the comments there. Still (open,
+ * cards fanned) for people who asked their device for less motion.
  *
  * role="img" with one description: a screen reader hears one sentence, not four cards of text.
  */
@@ -52,7 +56,7 @@ export function CardPouch() {
   return (
     <div
       role="img"
-      aria-label="A black and gold Sterl card pouch. The Premier Metal, Travel, Virtual and Everyday Debit cards take turns sliding out of it and back in."
+      aria-label="A black and gold Sterl card pouch holding the Premier Metal, Travel, Virtual and Everyday Debit cards. The cards fly out, the pouch closes and opens, and the cards drop back in."
       className="card-pouch"
     >
       <span className="card-pouch-floor" />
@@ -61,11 +65,11 @@ export function CardPouch() {
         <div className="card-pouch-back" />
 
         {/* 2. The cards. */}
-        {POUCH.map(({ product, fan, shift, delay }) => (
+        {POUCH.map(({ product, fan, shift }, i) => (
           <div
             key={product}
             className="card-pouch-card"
-            style={{ "--fan": `${fan}deg`, "--shift": `${shift}%`, "--delay": `${delay}s` } as CSSProperties}
+            style={{ "--fan": `${fan}deg`, "--shift": `${shift}%`, "--stagger": `${(i * 15) / 100}s` } as CSSProperties}
           >
             <PaymentCard card={sample(product)} />
           </div>
@@ -78,6 +82,11 @@ export function CardPouch() {
             <Eagle className="h-[2.4em]" />
             <span>STERL</span>
           </span>
+        </div>
+
+        {/* 4. The flap: folds down over the opening to close the pouch, with a gold clasp. */}
+        <div className="card-pouch-flap">
+          <span className="card-pouch-clasp" />
         </div>
       </div>
     </div>

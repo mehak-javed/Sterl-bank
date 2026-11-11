@@ -598,44 +598,34 @@ body:has(.public-site) {
   color: var(--public-silver);
 }
 
-/* A small floating frosted-glass chip next to the hero cards (decoration with fake data). */
-@media (prefers-reduced-motion: no-preference) {
-  .chip-float {
-    animation: chip-float 7s ease-in-out infinite;
-  }
-  .chip-float-late {
-    animation: chip-float 8s ease-in-out -3s infinite;
-  }
-  @keyframes chip-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-}
-
 /* ---------- Landing page: the card pouch (components/public/CardPouch.tsx) ---------- */
 
 /*
- * A black-and-gold metal pouch holding all four cards; one at a time each card slides out, shows
- * itself, and slides back in. Three flat layers inside one tilted scene: BACK panel, cards, FRONT
- * panel. Drawn in that order, so a card below the front panel's top edge is hidden (in the pouch).
+ * A black-and-gold metal pouch holding all four cards, on one loop (see the timeline below):
+ *   open → cards fly out and off the screen → flap closes → flap opens → cards drop back in →
+ *   flap closes over them → flap opens.
+ * Flat layers inside one tilted scene, painted in order: BACK panel, cards, FRONT panel, FLAP. A card
+ * below the front panel's top edge is hidden (in the pouch); the closed flap covers the opening.
  * The scene is tilted as a whole (one perspective), so the layers keep their order.
  *
+ * TIMELINE (% of --pouch-cycle; the cards and the flap share it, so they stay in sync):
+ *    0– 8  open, cards resting                  50–60   cards drop back in (ease-out: they land softly)
+ *    8–20  cards fly up and fade out            66–72   flap snaps shut over the cards
+ *          (ease-in: they speed up as they go)  72–82   closed, hold
+ *   26–32  flap snaps shut (pouch empty)        82–88   flap opens; 88–100 open, hold
+ *   32–44  closed, hold;  44–50 flap opens
+ * Each card is --stagger later (up to 0.45s), so the last one lands before the flap starts at 66%.
+ *
  * HOW TO ADJUST:
- *   --pouch-cycle  how long until the same card comes out again. Each card's turn is a quarter of it
- *                  (4 cards); keep each card's delay (CardPouch.tsx) a quarter-cycle apart.
- *   --pouch-rise   how far a card slides out, as a % of its own height. 0 = never leaves the pouch.
+ *   --pouch-cycle  the whole loop. Bigger = slower and calmer (every step scales with it).
+ *   --pouch-fly    how far the cards fly up when they leave, as a % of a card's height.
  *   --pouch-yaw / --pouch-pitch / --pouch-roll  the pouch's 3D angle (turn, tip back, lean).
- *   per card (POUCH in CardPouch.tsx): fan = its angle while resting, shift = left/right spread,
- *   delay = when its turn comes.
+ *   per card (POUCH in CardPouch.tsx): fan = its angle while resting, shift = left/right spread.
+ *   Each card starts 0.15s after the one behind it (--stagger), so they leave and return one by one.
  */
 .card-pouch {
-  --pouch-cycle: 16s;
-  --pouch-rise: 62%;
+  --pouch-cycle: 10s; /* was 14s: Mehak found it slow */
+  --pouch-fly: 320%;
   --pouch-yaw: -16deg;
   --pouch-pitch: 8deg;
   --pouch-roll: -5deg;
@@ -667,8 +657,8 @@ body:has(.public-site) {
 /* The back panel: taller than the front, so the cards stand in front of it. */
 .card-pouch-back {
   position: absolute;
-  left: 13%;
-  right: 13%;
+  left: 11%;
+  right: 11%;
   bottom: 12%;
   height: 50%;
   border-radius: 1.4rem;
@@ -681,8 +671,10 @@ body:has(.public-site) {
 /* Each card: inside the pouch, fanned out at its own angle, peeking over the front panel. */
 .card-pouch-card {
   position: absolute;
-  left: 19%;
-  width: 62%;
+  /* 56% wide (was 62%): with the fan, the outer cards' top corners must stay inside the pouch
+     (11%–89%). Measured in the browser after the gold card's corner was seen hanging outside. */
+  left: 22%;
+  width: 56%;
   /* 25%: each resting card peeks well over the front panel (whose top edge is at 46%), so the
      fan of four is visible even while no card is out. */
   bottom: 25%;
@@ -730,16 +722,54 @@ body:has(.public-site) {
   letter-spacing: 0.08em;
   color: #e2c15a;
 }
+/* The flap: hinged at its top edge, folding down over the opening. Open = turned edge-on (90deg,
+   seen from its hinge, so it disappears); closed = flat, covering the opening and the cards' tops. */
+.card-pouch-flap {
+  position: absolute;
+  /* 7% each side: wider than the front panel, so the fanned cards' outer corners (Premier leans
+     furthest left) stay under the flap when it closes. At 11% a gold corner stuck out. */
+  left: 7%;
+  right: 7%;
+  bottom: 40%;
+  height: 31%; /* from 40% up to 71%: over the front panel's top edge and every resting card */
+  border-radius: 1.2rem 1.2rem 2.2rem 2.2rem;
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.07) 45%, transparent 60%),
+    linear-gradient(175deg, #2c2c30 0%, #111113 70%, #070708 100%);
+  box-shadow:
+    0 14px 24px rgb(0 0 0 / 0.5),
+    inset 0 1px 0 rgb(247 221 139 / 0.45),
+    inset 0 0 0 1px rgb(212 175 55 / 0.35);
+  transform-origin: 50% 0%;
+  transform: perspective(700px) rotateX(90deg); /* open (at rest, and for reduced motion) */
+  opacity: 0;
+}
+/* The gold snap clasp at the bottom of the flap. */
+.card-pouch-clasp {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  width: 11%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #d4af37 45%, #8a6a1f 100%);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.5);
+}
+
 /* The eagle on the pouch uses the card gold, whatever the page theme. */
 .card-pouch-brand .eagle-mark {
   --eagle-fill: linear-gradient(135deg, #f7dd8b, #c9a13b);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Each card's turn: slide out (ease-out, like a hand pulling it), hold, slide back in (ease-in).
-     The negative delays put the four cards at different points of the same cycle, so they take turns. */
+  /* The cards and the flap run on the same clock (--pouch-cycle). --stagger delays each card by a
+     fraction of a second, so they leave and come back one after another. */
   .card-pouch-card {
-    animation: pouch-card var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) var(--delay) infinite;
+    animation: pouch-card var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) var(--stagger) infinite both;
+  }
+  .card-pouch-flap {
+    animation: pouch-flap var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
   /* The whole pouch floats gently, on its own slower rhythm. */
   .card-pouch-scene {
@@ -750,20 +780,67 @@ body:has(.public-site) {
   }
 }
 
-/* 0–4%: rest. 4–12%: slide out and straighten. 12–20%: hold, shown. 20–28%: slide back in.
-   28–100%: rest (the other three cards take their turns). */
+/* A card's journey (see TIMELINE above). An animation-timing-function inside a keyframe sets the
+   easing of the stretch that STARTS there, so each move gets its own feel. */
 @keyframes pouch-card {
   0%,
-  4% {
+  8% {
     transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.2); /* ease-in: speeds up as it leaves */
   }
-  12%,
-  20% {
-    transform: translateX(calc(var(--shift) * 0.4)) translateY(calc(var(--pouch-rise) * -1)) rotate(calc(var(--fan) * 0.3));
+  20%,
+  50% {
+    transform: translateX(calc(var(--shift) * 2.5)) translateY(calc(var(--pouch-fly) * -1)) rotate(calc(var(--fan) * 2.5));
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); /* ease-out: lands softly */
   }
-  28%,
+  60%,
   100% {
     transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+    opacity: 1;
+  }
+}
+
+/* The flap (see TIMELINE above): open → snaps shut (empty) → opens → snaps shut over the cards → opens.
+   Closing uses a small overshoot (a y-value above 1 in the curve), so it shuts with a little "click";
+   opening is a quick ease-out. */
+@keyframes pouch-flap {
+  /* open (edge-on, invisible) */
+  0%,
+  26%,
+  66%,
+  100% {
+    transform: perspective(700px) rotateX(90deg);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+  50%,
+  88% {
+    transform: perspective(700px) rotateX(90deg);
+    opacity: 0;
+  }
+  /* visible while it swings */
+  27%,
+  67% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+  49%,
+  87% {
+    opacity: 1;
+  }
+  /* closed: 32–44 (empty) and 72–82 (over the cards) */
+  32%,
+  72% {
+    transform: perspective(700px) rotateX(0deg);
+    opacity: 1;
+  }
+  44%,
+  82% {
+    transform: perspective(700px) rotateX(0deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); /* opens with a quick ease-out */
   }
 }
 

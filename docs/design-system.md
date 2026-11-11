@@ -103,20 +103,23 @@ wrapper) get a deeper near-black page (`--public-bg` #030405, via `body:has(.pub
 banking app keeps its own background) and matte-silver secondary text (`--public-silver` #b8bcc2,
 10.8 : 1). Gold stays the accent (Mehak chose black and gold over the reference's sage green).
 Hero: message left (gold "New" badge, two-tone headline, value line, "Try the demo" + "See how it
-works"), cards right; two frosted-glass chips with fake data float by the cards (`chip-float`,
-`z-10` so the cards never cover them); a row of four glass feature cards under the hero. Spheres
+works"), cards right; a row of four glass feature cards under the hero. Spheres
 only on the card side, and the side sphere only from `lg` (on phones the columns stack and it landed
 behind the paragraph).
 
-**Hero card pouch** (`public/CardPouch`, Mehak's idea from a reference video): a black-and-gold metal
-pouch (brushed black, gold rim, gold strap, the eagle and STERL) holding all four cards, fanned
-(`fan` angle + `shift` per card in `POUCH`). One at a time each card slides out, holds, and slides
-back in, so the animation shows every card the bank offers (`--pouch-cycle` 16s, each card's turn a
-quarter of it, set by negative `--delay`s). The "inside the pouch" effect is just paint order inside
-one tilted scene: back panel, then cards, then front panel; a card below the front panel's top edge
-is hidden behind it. The whole scene floats and turns gently (`pouch-float`), with a floor shadow.
-Pure CSS; every value is a commented variable in globals.css. Still (the four cards fanned) for
-reduced motion. `role="img"` with one sentence for screen readers.
+**Hero card pouch** (`public/CardPouch`, Mehak's idea): a black-and-gold metal pouch (brushed black,
+gold rim, gold strap, the eagle and STERL) holding all four cards, fanned (`fan` + `shift` per card in
+`POUCH`), with a flap and gold clasp. One loop (`--pouch-cycle` 10s; 14s felt slow), one shared clock
+for the cards and the flap: open → the cards fly up and off the screen, one after another (`--stagger` 0.15s apart)
+→ the flap closes → it opens → the cards drop back in → the flap closes over them → it opens. The
+"inside the pouch" effect is paint order inside one tilted scene: back panel, cards, front panel,
+flap. The flap is hinged at its top edge: open = `rotateX(90deg)` (edge-on, invisible), closed =
+`rotateX(0)`. It is wider than the front panel so the fanned cards' corners stay under it. Cards are 56% wide
+with a ±8° / ±4% fan, so at rest every card stays inside the pouch (measured; at ±13° the gold
+card's corner hung outside). Each move has its own easing (set inside the keyframes): cards speed
+up as they fly out and land softly; the flap snaps shut with a small overshoot and opens quickly. The whole
+scene floats gently. Pure CSS; the timeline is written out in globals.css. Still (open, cards fanned)
+for reduced motion. No floating chips or boxes on the landing page (Mehak removed them).
 
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
 rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.

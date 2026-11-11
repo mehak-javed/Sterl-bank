@@ -8,7 +8,6 @@ import {
   Landmark,
   LockKeyhole,
   PlayCircle,
-  Send,
   ShieldCheck,
   Sparkles,
   Zap,
@@ -70,7 +69,7 @@ const STEPS = [
  *
  * Look: a dark, restrained fintech landing page (Mehak's direction, inspired by a Dribbble concept
  * she shared): a near-black page with matte-silver text, the message on the left, a metal card pouch on the
- * right that shows every card, small frosted-glass chips, and quick feature cards under the hero.
+ * right that shows every card and quick feature cards under the hero.
  * Sterl's own name, black-and-gold brand, words and pictures.
  */
 export default function HomePage() {
@@ -115,28 +114,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* The card pouch, with two frosted-glass chips floating beside them (fake data, decoration).
-            z-10 on the chips: the cards have their own z-index, so without it they covered a chip. */}
+        {/* The card pouch. */}
         <div className="relative mx-auto w-full max-w-xl">
           <CardPouch />
-          <div aria-hidden="true" className="chip-float glass absolute top-[2%] -left-6 z-10 hidden items-center gap-3 rounded-2xl px-4 py-3 sm:flex">
-            <span className="chip h-9 w-9">
-              <Send className="h-4 w-4" strokeWidth={1.75} />
-            </span>
-            <span className="text-sm leading-tight">
-              <span className="block font-semibold">Transfer sent</span>
-              <span className="text-muted">£120.00 · just now</span>
-            </span>
-          </div>
-          <div aria-hidden="true" className="chip-float-late glass absolute -right-2 bottom-[2%] z-10 hidden items-center gap-3 rounded-2xl px-4 py-3 sm:flex">
-            <span className="chip h-9 w-9">
-              <Coins className="h-4 w-4" strokeWidth={1.75} />
-            </span>
-            <span className="text-sm leading-tight">
-              <span className="block font-semibold">Rounded up</span>
-              <span className="text-muted">+£0.53 to your pot</span>
-            </span>
-          </div>
         </div>
       </section>
 

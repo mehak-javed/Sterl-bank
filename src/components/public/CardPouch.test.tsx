@@ -24,9 +24,13 @@ describe("the landing page's card pouch", () => {
     expect(lastCard).toBeLessThan(front);
   });
 
-  it("gives the four cards turns a quarter-cycle apart", () => {
-    const delays = [...html.matchAll(/--delay:(-?\d+)s/g)].map((m) => Number(m[1]));
-    expect(delays.map((d) => ((d % 16) + 16) % 16).sort((a, b) => a - b)).toEqual([0, 4, 8, 12]);
+  it("has a flap painted last, so when closed it covers the opening and the cards", () => {
+    expect(html.indexOf("card-pouch-flap")).toBeGreaterThan(html.indexOf("card-pouch-front"));
+  });
+
+  it("sends the cards out and back one after another (staggered), back card first", () => {
+    const staggers = [...html.matchAll(/--stagger:([\d.]+)s/g)].map((m) => Number(m[1]));
+    expect(staggers).toEqual([0, 0.15, 0.3, 0.45]);
   });
 
   it("shows only published test card numbers", () => {
