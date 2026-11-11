@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { PeopleStories, STORIES } from "./PeopleStories";
+import { STORIES } from "@/lib/careers/stories";
+import { PeopleStories } from "./PeopleStories";
 
 // next/image checks its allowed hosts against next.config, which tests don't load: a plain <img>
 // stands in, so these tests check OUR markup (alt text, credits), not Next's image optimiser.
@@ -23,13 +24,12 @@ describe("Meet our people", () => {
     expect(html.match(/<li>/g)).toHaveLength(STORIES.length);
   });
 
-  it("describes the photo for screen readers and credits the photographer", () => {
+  it("describes the photo for screen readers, with no credit tag shown under it", () => {
     expect(html).toContain(`alt="${STORIES[0].photo.alt}"`);
-    expect(html).toContain(`href="${STORIES[0].photo.profile}"`);
-    expect(html).toContain(`${STORIES[0].photo.by}</a> on Unsplash`);
+    expect(html).not.toContain("on Unsplash");
   });
 
-  it("only uses free Unsplash photos from the allowed image host", () => {
+  it("only uses free Unsplash photos from the allowed image host, with the photographer on record", () => {
     for (const { photo } of STORIES) {
       expect(photo.src).toMatch(/^https:\/\/images\.unsplash\.com\/photo-/);
       expect(photo.profile).toMatch(/^https:\/\/unsplash\.com\/@/);

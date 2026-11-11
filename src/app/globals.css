@@ -52,6 +52,7 @@
   /* Public site (light: ivory page; dark silver-grey text, 7.8:1). */
   --public-bg: var(--background);
   --public-silver: #4a4d52;
+  --danger: #b42318; /* form errors */
   --glow-1: rgb(233 210 138 / 0.45);
   --glow-2: rgb(243 227 179 / 0.45);
   --glow-3: rgb(217 192 138 / 0.45);
@@ -93,6 +94,7 @@
     /* Public site (dark: near-black page, matte silver text, 10.5:1). */
     --public-bg: #030405;
     --public-silver: #b8bcc2;
+    --danger: #ff8a80; /* form errors */
     --glow-1: rgb(212 175 55 / 0.22);
     --glow-2: rgb(138 106 31 / 0.22);
     --glow-3: rgb(247 221 139 / 0.22);
@@ -132,6 +134,7 @@
   /* Public site (dark: near-black page, matte silver text, 10.5:1). */
   --public-bg: #030405;
   --public-silver: #b8bcc2;
+  --danger: #ff8a80; /* form errors */
   --glow-1: rgb(212 175 55 / 0.22);
   --glow-2: rgb(138 106 31 / 0.22);
   --glow-3: rgb(247 221 139 / 0.22);
@@ -171,6 +174,7 @@
   /* Public site (high contrast: plain). */
   --public-bg: var(--background);
   --public-silver: var(--foreground);
+  --danger: var(--foreground); /* form errors */
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;
@@ -208,6 +212,7 @@
     /* Public site (high contrast: plain). */
     --public-bg: var(--background);
     --public-silver: var(--foreground);
+    --danger: var(--foreground); /* form errors */
     --glow-1: transparent;
     --glow-2: transparent;
     --glow-3: transparent;
@@ -245,6 +250,7 @@
   /* Public site (high contrast: plain). */
   --public-bg: var(--background);
   --public-silver: var(--foreground);
+  --danger: var(--foreground); /* form errors */
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;

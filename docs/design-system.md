@@ -137,12 +137,33 @@ like a real bank", "Ready to look around?". The menu's Features link became Peop
 quote, name and role), previous / next with "1 / 4", every story as a tab with a gold top line on the
 current one (`aria-current`), `aria-live` so changes are read out, no autoplay (WCAG 2.2.2). Photos:
 four free Unsplash-License photos Mehak chose, loaded from Unsplash's CDN through `next/image`
-(`images.unsplash.com` allowed in `next.config.ts` remotePatterns), each with alt text and a
-photographer credit. A fifth photo she picked is Unsplash+ (paid licence) and was left out. Names,
+(`images.unsplash.com` allowed in `next.config.ts` remotePatterns), each with alt text; no visible
+credit (not required by the licence; Mehak removed the tags), photographers recorded in the code. A fifth photo she picked is Unsplash+ (paid licence) and was left out. Names,
 jobs and quotes are fictional, and the page says the people shown are models, not Sterl staff
-(Unsplash's licence asks that photos not imply endorsement). "Work that matters" is now text only
-(no repeated images). Header: Log in + Sign up (`/signup` is an honest placeholder until account
+(Unsplash's licence asks that photos not imply endorsement). "Work that matters, every single day" and
+its paragraph are now the hero headline (they replaced "Banking meets brilliance"); the "Sterl is
+growing" statement and the separate team block were removed. `#people` is the Meet our people section. Header: Log in + Sign up (`/signup` is an honest placeholder until account
 opening in Auth sprint B); "Try the demo" stays as the hero's main button.
+
+**Footer and public pages (Nov 11):** the footer text is Mehak's headquarters line; the footer demo
+notice was removed at her request (forms keep a "use made-up details" line). Footer links: Home,
+Careers, Help, Recruitment scams, Security and confidentiality, Log in, Sign up.
+- `/careers`: hero with Apply now, three focus areas, "Careers that grew here" (the four people
+  stories), Fresh Starts returners programme, Why Sterl, open roles (each with Apply now), how we
+  hire, a scam warning. Structure inspired by large banks' careers pages; Sterl's own words.
+- `/careers/apply/[role]` (static, one page per role in `lib/careers/roles.ts`, plus `general`):
+  the application form (`components/careers/ApplicationForm`, React Hook Form + Zod): personal
+  information, education, experience (0–5 roles, `useFieldArray`), CV upload (PDF/Word ≤ 5 MB),
+  optional note, consent. One Zod schema (`lib/careers/application.ts`) runs in the browser and
+  again in the server action (`server/careers-actions.ts`), which also checks the CV's first bytes
+  (magic numbers) because a file's name and type are chosen by the sender. Delivery goes through a
+  `CareersInbox` interface; the demo inbox logs only the reference and stores/sends nothing (no
+  real inbox; CVs are personal data). Server actions accept 6 MB (`next.config.ts`). Errors use the
+  `--danger` token (6.1–9.0 : 1 in every theme); an error summary and per-field messages are linked
+  with `aria-describedby`.
+- `/recruitment-scams` (replaced `/scams`): warning signs, what Sterl will never do, how to report,
+  addresses only on the reserved `@sterl.example` domain.
+- `/security`: "Security and confidentiality" (unbuilt items say "coming").
 
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
 rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.

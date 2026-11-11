@@ -6,7 +6,7 @@ import { Sheet } from "@/components/shell/Sheet";
 export const PUBLIC_LINKS = [
   { href: "/", label: "Home" },
   { href: "/#people", label: "People" },
-  { href: "/security", label: "Security" },
+  { href: "/security", label: "Security" }, // footer: "Security and confidentiality"
   { href: "/help", label: "Help" },
 ] as const;
 

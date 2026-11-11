@@ -16,7 +16,7 @@ const STEPS = [
  * as plain HTML; only the "Meet our people" stories (PeopleStories) run in the browser.
  *
  * Look: a dark, restrained fintech landing page (Mehak's direction): near-black page, matte-silver
- * text, gold accents. Sections: hero with the card pouch, send money, the team ("Work that matters"),
+ * text, gold accents. Sections: hero ("Work that matters, every single day") with the card pouch, send money,
  * "Meet our people" stories, how it works. Layout ideas from references Mehak shared; Sterl's own
  * name and words. The team members and their stories are fictional; the photos are Unsplash stock
  * photos of models, credited on the page.
@@ -33,12 +33,12 @@ export default function HomePage() {
 
         <div>
           <h1 id="hero-heading" className="text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
-            <span className="wipe-in block">Banking meets</span>
-            <span className="wipe-in-late text-gold-gradient block">brilliance</span>
+            <span className="wipe-in block">Work that matters,</span>
+            <span className="wipe-in-late text-gold-gradient block">every single day</span>
           </h1>
           <p className="mt-6 max-w-lg text-lg text-muted">
-            A modern bank account that keeps up with you: every balance at a glance, savings that build
-            themselves, and security you never have to think about.
+            At Sterl there&apos;s a place for everyone: room to learn, room to grow, and the chance to make a
+            real difference for the people we serve, wherever they are.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -66,30 +66,8 @@ export default function HomePage() {
       {/* ---------- Send money, analytics, budgeting, accounts ---------- */}
       <SendMoneyShowcase />
 
-      {/* ---------- The team: a short statement, then "Work that matters" ---------- */}
-      <section id="people" aria-labelledby="team-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
-        <p className="mx-auto max-w-4xl text-center text-xl leading-relaxed sm:text-2xl">
-          Sterl is growing, and every new teammate widens what we can do: helping people, small businesses,
-          schools and charities look after their money with confidence.
-        </p>
-
-        <div className="mt-24 max-w-3xl">
-          <div>
-            <h2 id="team-heading" className="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-              Work that matters,
-              <span className="text-gold-gradient block">every single day</span>
-            </h2>
-            <p className="mt-6 max-w-lg text-lg text-muted">
-              At Sterl there&apos;s a place for everyone: room to learn, room to grow, and the chance to make
-              a real difference for the people we serve, wherever they are.
-            </p>
-          </div>
-
-        </div>
-      </section>
-
       {/* ---------- Meet our people ---------- */}
-      <section aria-labelledby="stories-heading" className="mt-32 w-full px-4 sm:px-8 lg:px-12">
+      <section id="people" aria-labelledby="stories-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
         <h2 id="stories-heading" className="text-4xl font-semibold tracking-tight sm:text-6xl">
           Meet our <span className="text-gold-gradient">people</span>
         </h2>
