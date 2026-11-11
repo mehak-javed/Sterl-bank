@@ -6,8 +6,8 @@ import { PeopleStories } from "@/components/public/PeopleStories";
 import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
 
 const STEPS = [
-  { title: "Try the demo", text: "Open a ready-made demo account. No sign-up, no real details." },
-  { title: "Look around", text: "See balances, spending, your card and recent activity, all with fake data." },
+  { title: "Take a tour", text: "Open a ready-made account and look around. No sign-up needed." },
+  { title: "Look around", text: "See balances, spending, your cards and recent activity at a glance." },
   { title: "Move some money", text: "Transfer between accounts or switch round-ups on and off, and watch it update." },
 ];
 
@@ -46,7 +46,7 @@ export default function HomePage() {
               href="/dashboard"
               className="flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 text-base font-semibold shadow-lg"
             >
-              Try the demo <ArrowRight aria-hidden="true" className="h-5 w-5" />
+              Take a tour <ArrowRight aria-hidden="true" className="h-5 w-5" />
             </Link>
             <Link
               href="#how-it-works"
@@ -71,10 +71,6 @@ export default function HomePage() {
         <h2 id="stories-heading" className="text-4xl font-semibold tracking-tight sm:text-6xl">
           Meet our <span className="text-gold-gradient">people</span>
         </h2>
-        <p className="mt-3 text-sm text-muted">
-          Fictional names and stories for this portfolio demo. Photos from Unsplash: the people shown are models,
-          not Sterl staff.
-        </p>
         <div className="mt-12">
           <PeopleStories />
         </div>

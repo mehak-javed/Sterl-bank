@@ -6,9 +6,9 @@ import { Logo } from "@/components/brand/Logo";
 export const metadata: Metadata = { title: "Sign up" };
 
 /**
- * Placeholder until online account opening is built (Auth sprint B: made-up details only, a
- * simulated identity check on sample images, then a new account and card). Until then it says so
- * honestly and points to the demo, like the Log in page.
+ * Placeholder until online account opening is built (Auth: a few non-sensitive details, then a new
+ * account and card; no facial recognition, Mehak's decision of Nov 11). Until then it says it's
+ * coming and offers the tour, like the Log in page.
  */
 export default function SignUpPage() {
   return (
@@ -21,15 +21,15 @@ export default function SignUpPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Open an account</h1>
           <p className="mt-2 text-muted">
-            Opening an account online is on its way: a few made-up details, a simulated identity check, and
-            your new account and card in minutes. Until then, the demo account shows everything.
+            Opening an account online is coming soon: a few details, and your new account and card in
+            minutes. Meanwhile, take a tour of the app.
           </p>
         </div>
         <Link
           href="/dashboard"
           className="flex items-center justify-center gap-2 rounded-full btn-primary px-6 py-3.5 font-semibold"
         >
-          Try the demo <ArrowRight aria-hidden="true" className="h-5 w-5" />
+          Take a tour <ArrowRight aria-hidden="true" className="h-5 w-5" />
         </Link>
         <p className="text-center text-sm text-muted">
           Already with Sterl?{" "}
@@ -37,7 +37,6 @@ export default function SignUpPage() {
             Log in
           </Link>
         </p>
-        <p className="text-center text-xs text-muted">Never enter real details anywhere in Sterl. All data is fake.</p>
       </div>
     </div>
   );

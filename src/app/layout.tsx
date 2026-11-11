@@ -26,7 +26,11 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   // Pages set just their own name ("Cards"); the template turns it into "Cards · Sterl".
   title: { default: "Sterl", template: "%s · Sterl" },
-  description: "Sterl is a portfolio demo bank. Not a real bank. All data is fake.",
+  description: "Modern personal banking: every balance at a glance, savings that build themselves.",
+  // Not listed by search engines. The site looks like a real bank and has sign-up and application
+  // forms; keeping it out of search results stops strangers finding it, and stops it being flagged
+  // as a look-alike site. Anyone with the link can still visit normally.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

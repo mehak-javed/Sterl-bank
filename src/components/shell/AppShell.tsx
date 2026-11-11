@@ -59,7 +59,7 @@ export function AppShell({ customerName, children }: { customerName: string; chi
             </span>
             <span className="min-w-0 text-sm">
               <span className="block truncate font-semibold">{customerName}</span>
-              <span className="block text-xs text-muted">Demo customer</span>
+              <span className="block text-xs text-muted">Personal account</span>
             </span>
           </div>
         </div>

@@ -12,8 +12,8 @@ export const PUBLIC_LINKS = [
 
 /**
  * The top bar of the public (logged-out) site: a frosted-glass strip like the hero card below it.
- * Desktop: links in the middle, Log in + "Try the demo" on the right.
- * Phones: logo, "Try the demo", and a Menu sheet with the links.
+ * Desktop: links in the middle, Log in + Sign up on the right.
+ * Phones: logo, Log in, Sign up, and a Menu sheet with the links.
  */
 export function PublicHeader() {
   return (
@@ -34,7 +34,7 @@ export function PublicHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Log in and Sign up (Mehak's choice; "Try the demo" stays as the hero's main button).
+          {/* Log in and Sign up (Mehak's choice; "Take a tour" stays as the hero's main button).
               Both are compact on phones: logo + two buttons + menu must fit in 375px (at px-3 and gap-2
               the header measured 378px and clipped the menu button). */}
           <Link

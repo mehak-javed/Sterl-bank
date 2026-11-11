@@ -165,6 +165,14 @@ Careers, Help, Recruitment scams, Security and confidentiality, Log in, Sign up.
   addresses only on the reserved `@sterl.example` domain.
 - `/security`: "Security and confidentiality" (unbuilt items say "coming").
 
+**No "demo" wording (Nov 11, Mehak's decision):** the site reads as a real, new bank; she explains
+the portfolio context in the repository. `no-demo-copy.test.tsx` fails if "demo", "fake",
+"made-up", "fictional" or "simulated" appears in any public page's visible text ("fake interviews"
+on Recruitment scams is allowed: it describes scammers). Invisible safeguards: `noindex, nofollow`,
+no truly private data in forms, no authorisation claims, `@sterl.example` addresses.
+**Security policy** (`/security/policy`): how to report (security@sterl.example), scope, testing
+rules, response times, safe harbour; machine-readable twin `/.well-known/security.txt` (RFC 9116).
+
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
 rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.
 

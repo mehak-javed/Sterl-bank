@@ -58,7 +58,7 @@ const CONFIDENTIALITY = [
   {
     icon: Database,
     title: "Only what's needed",
-    text: "Sterl keeps only what running your account needs. In this demo every record is made up, and your display settings stay in your own browser.",
+    text: "Sterl keeps only what running your account needs, and your display settings stay in your own browser.",
   },
   {
     icon: HandHeart,
@@ -85,8 +85,7 @@ export default function SecurityPage() {
         Your money and your data, <span className="text-gold-gradient">protected</span>
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-muted">
-        Sterl is a portfolio demo with fake data, but it&apos;s engineered the way a bank is. Here&apos;s what
-        protects every account, and how information is treated, in plain words.
+        Here&apos;s what protects every Sterl account, and how we treat your information, in plain words.
       </p>
 
       <h2 className="mt-14 text-3xl font-semibold tracking-tight text-heading">Security</h2>
@@ -129,7 +128,7 @@ export default function SecurityPage() {
           </span>
         </p>
         <a
-          href="https://github.com/mehak-javed/Sterl-bank/blob/main/SECURITY.md"
+          href="/security/policy"
           className="flex shrink-0 items-center gap-2 font-semibold text-heading"
         >
           Security policy <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -139,7 +138,7 @@ export default function SecurityPage() {
       <p className="mt-8 text-sm text-muted">
         Want to see it for yourself?{" "}
         <Link href="/dashboard" className="font-semibold text-heading underline underline-offset-4">
-          Try the demo
+          Take a tour
         </Link>
         .
       </p>

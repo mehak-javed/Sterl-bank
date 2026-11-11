@@ -135,10 +135,7 @@ export function ApplicationForm({ role, roleTitle }: { role: string; roleTitle: 
           Thank you for applying for <strong className="text-foreground">{roleTitle}</strong>. Your reference is{" "}
           <strong className="text-foreground tabular-nums">{reference}</strong>.
         </p>
-        <p className="text-muted">
-          We read every application and reply within two weeks, by email from an <strong>@sterl.example</strong>{" "}
-          address. We will never ask you for money or bank details.
-        </p>
+        <p className="text-muted">Keep your reference for any questions about your application. We will never ask you for money or bank details.</p>
       </div>
     );
   }
@@ -152,11 +149,7 @@ export function ApplicationForm({ role, roleTitle }: { role: string; roleTitle: 
       // summary ref is only touched when the form is actually submitted.
       onSubmit={(event) => handleSubmit(onValid, onInvalid)(event)}
       className="flex flex-col gap-10"
-      aria-describedby={`${uid}-demo`}
     >
-      <p id={`${uid}-demo`} className="rounded-2xl border border-line bg-surface-2/60 p-4 text-sm">
-        Please use made-up details. Applications on this site are checked and then deleted, never sent or stored.
-      </p>
 
       {/* The error summary: focused after a failed submit, so screen-reader users hear what to fix. */}
       <div ref={summaryRef} tabIndex={-1} aria-live="assertive">
@@ -316,8 +309,7 @@ export function ApplicationForm({ role, roleTitle }: { role: string; roleTitle: 
         <label className="flex items-start gap-3 text-sm">
           <input type="checkbox" {...register("consent")} {...a11y(f("consent"), errors.consent)} className="mt-1 h-4 w-4" />
           <span>
-            I agree that Sterl can use these details to consider my application. (On this site, they&apos;re checked and then
-            deleted.)
+            I agree that Sterl can use these details to consider my application.
           </span>
         </label>
         {errors.consent && (

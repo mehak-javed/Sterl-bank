@@ -123,7 +123,6 @@ export default function CareersPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-3 text-xs text-muted">Fictional names and stories; the people shown are models.</p>
       </section>
 
       {/* Returners */}
