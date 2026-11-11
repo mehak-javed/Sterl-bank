@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { EAGLE_SRC } from "./Eagle";
 
 /**
  * The full "STERL BANKING" logo, redrawn from Mehak's design as SVG so it stays sharp at any size
@@ -6,6 +7,8 @@ import { useId } from "react";
  *   dark: bright gold · light: deep gold (bright gold is unreadable on ivory) · high contrast: plain
  *   black or white. Colours come from the --logo-1 / --logo-2 tokens in globals.css.
  *
+ * The eagle (Mehak's artwork, public/brand/eagle.png) crowns the name. Like <Eagle>, the PNG is only
+ * a stencil (an SVG alpha mask), so the eagle takes the same theme gold as the letters.
  * The swoosh sits BEHIND the letters and is drawn fainter, so it never cuts through the name.
  * role="img" + aria-label: screen readers hear "Sterl Banking" once, not a pile of shapes and letters.
  */
@@ -13,21 +16,28 @@ export function Logo({ className = "w-64" }: { className?: string }) {
   // Unique gradient ids: two logos on one page must not share (and fight over) the same id.
   const id = useId();
   const gold = `${id}-gold`;
+  const eagle = `${id}-eagle`;
 
   return (
-    <svg viewBox="0 0 520 330" role="img" aria-label="Sterl Banking" className={className}>
+    <svg viewBox="0 0 520 388" role="img" aria-label="Sterl Banking" className={className}>
       <defs>
         {/* userSpaceOnUse: the gradient spans the whole logo. The default (each shape's own box) breaks
             on the straight ornament lines: a horizontal line's box is 0 tall, so it painted nothing. */}
-        <linearGradient id={gold} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="520" y2="330">
+        <linearGradient id={gold} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="520" y2="388">
           <stop offset="0%" style={{ stopColor: "var(--logo-1)" }} />
           <stop offset="100%" style={{ stopColor: "var(--logo-2)" }} />
         </linearGradient>
+        {/* mask-type alpha: only the PNG's transparency counts, not its tan colour. */}
+        <mask id={eagle} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="388" style={{ maskType: "alpha" }}>
+          <image href={EAGLE_SRC} x="150" y="6" width="220" height="135" />
+        </mask>
       </defs>
 
-      <g fill={`url(#${gold})`} stroke={`url(#${gold})`}>
-        {/* Top ornament: rule, diamond ends, star medallion in the middle. */}
-        <Ornament y={40} />
+      {/* The eagle: a gold rectangle seen through the eagle-shaped stencil. */}
+      <rect x="150" y="6" width="220" height="135" fill={`url(#${gold})`} mask={`url(#${eagle})`} />
+
+      {/* Everything under the eagle, moved down 58 units to make room for it. */}
+      <g fill={`url(#${gold})`} stroke={`url(#${gold})`} transform="translate(0 58)">
 
         {/* The swoosh: behind the letters, fainter, so the name stays easy to read. */}
         <path
@@ -63,7 +73,7 @@ export function Logo({ className = "w-64" }: { className?: string }) {
   );
 }
 
-/** A thin rule with diamond ends and a star in a circle, like the original's top and bottom lines. */
+/** A thin rule with diamond ends and a star in a circle, between STERL and BANKING. */
 function Ornament({ y }: { y: number }) {
   return (
     <g strokeWidth="2.5" strokeLinecap="round">

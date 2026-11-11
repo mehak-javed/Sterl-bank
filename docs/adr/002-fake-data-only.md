@@ -27,7 +27,7 @@ Sterl never handles real customers, real money, real accounts or real companies.
 | Ask Sterl (AI) | Reads only an allow-list of fake fields |
 | Open banking (optional) | TrueLayer or Plaid sandbox only, never live mode |
 
-Every page shows: "Sterl is a portfolio demo. Not a real bank. All data is fake."
+Every page shows, at its foot: "Sterl is a portfolio demo. Not a real bank. All data is fake." (A strip at the top until Nov 10, 2026.)
 Visitors are never asked for real names, card numbers, bank logins or money.
 
 ## Consequences

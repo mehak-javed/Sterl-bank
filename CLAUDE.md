@@ -31,7 +31,7 @@
   - Payee name check: simulated against our fake payee list.
   - Ask Sterl (AI): reads only an allow-list of fake fields; answers checked against SQL; questions treated as untrusted input.
   - Optional TrueLayer/Plaid **sandbox only**, never live mode.
-- Banner on every page: "Sterl is a portfolio demo. Not a real bank. All data is fake."
+- Demo notice on every page (no top banner since Nov 10, at the foot of each page: public footer, app shell): "Sterl is a portfolio demo. Not a real bank. All data is fake."
 - Never commit secrets; `.env.local` (gitignored), Vercel/AWS env settings. No secrets or sensitive data in AI prompts.
 - Own brand only: never Chase or JPMorgan names, logos or colours in the UI.
 - **Tests come with every feature** (Vitest/RTL/Playwright on the front end, JUnit on the back end). Every AI-written change is covered by tests, reviewed, and logged in `AI_USAGE.md`.

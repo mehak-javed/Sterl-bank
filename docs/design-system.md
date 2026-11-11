@@ -28,6 +28,14 @@ Colours come from `--logo-1` / `--logo-2`:
 | Light | `#8a6a1f` → `#5c4612` (bright gold is only ~2 : 1 on ivory) | 4.7–8.4 : 1 |
 | High contrast | Plain white or black | 21 : 1 |
 
+**The eagle** (`public/brand/eagle.png`, supplied by Mehak; `components/brand/Eagle.tsx`) crowns the
+full logo, sits left of STERL in the compact `BrandMark`, and fills the empty right side of every
+`PaymentCard`. The PNG is only a **stencil** (CSS `mask` / SVG alpha mask): the colour comes from the
+theme (`--logo-1/2`, or `--card-accent` on cards via `eagle-on-card`), so one file works in dark, light
+and high contrast. On cards it is `h-[18cqw]` (18% of that card's width, a container query) so it fits
+the small dashboard card and the large Cards page card alike. Before publishing, the artwork's licence
+must allow use in a public repository and as a logo.
+
 Rules: the swoosh sits **behind** the letters and is fainter, so the name is always readable;
 `role="img" aria-label="Sterl Banking"`; gradients use `gradientUnits="userSpaceOnUse"` (with the
 default, the straight ornament lines have a 0-height box and paint nothing). The compact header and
@@ -51,7 +59,7 @@ reflection (`--sheen`) on top, so the gold spheres and glows show through. Rule:
 text**. Measured: a sphere behind "See how it works" dropped it to 3.5 : 1; moved behind the card
 picture, it is 10 : 1. Devices that ask for less transparency, and high contrast, get solid panels.
 
-**Demo banner:** required on every page, but no coloured bar: the text sits on the page
+**Demo notice:** required on every page, at the foot (public footer, app shell); no top banner since Nov 10. Previously:
 (light gold 11.3 : 1 in dark mode, deep gold 8.4 : 1 in light; solid black/white in high contrast).
 
 **Blur budget:** `glass` (real `backdrop-filter` blur) only where something sits behind to blur: the
@@ -72,6 +80,7 @@ failed to paint some of them.
 | --- | --- |
 | `glass` | See-through mirror glass: light blur, thin tint, diagonal reflection, bright top edge. Use sparingly (header, hero) |
 | `panel` | The same see-through look and reflection without blur: the default for cards on long pages |
+| `eagle-mark` / `eagle-on-card` | The eagle stencil in the logo gold / the card gold |
 | `text-gold-gradient` | Metallic gold text for a headline's second line (deep gold in light mode, plain in high contrast) |
 | `orb` | A CSS gold sphere for decoration (hidden in high contrast) |
 | `float-slow` / `float-slower` / `wipe-in` / `wipe-in-late` | Floating and headline-reveal animations (skipped for reduced motion) |

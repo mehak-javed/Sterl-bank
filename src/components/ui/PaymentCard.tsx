@@ -1,4 +1,5 @@
 import { Snowflake } from "lucide-react";
+import { Eagle } from "@/components/brand/Eagle";
 import type { Card } from "@/types/bank";
 
 /**
@@ -10,7 +11,7 @@ export function PaymentCard({ card }: { card: Card }) {
   const expiry = `${String(card.expiryMonth).padStart(2, "0")}/${String(card.expiryYear).slice(-2)}`;
 
   return (
-    <div className="relative aspect-[85.6/54] w-full max-w-sm overflow-hidden rounded-2xl payment-card p-5">
+    <div className="@container relative aspect-[85.6/54] w-full max-w-sm overflow-hidden rounded-2xl payment-card p-5">
       {/* A soft gold sheen in the corner: decoration only. */}
       <div aria-hidden="true" className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full bg-card-accent/15 blur-2xl" />
 
@@ -22,8 +23,12 @@ export function PaymentCard({ card }: { card: Card }) {
           <span className="text-xs font-semibold tracking-[0.2em] text-card-foreground/80 uppercase">Debit</span>
         </div>
 
-        {/* The chip: a gold rounded rectangle. */}
-        <span aria-hidden="true" className="block h-8 w-11 rounded-md bg-gradient-to-br from-card-accent to-card-accent/50" />
+        {/* The middle row: the chip on the left, the Sterl eagle filling the empty right side. */}
+        <div className="flex items-center justify-between">
+          <span aria-hidden="true" className="block h-8 w-11 rounded-md bg-gradient-to-br from-card-accent to-card-accent/50" />
+          {/* 18cqw = 18% of THIS card's width (a container query), so it fits small and large cards alike. */}
+          <Eagle tone="card" className="h-[18cqw]" />
+        </div>
 
         <div>
           <p className="font-mono text-base tracking-[0.18em] sm:text-lg">

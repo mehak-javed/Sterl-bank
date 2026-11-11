@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Cinzel, Geist, Geist_Mono } from "next/font/google";
-import { DemoBanner } from "@/components/DemoBanner";
 import { QueryProvider } from "@/components/QueryProvider";
 import { ReduxProvider } from "@/stores/fx/ReduxProvider";
 import { UiStoreProvider } from "@/stores/UiStoreProvider";
@@ -44,7 +43,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <QueryProvider>
             {/* Root level, so FX orders survive moving between Banking and Markets. */}
             <ReduxProvider>
-              <DemoBanner />
               {children}
             </ReduxProvider>
           </QueryProvider>

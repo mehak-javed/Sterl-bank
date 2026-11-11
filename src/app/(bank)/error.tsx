@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 /**
  * A React error boundary around every banking page. If a page crashes, only the area
- * inside the layout is replaced: the demo banner and nav stay usable.
+ * inside the layout is replaced: the demo notice and nav stay usable.
  * Named ErrorPage, not Error, so we don't hide JavaScript's built-in Error class.
  */
 export default function ErrorPage({ error, retry }: { error: unknown; retry: () => void }) {

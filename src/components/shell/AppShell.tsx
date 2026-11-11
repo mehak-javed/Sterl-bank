@@ -78,6 +78,11 @@ export function AppShell({ customerName, children }: { customerName: string; chi
             pb-28 on phones: room for the tab bar, so it never covers the last thing on the page. */}
         <main id="main" tabIndex={-1} className="flex w-full flex-1 flex-col gap-6 px-4 pt-5 pb-28 lg:px-10 lg:pt-8 lg:pb-12">
           {children}
+          {/* The demo notice, at the foot of every banking page (it used to be a strip at the top).
+              A realistic bank site must never be mistaken for a real one. */}
+          <p className="mt-auto pt-6 text-center text-xs text-muted">
+            Sterl is a portfolio demo. Not a real bank. All data is fake.
+          </p>
         </main>
       </div>
 

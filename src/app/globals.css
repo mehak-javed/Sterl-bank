@@ -32,8 +32,6 @@
   --hero-foreground: #1a1406;
   --hero-button: #1a1406;
   --hero-button-foreground: #f7dd8b;
-  --banner: transparent; /* no coloured bar: the notice sits on the page itself */
-  --banner-foreground: #5c4612; /* deep gold on ivory: 8.4:1 */
   --accent: #d4af37;
   --focus: #8a6a1f;
   --positive: #047857;
@@ -72,8 +70,6 @@
     --hero-foreground: #1a1406;
     --hero-button: #1a1406;
     --hero-button-foreground: #f7dd8b;
-    --banner: transparent; /* no yellow bar: the notice sits on the page itself */
-    --banner-foreground: #e2c15a; /* light gold on near-black: 11.3:1 */
     --accent: #d4af37;
     --focus: #f7dd8b;
     --positive: #6ee7b7;
@@ -110,8 +106,6 @@
   --hero-foreground: #1a1406;
   --hero-button: #1a1406;
   --hero-button-foreground: #f7dd8b;
-  --banner: transparent; /* no yellow bar: the notice sits on the page itself */
-  --banner-foreground: #e2c15a; /* light gold on near-black: 11.3:1 */
   --accent: #d4af37;
   --focus: #f7dd8b;
   --positive: #6ee7b7;
@@ -149,8 +143,6 @@
   --hero-foreground: var(--background);
   --hero-button: var(--background);
   --hero-button-foreground: var(--foreground);
-  --banner: #000000;
-  --banner-foreground: #ffffff;
   --accent: #000000;
   --focus: #000000;
   --positive: #000000;
@@ -185,8 +177,6 @@
     --hero-foreground: var(--background);
     --hero-button: var(--background);
     --hero-button-foreground: var(--foreground);
-    --banner: #ffffff;
-    --banner-foreground: #000000;
     --accent: #ffffff;
     --focus: #ffffff;
     --positive: #ffffff;
@@ -221,8 +211,6 @@
   --hero-foreground: var(--background);
   --hero-button: var(--background);
   --hero-button-foreground: var(--foreground);
-  --banner: #ffffff;
-  --banner-foreground: #000000;
   --accent: #ffffff;
   --focus: #ffffff;
   --positive: #ffffff;
@@ -263,8 +251,6 @@
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-banner: var(--banner);
-  --color-banner-foreground: var(--banner-foreground);
   --color-accent: var(--accent);
   --color-positive: var(--positive);
   --color-surface-2: var(--surface-2);
@@ -453,6 +439,24 @@ body::before {
 }
 
 /* ---------- Public site (logged-out pages) ---------- */
+
+/*
+ * The Sterl eagle (components/brand/Eagle.tsx): the PNG is a stencil, the colour is the theme's logo
+ * gold. mask-image takes only the picture's transparency; whatever "background" is paints through it.
+ */
+@utility eagle-mark {
+  display: block;
+  flex-shrink: 0;
+  aspect-ratio: 378 / 232;
+  background: var(--eagle-fill, linear-gradient(135deg, var(--logo-1), var(--logo-2)));
+  -webkit-mask: url("/brand/eagle.png") center / contain no-repeat; /* Safari */
+  mask: url("/brand/eagle.png") center / contain no-repeat;
+}
+/* On a payment card: the card's own gold (the card is dark in every theme, like a real card).
+   It sets a variable rather than `background`, so it never depends on which utility comes first. */
+@utility eagle-on-card {
+  --eagle-fill: linear-gradient(135deg, var(--card-accent), color-mix(in srgb, var(--card-accent) 70%, #000));
+}
 
 /* Gold, metallic text for the second line of a headline. Plain text in high contrast. */
 @utility text-gold-gradient {

@@ -5,7 +5,7 @@ import { PublicHeader } from "@/components/public/PublicHeader";
 /**
  * The public (logged-out) site: what anyone sees before logging in. A route group, like (bank):
  * it shares this layout without adding to the URL. Only fake, general information here; nothing
- * about any customer. (The demo banner comes from the root layout, on every page.)
+ * about any customer. (The demo notice is in PublicFooter, on every page.)
  */
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
