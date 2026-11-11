@@ -2,11 +2,45 @@
   {
     "id": "b0422f68-b03d-4d55-8c41-4607b817b005",
     "accountId": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "product": "debit",
     "brand": "Visa",
     "nameOnCard": "NIKITA CRIST",
     "last4": "4242",
     "expiryMonth": 9,
     "expiryYear": 2029,
+    "frozen": false
+  },
+  {
+    "id": "e94b523a-0433-4adb-8ae0-2656328e60b4",
+    "accountId": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "product": "premier",
+    "brand": "Mastercard",
+    "nameOnCard": "NIKITA CRIST",
+    "last4": "8210",
+    "expiryMonth": 4,
+    "expiryYear": 2030,
+    "frozen": false
+  },
+  {
+    "id": "5bd9541e-a0a7-4fd2-8b72-b80aa2592d01",
+    "accountId": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "product": "travel",
+    "brand": "Mastercard",
+    "nameOnCard": "NIKITA CRIST",
+    "last4": "4444",
+    "expiryMonth": 12,
+    "expiryYear": 2029,
+    "frozen": false
+  },
+  {
+    "id": "8964c140-0534-4d2c-8a58-72e9ed132dd8",
+    "accountId": "f9312322-42e1-486f-916f-dd42ae894c25",
+    "product": "virtual",
+    "brand": "Visa",
+    "nameOnCard": "NIKITA CRIST",
+    "last4": "5556",
+    "expiryMonth": 6,
+    "expiryYear": 2028,
     "frozen": false
   }
 ]

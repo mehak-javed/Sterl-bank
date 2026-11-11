@@ -10,6 +10,7 @@ import { Logo } from "./Logo";
 const card: Card = {
   id: "card-test",
   accountId: "acc-test",
+  product: "debit",
   brand: "Visa",
   last4: "4242",
   nameOnCard: "TEST NAME",

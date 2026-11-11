@@ -5,6 +5,7 @@ import type {
   AccountType,
   BankData,
   Card,
+  CardProduct,
   Category,
   Customer,
   Payee,
@@ -12,6 +13,7 @@ import type {
   Transaction,
   TransactionKind,
 } from "@/types/bank";
+import { CARD_PRODUCTS } from "@/lib/cards";
 
 /**
  * Sterl's fake bank: one customer, three accounts, ~90 days of history.
@@ -142,19 +144,28 @@ export function generateBank(): BankData {
   transactions.sort((a, b) => byDateThenId(b, a)); // newest first for the screens
   checkBooksBalance(allAccounts, transactions);
 
-  // 5. The debit card. Made last so adding it didn't change any of the data above:
+  // 5. The cards. Made last so adding them didn't change any of the data above:
   //    every faker call shifts the random sequence for everything after it.
+  //    Last 4 digits only, all from PUBLISHED test numbers:
+  //    4242 = Visa 4242 4242 4242 4242 · 5556 = Visa debit 4000 0566 5566 5556
+  //    4444 = Mastercard 5555 5555 5555 4444 · 8210 = Mastercard debit 5200 8282 8282 8210
+  const nameOnCard = `${customer.firstName} ${customer.lastName}`.toUpperCase();
+  const card = (product: CardProduct, last4: string, expiryMonth: number, years: number): Card => ({
+    id: faker.string.uuid(),
+    accountId: current,
+    product,
+    brand: CARD_PRODUCTS[product].network,
+    nameOnCard,
+    last4,
+    expiryMonth,
+    expiryYear: REF_DATE.getUTCFullYear() + years,
+    frozen: false,
+  });
   const cards: Card[] = [
-    {
-      id: faker.string.uuid(),
-      accountId: current,
-      brand: "Visa",
-      nameOnCard: `${customer.firstName} ${customer.lastName}`.toUpperCase(),
-      last4: "4242",
-      expiryMonth: 9,
-      expiryYear: REF_DATE.getUTCFullYear() + 3,
-      frozen: false,
-    },
+    card("debit", "4242", 9, 3), // the original card, first, so its id is unchanged
+    card("premier", "8210", 4, 4),
+    card("travel", "4444", 12, 3),
+    card("virtual", "5556", 6, 2),
   ];
 
   return { customer, accounts: allAccounts, transactions, payees, cards };

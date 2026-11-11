@@ -30,13 +30,25 @@ type BankState = {
  * shared by every bundle in the same Node process, and also survives dev hot reloads.
  * (The same trick is used for database clients like Prisma in Next apps.)
  */
-const globalForBank = globalThis as typeof globalThis & { __sterlBank?: BankState };
-const db = (globalForBank.__sterlBank ??= {
-  accounts: structuredClone(accountsJson) as Account[],
-  transactions: structuredClone(transactionsJson) as Transaction[],
-  cards: structuredClone(cardsJson) as Card[],
-  roundUpsEnabled: true,
-});
+/**
+ * Bump this whenever the SHAPE of the fixture data changes (a new field, say). A running dev server
+ * keeps its globalThis copy across hot reloads, so without this it would go on serving the old
+ * shape: adding `product` to cards crashed the Cards page until the server was restarted.
+ * Version 2: cards gained `product` and the wallet has four cards.
+ */
+const BANK_DATA_VERSION = 2;
+
+const globalForBank = globalThis as typeof globalThis & { __sterlBank?: BankState & { version: number } };
+if (globalForBank.__sterlBank?.version !== BANK_DATA_VERSION) {
+  globalForBank.__sterlBank = {
+    version: BANK_DATA_VERSION,
+    accounts: structuredClone(accountsJson) as Account[],
+    transactions: structuredClone(transactionsJson) as Transaction[],
+    cards: structuredClone(cardsJson) as Card[],
+    roundUpsEnabled: true,
+  };
+}
+const db = globalForBank.__sterlBank;
 const { accounts, transactions, cards } = db; // same arrays, mutated in place, never reassigned
 
 export function listAccounts(): Account[] {

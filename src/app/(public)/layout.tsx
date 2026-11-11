@@ -8,8 +8,9 @@ import { PublicHeader } from "@/components/public/PublicHeader";
  * about any customer. (The demo notice is in PublicFooter, on every page.)
  */
 export default function PublicLayout({ children }: { children: ReactNode }) {
+  // public-site: the deeper page colour and silver text of the public pages (globals.css).
   return (
-    <div className="flex w-full flex-1 flex-col">
+    <div className="public-site flex w-full flex-1 flex-col">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"

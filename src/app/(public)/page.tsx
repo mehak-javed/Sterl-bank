@@ -8,18 +8,21 @@ import {
   Landmark,
   LockKeyhole,
   PlayCircle,
+  Send,
   ShieldCheck,
+  Sparkles,
   Zap,
 } from "lucide-react";
+import { CardRange } from "@/components/public/CardRange";
 import { FloatingOrbs } from "@/components/public/FloatingOrbs";
-import { HeroShowcase } from "@/components/public/HeroShowcase";
+import { CardPouch } from "@/components/public/CardPouch";
 
-/** The four promises under the headline, in circles (like the feature row in the design reference). */
-const HIGHLIGHTS = [
-  { icon: ShieldCheck, label: "Bank-grade security" },
-  { icon: Coins, label: "Round-up savings" },
-  { icon: Zap, label: "Instant transfers" },
-  { icon: ChartPie, label: "Spending insights" },
+/** The quick feature cards right under the hero. */
+const QUICK_FEATURES = [
+  { icon: ShieldCheck, title: "Bank-grade security", text: "Strong sign-in and protection on every request." },
+  { icon: Coins, title: "Round-up savings", text: "Spare change from every card payment, saved." },
+  { icon: Zap, title: "Instant transfers", text: "Money moves at once, and never twice." },
+  { icon: ChartPie, title: "Spending insights", text: "Your month by category, at a glance." },
 ];
 
 const FEATURES = [
@@ -63,69 +66,95 @@ const STEPS = [
 
 /**
  * The public home page: what anyone sees before logging in. A Server Component: static marketing
- * content, sent as plain HTML. Only the preview rail in the hero (HeroShowcase) runs in the browser.
+ * content, sent as plain HTML (the card animation is pure CSS, so no JavaScript is needed at all).
  *
- * Layout and mood follow the design reference (a frosted-glass hero over floating metallic objects,
- * a two-tone headline, a row of feature circles, a pill button and a round "play" button), in
- * Sterl's own black and gold, with our own words and pictures.
+ * Look: a dark, restrained fintech landing page (Mehak's direction, inspired by a Dribbble concept
+ * she shared): a near-black page with matte-silver text, the message on the left, a metal card pouch on the
+ * right that shows every card, small frosted-glass chips, and quick feature cards under the hero.
+ * Sterl's own name, black-and-gold brand, words and pictures.
  */
 export default function HomePage() {
   return (
     <>
-      {/* ---------- Hero ---------- */}
-      <section aria-labelledby="hero-heading" className="relative isolate px-4 pt-8 sm:px-8 sm:pt-12 lg:px-12">
+      {/* ---------- Hero: message left, cards right ---------- */}
+      <section
+        aria-labelledby="hero-heading"
+        className="relative isolate grid items-center gap-10 px-4 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[1fr_1.1fr] lg:px-12"
+      >
         <FloatingOrbs />
-        <div className="glass relative grid items-center gap-10 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[1.15fr_1fr]">
-          {/* A gold coin breaking over the card's top edge, for depth (like the floating watch in the reference). */}
-          <span
-            aria-hidden="true"
-            className="orb float-slow pointer-events-none absolute -top-9 right-[14%] z-10 hidden h-20 w-20 place-items-center text-2xl font-bold text-[#2b220c]/70 sm:grid"
-          >
-            £
-          </span>
-          <HeroShowcase />
 
-          {/* order-1 on phones: the message comes first; on desktop the picture sits on the left. */}
-          <div className="order-1 lg:order-2">
-            <p className="eyebrow flex items-center gap-3 text-muted">
-              Personal banking <span aria-hidden="true" className="h-px w-10 bg-current" />
-            </p>
-            <h1 id="hero-heading" className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-6xl">
-              <span className="wipe-in block">Banking meets</span>
-              <span className="wipe-in-late text-gold-gradient block">brilliance</span>
-            </h1>
-            <p className="mt-5 max-w-md text-lg text-muted">
-              A calm, clear bank account: every balance at a glance, savings that build themselves, and
-              security you never have to think about.
-            </p>
+        <div>
+          {/* A small gold badge, like the highlight badges in fintech landing pages. */}
+          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface-2/60 px-3 py-1.5 text-xs font-semibold">
+            <Sparkles aria-hidden="true" className="h-3.5 w-3.5 text-heading" />
+            New: the Premier Metal card
+          </p>
+          <h1 id="hero-heading" className="mt-6 text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
+            <span className="wipe-in block">Banking meets</span>
+            <span className="wipe-in-late text-gold-gradient block">brilliance</span>
+          </h1>
+          <p className="mt-6 max-w-lg text-lg text-muted">
+            A modern bank account that keeps up with you: every balance at a glance, savings that build
+            themselves, and security you never have to think about.
+          </p>
 
-            <ul className="mt-7 grid max-w-md grid-cols-4 gap-2">
-              {HIGHLIGHTS.map(({ icon: Icon, label }) => (
-                <li key={label} className="flex flex-col items-center gap-2 text-center text-xs font-medium">
-                  <span aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full border border-line bg-surface-2/70">
-                    <Icon className="h-5 w-5 text-heading" strokeWidth={1.75} />
-                  </span>
-                  {label}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 text-base font-semibold shadow-lg"
-              >
-                Try the demo <ArrowRight aria-hidden="true" className="h-5 w-5" />
-              </Link>
-              <Link href="#how-it-works" className="flex items-center gap-3 text-sm font-semibold">
-                <span aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full border border-line">
-                  <PlayCircle className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                See how it works
-              </Link>
-            </div>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 text-base font-semibold shadow-lg"
+            >
+              Try the demo <ArrowRight aria-hidden="true" className="h-5 w-5" />
+            </Link>
+            <Link
+              href="#how-it-works"
+              className="flex items-center gap-2 rounded-full border border-line px-6 py-3.5 text-base font-semibold hover:bg-surface-2"
+            >
+              <PlayCircle aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
+              See how it works
+            </Link>
           </div>
         </div>
+
+        {/* The card pouch, with two frosted-glass chips floating beside them (fake data, decoration).
+            z-10 on the chips: the cards have their own z-index, so without it they covered a chip. */}
+        <div className="relative mx-auto w-full max-w-xl">
+          <CardPouch />
+          <div aria-hidden="true" className="chip-float glass absolute top-[2%] -left-6 z-10 hidden items-center gap-3 rounded-2xl px-4 py-3 sm:flex">
+            <span className="chip h-9 w-9">
+              <Send className="h-4 w-4" strokeWidth={1.75} />
+            </span>
+            <span className="text-sm leading-tight">
+              <span className="block font-semibold">Transfer sent</span>
+              <span className="text-muted">£120.00 · just now</span>
+            </span>
+          </div>
+          <div aria-hidden="true" className="chip-float-late glass absolute -right-2 bottom-[2%] z-10 hidden items-center gap-3 rounded-2xl px-4 py-3 sm:flex">
+            <span className="chip h-9 w-9">
+              <Coins className="h-4 w-4" strokeWidth={1.75} />
+            </span>
+            <span className="text-sm leading-tight">
+              <span className="block font-semibold">Rounded up</span>
+              <span className="text-muted">+£0.53 to your pot</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- Quick feature cards, right under the hero ---------- */}
+      <section aria-label="Highlights" className="mt-12 w-full px-4 sm:px-8 lg:px-12">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {QUICK_FEATURES.map(({ icon: Icon, title, text }) => (
+            <li key={title} className="glass flex items-start gap-4 rounded-3xl p-5">
+              <span aria-hidden="true" className="chip h-11 w-11">
+                <Icon className="h-5 w-5" strokeWidth={1.75} />
+              </span>
+              <span>
+                <span className="block font-semibold">{title}</span>
+                <span className="mt-1 block text-sm text-muted">{text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* ---------- Features ---------- */}
@@ -145,6 +174,15 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* ---------- Our cards: every card type the bank offers ---------- */}
+      <section id="cards" aria-labelledby="cards-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
+        <p className="eyebrow text-muted">Our cards</p>
+        <h2 id="cards-heading" className="mt-2 max-w-xl text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
+          A card for every part of your life
+        </h2>
+        <CardRange />
       </section>
 
       {/* ---------- How it works ---------- */}

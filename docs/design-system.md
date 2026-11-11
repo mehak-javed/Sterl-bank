@@ -66,6 +66,61 @@ picture, it is 10 : 1. Devices that ask for less transparency, and high contrast
 header and the hero. Everything else uses `panel` (same look, no blur). A page with 13 blurred panels
 failed to paint some of them.
 
+## Cards
+
+Four products in `src/lib/cards.ts` (`CARD_PRODUCTS`); the **product decides the design and network**,
+so data can't hold an impossible combination. The public "Our cards" section and the banking wallet
+both read this one catalogue.
+
+| Product | Design | Network | Text contrast (worst point) |
+| --- | --- | --- | --- |
+| Everyday Debit | `card-design-black` | Visa | 15.4 : 1 |
+| Premier Metal | `card-design-gold` | Mastercard | 5.7 : 1 (dark text) |
+| Travel Card | `card-design-black-gold` (gold band behind chip and eagle only) | Mastercard | 17.4 : 1 |
+| Virtual Card | `card-design-jolly` | Visa | 8.8 : 1 (dark text) |
+
+Networks are plain words ("VISA", "Mastercard"); no network logo is copied. Last 4 digits come from
+published test numbers only. Card designs keep their colours in every theme (they are pictures of
+objects). Tailwind only builds classes it sees written in full, so `PaymentCard` maps designs to full
+class names (`DESIGN_CLASS`), never `card-design-${design}`.
+
+**Wallet** (`CardPanel`): a side-by-side slideshow on CSS scroll-snap (`snap-x snap-mandatory`):
+the browser does swiping, momentum and snapping on touch, trackpad, wheel and keyboard. The centred
+card is the chosen one (neighbours `scale-90 opacity-60`) and Freeze acts on it. No dots (Mehak's
+choice): it is swiped by hand: finger, trackpad, or mouse click-and-drag (snapping is switched off
+during a mouse drag, then the nearest card is centred on release). No arrows either (Mehak's
+choice, made knowing WCAG 2.5.7 asks for a one-click alternative to swiping); the peeking edges of
+the neighbouring cards show there are more. Keyboard: focus the strip, then ← →; while that smooth
+scroll runs, the destination is remembered (`targetRef`) so a second quick press counts from it.
+`aria-roledescription` "carousel"/"slide", slides labelled "2 of 4: Premier Metal ending 8210". Smooth scrolling is skipped for
+reduced motion. Everything inside `PaymentCard` is sized in `cqw` (1% of the card's own width), so
+a card looks the same at 260px on a phone and 384px on desktop; the card's OWN radius stays fixed,
+because `cqw` on an element measures the container above it, not itself.
+
+**Landing page look (Nov 11, Mehak's direction, inspired by a Dribbble fintech concept she
+shared; Sterl's own name, brand, words and pictures; not a copy):** the public pages (`.public-site`
+wrapper) get a deeper near-black page (`--public-bg` #030405, via `body:has(.public-site)` so the
+banking app keeps its own background) and matte-silver secondary text (`--public-silver` #b8bcc2,
+10.8 : 1). Gold stays the accent (Mehak chose black and gold over the reference's sage green).
+Hero: message left (gold "New" badge, two-tone headline, value line, "Try the demo" + "See how it
+works"), cards right; two frosted-glass chips with fake data float by the cards (`chip-float`,
+`z-10` so the cards never cover them); a row of four glass feature cards under the hero. Spheres
+only on the card side, and the side sphere only from `lg` (on phones the columns stack and it landed
+behind the paragraph).
+
+**Hero card pouch** (`public/CardPouch`, Mehak's idea from a reference video): a black-and-gold metal
+pouch (brushed black, gold rim, gold strap, the eagle and STERL) holding all four cards, fanned
+(`fan` angle + `shift` per card in `POUCH`). One at a time each card slides out, holds, and slides
+back in, so the animation shows every card the bank offers (`--pouch-cycle` 16s, each card's turn a
+quarter of it, set by negative `--delay`s). The "inside the pouch" effect is just paint order inside
+one tilted scene: back panel, then cards, then front panel; a card below the front panel's top edge
+is hidden behind it. The whole scene floats and turns gently (`pouch-float`), with a floor shadow.
+Pure CSS; every value is a commented variable in globals.css. Still (the four cards fanned) for
+reduced motion. `role="img"` with one sentence for screen readers.
+
+**Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
+rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.
+
 ## Tokens (added in the redesign)
 
 | Token | Use |

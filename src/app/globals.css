@@ -49,6 +49,9 @@
   --glass-border: rgb(255 255 255 / 0.85);
   --glass-highlight: rgb(255 255 255 / 0.9);
   --glass-shadow: rgb(26 26 26 / 0.06);
+  /* Public site (light: ivory page; dark silver-grey text, 7.8:1). */
+  --public-bg: var(--background);
+  --public-silver: #4a4d52;
   --glow-1: rgb(233 210 138 / 0.45);
   --glow-2: rgb(243 227 179 / 0.45);
   --glow-3: rgb(217 192 138 / 0.45);
@@ -87,6 +90,9 @@
     --glass-border: rgb(247 221 139 / 0.22);
     --glass-highlight: rgb(255 255 255 / 0.16);
     --glass-shadow: rgb(0 0 0 / 0.45);
+    /* Public site (dark: near-black page, matte silver text, 10.5:1). */
+    --public-bg: #030405;
+    --public-silver: #b8bcc2;
     --glow-1: rgb(212 175 55 / 0.22);
     --glow-2: rgb(138 106 31 / 0.22);
     --glow-3: rgb(247 221 139 / 0.22);
@@ -123,6 +129,9 @@
   --glass-border: rgb(247 221 139 / 0.22);
   --glass-highlight: rgb(255 255 255 / 0.16);
   --glass-shadow: rgb(0 0 0 / 0.45);
+  /* Public site (dark: near-black page, matte silver text, 10.5:1). */
+  --public-bg: #030405;
+  --public-silver: #b8bcc2;
   --glow-1: rgb(212 175 55 / 0.22);
   --glow-2: rgb(138 106 31 / 0.22);
   --glow-3: rgb(247 221 139 / 0.22);
@@ -159,6 +168,9 @@
   --glass-border: var(--line);
   --glass-highlight: transparent;
   --glass-shadow: transparent;
+  /* Public site (high contrast: plain). */
+  --public-bg: var(--background);
+  --public-silver: var(--foreground);
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;
@@ -193,6 +205,9 @@
     --glass-border: var(--line);
     --glass-highlight: transparent;
     --glass-shadow: transparent;
+    /* Public site (high contrast: plain). */
+    --public-bg: var(--background);
+    --public-silver: var(--foreground);
     --glow-1: transparent;
     --glow-2: transparent;
     --glow-3: transparent;
@@ -227,6 +242,9 @@
   --glass-border: var(--line);
   --glass-highlight: transparent;
   --glass-shadow: transparent;
+  /* Public site (high contrast: plain). */
+  --public-bg: var(--background);
+  --public-silver: var(--foreground);
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;
@@ -400,6 +418,41 @@ body::before {
     0 18px 40px rgb(0 0 0 / 0.35),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
+/*
+ * The four card designs (src/lib/cards.ts). Each one only re-sets the card's three colour tokens,
+ * so PaymentCard's layout never changes. They are pictures of physical cards, so they keep their
+ * colours in every theme. Text contrast checked on each: see docs/design-system.md.
+ */
+@utility card-design-black {
+  --card-fill: linear-gradient(135deg, #1a1a1c 0%, #050506 60%, #000 100%);
+  --card-foreground: #f5f1e6;
+  --card-accent: #d4af37;
+}
+@utility card-design-gold {
+  --card-fill: linear-gradient(135deg, #f7dd8b 0%, #d4af37 45%, #b08a2a 100%);
+  --card-foreground: #1a1406;
+  --card-accent: #1a1406;
+}
+@utility card-design-black-gold {
+  /* Black, with a band of gold across the middle (behind the chip and eagle, away from the text). */
+  --card-fill: linear-gradient(
+    176deg,
+    #0b0b0c 0% 27%,
+    #8a6a1f 27%,
+    #f0d27a 40%,
+    #b8902e 53%,
+    #0b0b0c 53% 100%
+  );
+  --card-foreground: #f5f1e6;
+  --card-accent: #1a1406; /* the chip and eagle sit on the gold band */
+  --card-wordmark: #e2c15a; /* STERL sits on black */
+}
+@utility card-design-jolly {
+  --card-fill: linear-gradient(120deg, #ff8fb1 0%, #ffb36b 30%, #ffe066 52%, #7fe0b8 76%, #7cc4ff 100%);
+  --card-foreground: #14110a;
+  --card-accent: #14110a;
+}
+
 :root[data-contrast="high"] .payment-card {
   box-shadow: none;
   border: 2px solid var(--line);
@@ -531,4 +584,214 @@ body::before {
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* ---------- Public site look (dark, silver, restrained; Mehak's Orvia-inspired direction) ---------- */
+
+/* The public pages get a deeper near-black page. :has() lets the body change colour only while a
+   public page is showing, so the banking app keeps its own background. */
+body:has(.public-site) {
+  background: var(--public-bg);
+}
+/* Secondary text on public pages is matte silver instead of warm grey. */
+.public-site .text-muted {
+  color: var(--public-silver);
+}
+
+/* A small floating frosted-glass chip next to the hero cards (decoration with fake data). */
+@media (prefers-reduced-motion: no-preference) {
+  .chip-float {
+    animation: chip-float 7s ease-in-out infinite;
+  }
+  .chip-float-late {
+    animation: chip-float 8s ease-in-out -3s infinite;
+  }
+  @keyframes chip-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+/* ---------- Landing page: the card pouch (components/public/CardPouch.tsx) ---------- */
+
+/*
+ * A black-and-gold metal pouch holding all four cards; one at a time each card slides out, shows
+ * itself, and slides back in. Three flat layers inside one tilted scene: BACK panel, cards, FRONT
+ * panel. Drawn in that order, so a card below the front panel's top edge is hidden (in the pouch).
+ * The scene is tilted as a whole (one perspective), so the layers keep their order.
+ *
+ * HOW TO ADJUST:
+ *   --pouch-cycle  how long until the same card comes out again. Each card's turn is a quarter of it
+ *                  (4 cards); keep each card's delay (CardPouch.tsx) a quarter-cycle apart.
+ *   --pouch-rise   how far a card slides out, as a % of its own height. 0 = never leaves the pouch.
+ *   --pouch-yaw / --pouch-pitch / --pouch-roll  the pouch's 3D angle (turn, tip back, lean).
+ *   per card (POUCH in CardPouch.tsx): fan = its angle while resting, shift = left/right spread,
+ *   delay = when its turn comes.
+ */
+.card-pouch {
+  --pouch-cycle: 16s;
+  --pouch-rise: 62%;
+  --pouch-yaw: -16deg;
+  --pouch-pitch: 8deg;
+  --pouch-roll: -5deg;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* The tilted scene: everything inside shares one 3D angle. */
+.card-pouch-scene {
+  position: absolute;
+  inset: 0;
+  transform: perspective(1300px) rotateY(var(--pouch-yaw)) rotateX(var(--pouch-pitch)) rotate(var(--pouch-roll));
+}
+
+/* A soft shadow on the "floor" under the pouch. */
+.card-pouch-floor {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 3%;
+  height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), transparent);
+  filter: blur(6px);
+}
+
+/* The back panel: taller than the front, so the cards stand in front of it. */
+.card-pouch-back {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  bottom: 12%;
+  height: 50%;
+  border-radius: 1.4rem;
+  background: linear-gradient(160deg, #2a2a2e 0%, #121214 55%, #050506 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(247 221 139 / 0.25),
+    inset 0 0 0 1px rgb(212 175 55 / 0.18);
+}
+
+/* Each card: inside the pouch, fanned out at its own angle, peeking over the front panel. */
+.card-pouch-card {
+  position: absolute;
+  left: 19%;
+  width: 62%;
+  /* 25%: each resting card peeks well over the front panel (whose top edge is at 46%), so the
+     fan of four is visible even while no card is out. */
+  bottom: 25%;
+  transform: translateX(var(--shift)) rotate(var(--fan));
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 10px 16px rgb(0 0 0 / 0.45));
+}
+
+/* The front panel: brushed black metal with a gold rim, a gold strap and the Sterl eagle. */
+.card-pouch-front {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 10%;
+  height: 36%;
+  border-radius: 1.2rem 1.2rem 1.6rem 1.6rem;
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.07) 45%, transparent 60%),
+    linear-gradient(170deg, #26262a 0%, #0d0d0f 60%, #050506 100%);
+  box-shadow:
+    0 24px 40px rgb(0 0 0 / 0.55),
+    inset 0 1px 0 rgb(247 221 139 / 0.45),
+    inset 0 0 0 1px rgb(212 175 55 / 0.35);
+  overflow: hidden;
+}
+.card-pouch-strap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16%;
+  height: 14%;
+  background: linear-gradient(90deg, #8a6a1f, #f0d27a 45%, #b8902e 70%, #8a6a1f);
+  opacity: 0.9;
+}
+.card-pouch-brand {
+  position: absolute;
+  left: 7%;
+  bottom: 14%;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: clamp(0.9rem, 2.4vw, 1.4rem);
+  letter-spacing: 0.08em;
+  color: #e2c15a;
+}
+/* The eagle on the pouch uses the card gold, whatever the page theme. */
+.card-pouch-brand .eagle-mark {
+  --eagle-fill: linear-gradient(135deg, #f7dd8b, #c9a13b);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Each card's turn: slide out (ease-out, like a hand pulling it), hold, slide back in (ease-in).
+     The negative delays put the four cards at different points of the same cycle, so they take turns. */
+  .card-pouch-card {
+    animation: pouch-card var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) var(--delay) infinite;
+  }
+  /* The whole pouch floats gently, on its own slower rhythm. */
+  .card-pouch-scene {
+    animation: pouch-float 7s ease-in-out infinite;
+  }
+  .card-pouch-floor {
+    animation: pouch-floor 7s ease-in-out infinite;
+  }
+}
+
+/* 0–4%: rest. 4–12%: slide out and straighten. 12–20%: hold, shown. 20–28%: slide back in.
+   28–100%: rest (the other three cards take their turns). */
+@keyframes pouch-card {
+  0%,
+  4% {
+    transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+  }
+  12%,
+  20% {
+    transform: translateX(calc(var(--shift) * 0.4)) translateY(calc(var(--pouch-rise) * -1)) rotate(calc(var(--fan) * 0.3));
+  }
+  28%,
+  100% {
+    transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+  }
+}
+
+@keyframes pouch-float {
+  0%,
+  100% {
+    transform: perspective(1300px) rotateY(var(--pouch-yaw)) rotateX(var(--pouch-pitch)) rotate(var(--pouch-roll))
+      translateY(0);
+  }
+  50% {
+    transform: perspective(1300px) rotateY(calc(var(--pouch-yaw) + 4deg)) rotateX(var(--pouch-pitch))
+      rotate(var(--pouch-roll)) translateY(-10px);
+  }
+}
+
+/* The floor shadow tightens as the pouch floats up. */
+@keyframes pouch-floor {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.75;
+  }
+}
+
+:root[data-contrast="high"] .card-pouch-floor {
+  display: none;
 }

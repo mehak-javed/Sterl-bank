@@ -6,6 +6,7 @@ import { Sheet } from "@/components/shell/Sheet";
 export const PUBLIC_LINKS = [
   { href: "/", label: "Home" },
   { href: "/#features", label: "Features" },
+  { href: "/#cards", label: "Cards" },
   { href: "/security", label: "Security" },
   { href: "/help", label: "Help" },
 ] as const;
@@ -18,7 +19,7 @@ export const PUBLIC_LINKS = [
 export function PublicHeader() {
   return (
     <header className="sticky top-0 z-40 px-4 pt-4 sm:px-8 lg:px-12">
-      <div className="glass flex items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-5">
+      <div className="glass flex items-center justify-between gap-2 rounded-2xl px-3 py-3 sm:gap-4 sm:px-5">
         <BrandMark href="/" label="Sterl home" />
 
         <nav aria-label="Main" className="hidden md:block">
@@ -39,9 +40,10 @@ export function PublicHeader() {
           </Link>
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 rounded-full btn-primary px-4 py-2 text-sm font-semibold whitespace-nowrap"
+            className="flex items-center gap-1.5 rounded-full btn-primary px-3 py-2 text-sm font-semibold whitespace-nowrap sm:px-4"
           >
-            Try the demo <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            {/* The arrow is hidden on small phones: logo + button + menu must fit in 375px. */}
+            Try the demo <ArrowRight aria-hidden="true" className="hidden h-4 w-4 sm:block" />
           </Link>
           <div className="md:hidden">
             <Sheet
