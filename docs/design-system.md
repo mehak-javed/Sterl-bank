@@ -121,6 +121,29 @@ up as they fly out and land softly; the flap snaps shut with a small overshoot a
 scene floats gently. Pure CSS; the timeline is written out in globals.css. Still (open, cards fanned)
 for reduced motion. No floating chips or boxes on the landing page (Mehak removed them).
 
+**Send-money showcase** (`public/SendMoneyShowcase`, replaced the "Our cards" section and its menu
+link; layout idea from a Dribbble shot Mehak shared, Sterl's own style): centred two-tone heading,
+then a badge + headline + paragraph + gold button ("Try moving money" → `/dashboard#move-money`) on
+the left, and a picture of the send-money screen on the right in a dark glass frame over a gold
+horizon glow (`send-showcase`, `-horizon`, `-screen`). Below: Analytics, Budgeting and Accounts
+cards, each with a mini preview (`send-showcase-mini`). The screen is a picture (`role="img"`, one
+sentence; no real inputs or buttons inside), and every figure is the demo's fake data in pence.
+
+**Landing page sections (Nov 11, Mehak's cut):** hero (no badge) → send money (no badge) → the team
+→ "Meet our people" → how it works. Removed: the four boxes under the hero, Features, "Protected
+like a real bank", "Ready to look around?". The menu's Features link became People (`/#people`).
+
+**Meet our people** (`public/PeopleStories`, client): four stories, one at a time (photo, headline,
+quote, name and role), previous / next with "1 / 4", every story as a tab with a gold top line on the
+current one (`aria-current`), `aria-live` so changes are read out, no autoplay (WCAG 2.2.2). Photos:
+four free Unsplash-License photos Mehak chose, loaded from Unsplash's CDN through `next/image`
+(`images.unsplash.com` allowed in `next.config.ts` remotePatterns), each with alt text and a
+photographer credit. A fifth photo she picked is Unsplash+ (paid licence) and was left out. Names,
+jobs and quotes are fictional, and the page says the people shown are models, not Sterl staff
+(Unsplash's licence asks that photos not imply endorsement). "Work that matters" is now text only
+(no repeated images). Header: Log in + Sign up (`/signup` is an honest placeholder until account
+opening in Auth sprint B); "Try the demo" stays as the hero's main button.
+
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
 rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.
 

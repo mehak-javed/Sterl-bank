@@ -1,61 +1,9 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  ChartPie,
-  Coins,
-  CreditCard,
-  Fingerprint,
-  Landmark,
-  LockKeyhole,
-  PlayCircle,
-  ShieldCheck,
-  Sparkles,
-  Zap,
-} from "lucide-react";
-import { CardRange } from "@/components/public/CardRange";
-import { FloatingOrbs } from "@/components/public/FloatingOrbs";
+import { ArrowRight, PlayCircle } from "lucide-react";
 import { CardPouch } from "@/components/public/CardPouch";
-
-/** The quick feature cards right under the hero. */
-const QUICK_FEATURES = [
-  { icon: ShieldCheck, title: "Bank-grade security", text: "Strong sign-in and protection on every request." },
-  { icon: Coins, title: "Round-up savings", text: "Spare change from every card payment, saved." },
-  { icon: Zap, title: "Instant transfers", text: "Money moves at once, and never twice." },
-  { icon: ChartPie, title: "Spending insights", text: "Your month by category, at a glance." },
-];
-
-const FEATURES = [
-  {
-    icon: Landmark,
-    title: "Every account in one place",
-    text: "Your current account, savings and Round-up Pot side by side, with your total balance at the top.",
-  },
-  {
-    icon: Coins,
-    title: "Save without thinking",
-    text: "Every card payment rounds up to the next pound, and the change moves into your Round-up Pot.",
-  },
-  {
-    icon: ChartPie,
-    title: "Know where it goes",
-    text: "Your month's spending by category, from groceries to bills, so there are no surprises.",
-  },
-  {
-    icon: CreditCard,
-    title: "Your card, your rules",
-    text: "Freeze and unfreeze your card in one tap if it goes missing, then carry on.",
-  },
-  {
-    icon: Zap,
-    title: "Money moves, exactly once",
-    text: "Transfers between your accounts are instant, and a double tap can never send them twice.",
-  },
-  {
-    icon: Fingerprint,
-    title: "Built to keep you safe",
-    text: "Strong passwords, sessions that end when you're idle, and protection on every request.",
-  },
-];
+import { FloatingOrbs } from "@/components/public/FloatingOrbs";
+import { PeopleStories } from "@/components/public/PeopleStories";
+import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
 
 const STEPS = [
   { title: "Try the demo", text: "Open a ready-made demo account. No sign-up, no real details." },
@@ -64,18 +12,19 @@ const STEPS = [
 ];
 
 /**
- * The public home page: what anyone sees before logging in. A Server Component: static marketing
- * content, sent as plain HTML (the card animation is pure CSS, so no JavaScript is needed at all).
+ * The public home page: what anyone sees before logging in. A Server Component: static content sent
+ * as plain HTML; only the "Meet our people" stories (PeopleStories) run in the browser.
  *
- * Look: a dark, restrained fintech landing page (Mehak's direction, inspired by a Dribbble concept
- * she shared): a near-black page with matte-silver text, the message on the left, a metal card pouch on the
- * right that shows every card and quick feature cards under the hero.
- * Sterl's own name, black-and-gold brand, words and pictures.
+ * Look: a dark, restrained fintech landing page (Mehak's direction): near-black page, matte-silver
+ * text, gold accents. Sections: hero with the card pouch, send money, the team ("Work that matters"),
+ * "Meet our people" stories, how it works. Layout ideas from references Mehak shared; Sterl's own
+ * name and words. The team members and their stories are fictional; the photos are Unsplash stock
+ * photos of models, credited on the page.
  */
 export default function HomePage() {
   return (
     <>
-      {/* ---------- Hero: message left, cards right ---------- */}
+      {/* ---------- Hero: message left, card pouch right ---------- */}
       <section
         aria-labelledby="hero-heading"
         className="relative isolate grid items-center gap-10 px-4 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[1fr_1.1fr] lg:px-12"
@@ -83,12 +32,7 @@ export default function HomePage() {
         <FloatingOrbs />
 
         <div>
-          {/* A small gold badge, like the highlight badges in fintech landing pages. */}
-          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface-2/60 px-3 py-1.5 text-xs font-semibold">
-            <Sparkles aria-hidden="true" className="h-3.5 w-3.5 text-heading" />
-            New: the Premier Metal card
-          </p>
-          <h1 id="hero-heading" className="mt-6 text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
+          <h1 id="hero-heading" className="text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
             <span className="wipe-in block">Banking meets</span>
             <span className="wipe-in-late text-gold-gradient block">brilliance</span>
           </h1>
@@ -114,59 +58,52 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* The card pouch. */}
         <div className="relative mx-auto w-full max-w-xl">
           <CardPouch />
         </div>
       </section>
 
-      {/* ---------- Quick feature cards, right under the hero ---------- */}
-      <section aria-label="Highlights" className="mt-12 w-full px-4 sm:px-8 lg:px-12">
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {QUICK_FEATURES.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="glass flex items-start gap-4 rounded-3xl p-5">
-              <span aria-hidden="true" className="chip h-11 w-11">
-                <Icon className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <span>
-                <span className="block font-semibold">{title}</span>
-                <span className="mt-1 block text-sm text-muted">{text}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+      {/* ---------- Send money, analytics, budgeting, accounts ---------- */}
+      <SendMoneyShowcase />
+
+      {/* ---------- The team: a short statement, then "Work that matters" ---------- */}
+      <section id="people" aria-labelledby="team-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
+        <p className="mx-auto max-w-4xl text-center text-xl leading-relaxed sm:text-2xl">
+          Sterl is growing, and every new teammate widens what we can do: helping people, small businesses,
+          schools and charities look after their money with confidence.
+        </p>
+
+        <div className="mt-24 max-w-3xl">
+          <div>
+            <h2 id="team-heading" className="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
+              Work that matters,
+              <span className="text-gold-gradient block">every single day</span>
+            </h2>
+            <p className="mt-6 max-w-lg text-lg text-muted">
+              At Sterl there&apos;s a place for everyone: room to learn, room to grow, and the chance to make
+              a real difference for the people we serve, wherever they are.
+            </p>
+          </div>
+
+        </div>
       </section>
 
-      {/* ---------- Features ---------- */}
-      <section id="features" aria-labelledby="features-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
-        <p className="eyebrow text-muted">Features</p>
-        <h2 id="features-heading" className="mt-2 max-w-xl text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
-          Everything you need, nothing you don&apos;t
+      {/* ---------- Meet our people ---------- */}
+      <section aria-labelledby="stories-heading" className="mt-32 w-full px-4 sm:px-8 lg:px-12">
+        <h2 id="stories-heading" className="text-4xl font-semibold tracking-tight sm:text-6xl">
+          Meet our <span className="text-gold-gradient">people</span>
         </h2>
-        <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="panel flex flex-col gap-3 rounded-3xl p-6">
-              <span aria-hidden="true" className="chip h-11 w-11">
-                <Icon className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <h3 className="text-lg font-semibold">{title}</h3>
-              <p className="text-sm text-muted">{text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* ---------- Our cards: every card type the bank offers ---------- */}
-      <section id="cards" aria-labelledby="cards-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
-        <p className="eyebrow text-muted">Our cards</p>
-        <h2 id="cards-heading" className="mt-2 max-w-xl text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
-          A card for every part of your life
-        </h2>
-        <CardRange />
+        <p className="mt-3 text-sm text-muted">
+          Fictional names and stories for this portfolio demo. Photos from Unsplash: the people shown are models,
+          not Sterl staff.
+        </p>
+        <div className="mt-12">
+          <PeopleStories />
+        </div>
       </section>
 
       {/* ---------- How it works ---------- */}
-      <section id="how-it-works" aria-labelledby="how-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
+      <section id="how-it-works" aria-labelledby="how-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
         <p className="eyebrow text-muted">How it works</p>
         <h2 id="how-heading" className="mt-2 text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
           See Sterl in a minute
@@ -182,62 +119,6 @@ export default function HomePage() {
             </li>
           ))}
         </ol>
-      </section>
-
-      {/* ---------- Security ---------- */}
-      <section aria-labelledby="security-heading" className="mt-24 w-full px-4 sm:px-8 lg:px-12">
-        <div className="panel grid gap-8 rounded-[2rem] p-8 sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-          <div>
-            <span aria-hidden="true" className="chip h-14 w-14">
-              <LockKeyhole className="h-6 w-6" strokeWidth={1.75} />
-            </span>
-            <h2 id="security-heading" className="mt-5 text-3xl font-semibold tracking-tight text-heading">
-              Protected like a real bank
-            </h2>
-            <p className="mt-3 text-muted">
-              Sterl is a demo, but it&apos;s built with the protections a bank uses. Your data is fake; the
-              engineering is real.
-            </p>
-            <Link href="/security" className="mt-6 inline-flex items-center gap-2 font-semibold text-heading">
-              How Sterl keeps you safe <ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </Link>
-          </div>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {[
-              "Passwords stored only as strong one-way hashes",
-              "You only ever see your own accounts",
-              "Sessions end after 15 minutes of inactivity",
-              "Every payment can only happen once",
-              "Every login and payment is recorded",
-              "Security scans on every code change",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3 rounded-2xl border border-line bg-surface-2/60 p-4 text-sm">
-                <ShieldCheck aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-heading" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ---------- Final call to action: this page's one solid-gold block ---------- */}
-      <section aria-labelledby="cta-heading" className="mt-24 w-full px-4 sm:px-8 lg:px-12">
-        <div className="hero-gold flex flex-col items-start gap-6 rounded-[2rem] p-8 sm:flex-row sm:items-center sm:justify-between sm:p-12">
-          <div>
-            <h2 id="cta-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Ready to look around?
-            </h2>
-            <p className="mt-2 max-w-md font-medium opacity-80">
-              Open the demo account: no sign-up, no real details, nothing to install.
-            </p>
-          </div>
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2 rounded-full bg-hero-button px-7 py-3.5 font-semibold text-hero-button-foreground"
-          >
-            Try the demo <ArrowRight aria-hidden="true" className="h-5 w-5" />
-          </Link>
-        </div>
       </section>
     </>
   );

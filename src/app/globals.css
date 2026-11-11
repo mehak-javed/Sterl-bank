@@ -598,6 +598,60 @@ body:has(.public-site) {
   color: var(--public-silver);
 }
 
+/* ---------- Landing page: the send-money showcase (components/public/SendMoneyShowcase.tsx) ---------- */
+
+/* The frame: dark glass with a gold horizon glowing up from the bottom (like light over a planet's edge). */
+.send-showcase {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 55%, transparent), transparent);
+}
+.send-showcase-horizon {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  top: 72%;
+  height: 120%;
+  border-radius: 50%;
+  border-top: 1px solid rgb(247 221 139 / 0.55);
+  background: radial-gradient(60% 40% at 50% 0%, rgb(212 175 55 / 0.35), transparent 70%);
+  box-shadow: 0 -18px 60px rgb(212 175 55 / 0.25);
+  pointer-events: none;
+}
+/* The screen: a frosted panel lit from the top with a soft gold glow. */
+.send-showcase-screen {
+  background:
+    radial-gradient(70% 45% at 50% 0%, rgb(212 175 55 / 0.22), transparent 70%),
+    color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 24px 50px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+/* The small previews inside the three feature cards: lit from the top, like the screen. */
+.send-showcase-mini {
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgb(212 175 55 / 0.16), transparent 70%),
+    var(--surface-2);
+  border: 1px solid var(--line);
+}
+:root[data-contrast="high"] .send-showcase-horizon {
+  display: none;
+}
+:root[data-contrast="high"] .send-showcase-screen,
+:root[data-contrast="high"] .send-showcase-mini {
+  background: var(--surface);
+}
+
+/* ---------- Landing page: Meet our people (components/public/PeopleStories.tsx) ---------- */
+
+/* A portrait's frame: a hairline gold-tinted border, a soft shadow, and a dark caption strip. */
+.people-frame {
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  box-shadow:
+    0 18px 40px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
 /* ---------- Landing page: the card pouch (components/public/CardPouch.tsx) ---------- */
 
 /*
