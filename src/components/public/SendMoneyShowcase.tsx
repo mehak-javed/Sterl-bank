@@ -50,10 +50,10 @@ export function SendMoneyShowcase() {
             ever happen once, even if you tap twice.
           </p>
           <Link
-            href="/dashboard#move-money"
+            href="/signup"
             className="mt-8 inline-flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 font-semibold shadow-lg"
           >
-            Try moving money <ArrowRight aria-hidden="true" className="h-5 w-5" />
+            Get started <ArrowRight aria-hidden="true" className="h-5 w-5" />
           </Link>
         </div>
 

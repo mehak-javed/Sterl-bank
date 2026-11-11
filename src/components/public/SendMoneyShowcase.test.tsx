@@ -23,7 +23,7 @@ describe("the landing page's send-money section", () => {
     for (const amount of ["£848.56", "£1,250.00", "£4,800.00", "+£0.53"]) expect(html).toContain(amount);
   });
 
-  it("links to the real send-money form in the demo", () => {
-    expect(html).toContain('href="/dashboard#move-money"');
+  it("leads new visitors to sign up", () => {
+    expect(html).toContain('href="/signup"');
   });
 });

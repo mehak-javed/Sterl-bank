@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, LockKeyhole } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 
 export const metadata: Metadata = { title: "Log in" };
@@ -21,15 +21,14 @@ export default function LoginPage() {
           <h1 className="text-3xl font-semibold tracking-tight">Log in</h1>
           <p className="mt-2 text-muted">
             Online login is coming soon, with your password and then Face ID, Touch ID or an authenticator app.
-            Meanwhile, take a tour of the app.
           </p>
         </div>
-        <Link
-          href="/dashboard"
-          className="flex items-center justify-center gap-2 rounded-full btn-primary px-6 py-3.5 font-semibold"
-        >
-          Take a tour <ArrowRight aria-hidden="true" className="h-5 w-5" />
-        </Link>
+                <p className="text-center text-sm text-muted">
+          New to Sterl?{" "}
+          <Link href="/signup" className="font-semibold text-heading underline underline-offset-4">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -148,10 +148,12 @@ opening in Auth sprint B); "Try the demo" stays as the hero's main button.
 **Footer and public pages (Nov 11):** the footer text is Mehak's headquarters line; the footer demo
 notice was removed at her request (forms keep a "use made-up details" line). Footer links: Home,
 Careers, Help, Recruitment scams, Security and confidentiality, Log in, Sign up.
-- `/careers`: hero with Apply now, three focus areas, "Careers that grew here" (the four people
+- `/careers`: hero (no Apply now; "See open roles"), three focus areas, "Careers that grew here" (the four people
   stories), Fresh Starts returners programme, Why Sterl, open roles (each with Apply now), how we
   hire, a scam warning. Structure inspired by large banks' careers pages; Sterl's own words.
-- `/careers/apply/[role]` (static, one page per role in `lib/careers/roles.ts`, plus `general`):
+- `/careers/jobs/[role]` (static per role): summary, facts (team, location, job type, salary), what
+  you'll do, what you'll need, nice to have, Apply now near the top and at the bottom.
+- `/careers/apply/[role]` (static, one page per role in `lib/careers/roles.ts`; back link to the role):
   the application form (`components/careers/ApplicationForm`, React Hook Form + Zod): personal
   information, education, experience (0–5 roles, `useFieldArray`), CV upload (PDF/Word ≤ 5 MB),
   optional note, consent. One Zod schema (`lib/careers/application.ts`) runs in the browser and
@@ -168,8 +170,10 @@ Careers, Help, Recruitment scams, Security and confidentiality, Log in, Sign up.
 **No "demo" wording (Nov 11, Mehak's decision):** the site reads as a real, new bank; she explains
 the portfolio context in the repository. `no-demo-copy.test.tsx` fails if "demo", "fake",
 "made-up", "fictional" or "simulated" appears in any public page's visible text ("fake interviews"
-on Recruitment scams is allowed: it describes scammers). Invisible safeguards: `noindex, nofollow`,
-no truly private data in forms, no authorisation claims, `@sterl.example` addresses.
+on Recruitment scams is allowed: it describes scammers). The site is indexed (Mehak wants it on
+Google): `sitemap.xml` lists the public pages and every apply page; `robots.txt` keeps personal banking
+pages and `/api/` out. Safeguards: no truly private data in forms, no authorisation claims, Sterl's own
+brand (not impersonating a real bank), `@sterl.example` addresses.
 **Security policy** (`/security/policy`): how to report (security@sterl.example), scope, testing
 rules, response times, safe harbour; machine-readable twin `/.well-known/security.txt` (RFC 9116).
 

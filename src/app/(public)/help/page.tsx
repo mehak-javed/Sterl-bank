@@ -6,11 +6,7 @@ export const metadata: Metadata = { title: "Help" };
 const QUESTIONS = [
   {
     q: "How do I open an account?",
-    a: "Online account opening is coming soon. You'll need to be 18 or over and live in the UK, and it takes about ten minutes on your phone or computer.",
-  },
-  {
-    q: "Can I look around first?",
-    a: 'Yes. Choose "Take a tour" to explore a ready-made account: balances and spending, your cards, moving money between accounts and round-ups.',
+    a: "Choose Sign up and enter your name, email and a password, or sign up with Google. It takes about a minute.",
   },
   {
     q: "How do round-ups work?",
@@ -46,8 +42,8 @@ export default function HelpPage() {
         </h1>
         <p className="mt-6 text-muted">
           Still curious?{" "}
-          <Link href="/dashboard" className="font-semibold text-heading underline underline-offset-4">
-            Take a tour
+          <Link href="/signup" className="font-semibold text-heading underline underline-offset-4">
+            Open an account
           </Link>{" "}
           or read about{" "}
           <Link href="/security" className="font-semibold text-heading underline underline-offset-4">

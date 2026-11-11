@@ -24,9 +24,6 @@ export async function generateMetadata({ params }: PageProps<"/careers/apply/[ro
 export default function ApplyPage({ params }: PageProps<"/careers/apply/[role]">) {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 pt-12 sm:px-8">
-      <Link href="/careers#roles" className="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-foreground">
-        <ArrowLeft aria-hidden="true" className="h-4 w-4" /> All roles
-      </Link>
       <Suspense fallback={<div className="mt-8 h-40 animate-pulse rounded-3xl bg-surface-2" />}>
         <ApplyContent params={params} />
       </Suspense>
@@ -40,6 +37,9 @@ async function ApplyContent({ params }: { params: Promise<{ role: string }> }) {
 
   return (
     <>
+      <Link href={`/careers/jobs/${role.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-foreground">
+        <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Back to the role
+      </Link>
       <p className="eyebrow mt-8 text-muted">Apply now</p>
       <h1 className="mt-2 text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">{role.title}</h1>
       <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted">

@@ -30,10 +30,14 @@ describe("the public footer", () => {
 describe("Careers", () => {
   const html = renderToStaticMarkup(<CareersPage />);
 
-  it("has an Apply now link to each role's own application page", () => {
-    expect(html).toContain('href="/careers/apply/software-engineer-java"');
+  it("has an Apply now on each role, opening the role's details page", () => {
+    expect(html).toContain('href="/careers/jobs/software-engineer-java"');
     expect(html).toContain('aria-label="Apply now: Credit Risk Analyst"');
-    expect(html).toContain('href="/careers/apply/general"');
+  });
+
+  it("has no Apply now button at the top of the page (Mehak's choice)", () => {
+    const heroEnd = html.indexOf('id="focus-heading"');
+    expect(html.slice(0, heroEnd)).not.toContain("Apply now");
   });
 
   it("keeps the application form on its own page, not inside Careers", () => {

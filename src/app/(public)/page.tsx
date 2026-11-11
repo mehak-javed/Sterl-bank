@@ -6,7 +6,7 @@ import { PeopleStories } from "@/components/public/PeopleStories";
 import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
 
 const STEPS = [
-  { title: "Take a tour", text: "Open a ready-made account and look around. No sign-up needed." },
+  { title: "Open an account", text: "Sign up in a minute with your email, or with Google." },
   { title: "Look around", text: "See balances, spending, your cards and recent activity at a glance." },
   { title: "Move some money", text: "Transfer between accounts or switch round-ups on and off, and watch it update." },
 ];
@@ -43,10 +43,10 @@ export default function HomePage() {
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link
-              href="/dashboard"
+              href="/signup"
               className="flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 text-base font-semibold shadow-lg"
             >
-              Take a tour <ArrowRight aria-hidden="true" className="h-5 w-5" />
+              Open an account <ArrowRight aria-hidden="true" className="h-5 w-5" />
             </Link>
             <Link
               href="#how-it-works"

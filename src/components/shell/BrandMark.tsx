@@ -25,7 +25,7 @@ export function BrandMark({
       <span className="flex flex-col items-start">
         <span
           aria-hidden="true"
-          className="text-gold-gradient text-[1.65rem] font-bold tracking-[0.04em]"
+          className="text-gold-gradient text-[1.4rem] font-bold tracking-[0.04em] sm:text-[1.65rem]"
           style={{ fontFamily: "var(--font-display), serif" }}
         >
           STERL

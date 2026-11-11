@@ -136,9 +136,9 @@ export default function SecurityPage() {
       </div>
 
       <p className="mt-8 text-sm text-muted">
-        Want to see it for yourself?{" "}
-        <Link href="/dashboard" className="font-semibold text-heading underline underline-offset-4">
-          Take a tour
+        Ready to join?{" "}
+        <Link href="/signup" className="font-semibold text-heading underline underline-offset-4">
+          Open an account
         </Link>
         .
       </p>

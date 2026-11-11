@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Geist, Geist_Mono } from "next/font/google";
 import { QueryProvider } from "@/components/QueryProvider";
 import { ReduxProvider } from "@/stores/fx/ReduxProvider";
+import { SITE_URL } from "@/lib/site";
 import { UiStoreProvider } from "@/stores/UiStoreProvider";
 import "./globals.css";
 
@@ -27,10 +28,8 @@ export const metadata: Metadata = {
   // Pages set just their own name ("Cards"); the template turns it into "Cards · Sterl".
   title: { default: "Sterl", template: "%s · Sterl" },
   description: "Modern personal banking: every balance at a glance, savings that build themselves.",
-  // Not listed by search engines. The site looks like a real bank and has sign-up and application
-  // forms; keeping it out of search results stops strangers finding it, and stops it being flagged
-  // as a look-alike site. Anyone with the link can still visit normally.
-  robots: { index: false, follow: false },
+  // The full address, so links in search results and shares (and the sitemap) are absolute.
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

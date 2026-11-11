@@ -34,7 +34,7 @@ export function PublicHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Log in and Sign up (Mehak's choice; "Take a tour" stays as the hero's main button).
+          {/* Log in and Sign up (Mehak's choice; "Open an account" is the hero's main button).
               Both are compact on phones: logo + two buttons + menu must fit in 375px (at px-3 and gap-2
               the header measured 378px and clipped the menu button). */}
           <Link

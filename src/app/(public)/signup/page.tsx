@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 
 export const metadata: Metadata = { title: "Sign up" };
@@ -22,16 +22,10 @@ export default function SignUpPage() {
           <h1 className="text-3xl font-semibold tracking-tight">Open an account</h1>
           <p className="mt-2 text-muted">
             Opening an account online is coming soon: a few details, and your new account and card in
-            minutes. Meanwhile, take a tour of the app.
+            minutes.
           </p>
         </div>
-        <Link
-          href="/dashboard"
-          className="flex items-center justify-center gap-2 rounded-full btn-primary px-6 py-3.5 font-semibold"
-        >
-          Take a tour <ArrowRight aria-hidden="true" className="h-5 w-5" />
-        </Link>
-        <p className="text-center text-sm text-muted">
+                <p className="text-center text-sm text-muted">
           Already with Sterl?{" "}
           <Link href="/login" className="font-semibold text-heading underline underline-offset-4">
             Log in

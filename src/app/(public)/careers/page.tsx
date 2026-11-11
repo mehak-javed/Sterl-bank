@@ -54,12 +54,10 @@ const STEPS = [
 
 /**
  * Careers (public): Sterl's own careers page, structured like the careers pages of large banks:
- * a hero, three focus areas, people's stories, a returners programme, why Sterl, open roles with an
- * Apply now button each (every role has its own application page), how we hire, and a scam warning.
+ * a hero, three focus areas, people's stories, a returners programme, why Sterl, open roles (each Apply
+ * now opens the role's details page, which has Apply now again for the form), how we hire, scam warning.
  */
 export default function CareersPage() {
-  const openRoles = ROLES.filter((r) => r.slug !== "general");
-
   return (
     <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
       {/* Hero */}
@@ -71,14 +69,9 @@ export default function CareersPage() {
         Good jobs build good lives, and strong communities. We help people gain the skills, experience and support to grow a
         career, whether they&apos;re starting out, changing direction or coming back.
       </p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/careers/apply/general" className="flex items-center gap-2 rounded-full btn-primary px-7 py-3.5 font-semibold">
-          Apply now <ArrowRight aria-hidden="true" className="h-5 w-5" />
-        </Link>
-        <a href="#roles" className="flex items-center gap-2 rounded-full border border-line px-6 py-3.5 font-semibold hover:bg-surface-2">
-          See open roles
-        </a>
-      </div>
+      <a href="#roles" className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3.5 font-semibold hover:bg-surface-2">
+        See open roles <ArrowRight aria-hidden="true" className="h-5 w-5" />
+      </a>
 
       {/* Three focus areas */}
       <section aria-labelledby="focus-heading" className="mt-24">
@@ -165,7 +158,7 @@ export default function CareersPage() {
           Open roles
         </h2>
         <ul className="panel mt-8 divide-y divide-[var(--line)] rounded-3xl">
-          {openRoles.map(({ slug, title, team, place, type }) => (
+          {ROLES.map(({ slug, title, team, place, type }) => (
             <li key={slug} className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <span>
                 <span className="block text-lg font-semibold">{title}</span>
@@ -177,7 +170,7 @@ export default function CareersPage() {
                 </span>
                 <span className="rounded-full border border-line px-3 py-1">{type}</span>
                 <Link
-                  href={`/careers/apply/${slug}`}
+                  href={`/careers/jobs/${slug}`}
                   aria-label={`Apply now: ${title}`}
                   className="flex items-center gap-1.5 rounded-full btn-primary px-4 py-1.5 font-semibold"
                 >
@@ -187,13 +180,6 @@ export default function CareersPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-sm text-muted">
-          Don&apos;t see the right role?{" "}
-          <Link href="/careers/apply/general" className="font-semibold text-heading underline underline-offset-4">
-            Send an open application
-          </Link>
-          .
-        </p>
       </section>
 
       {/* How we hire */}
