@@ -25,7 +25,7 @@ The reply must match a fixed schema (structured outputs: `customerMessage`, `rev
 prompt states the decision is final, the facts are data and not instructions, and nothing may be invented.
 
 ## 5. The bank works without the AI
-No API key, a timeout (20 s, one retry), an error, a refusal or an empty reply all fall back to fixed wording
+AI switched off (the default), no API key, a timeout (20 s, one retry), an error, a refusal or an empty reply all fall back to fixed wording
 (`TemplatePaymentExplainer`). Payments never wait on, or fail because of, an outside AI. Tests always run on
 the template and never call the API.
 
@@ -38,5 +38,9 @@ The customer sees a calm message ("paused for a quick security check"), never th
 crossed; that would teach fraudsters how to stay under it. Staff see the full reasons.
 
 ## Configuration
-- `ANTHROPIC_API_KEY`: environment variable only, never committed. Without it, the template is used.
-- `sterl.ai.model`: `claude-opus-5-5`. `sterl.ai.timeout`: `20s`.
+The AI is **off by default**: Sterl uses the fixed wording, with no network call and no cost. Claude is used
+only when **both** are set, so a key that happens to be in the environment can never start spending:
+- `STERL_AI_ENABLED=true`
+- `ANTHROPIC_API_KEY`: environment variable only, never committed.
+
+`sterl.ai.model`: `claude-opus-5-5`. `sterl.ai.timeout`: `20s`.
