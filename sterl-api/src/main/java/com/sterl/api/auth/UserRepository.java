@@ -7,14 +7,19 @@ import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import com.sterl.api.common.DataCipher;
+import com.sterl.api.common.EncryptPersonalDataMigration;
+
 /** Users, their profile for /api/auth/me, and the login audit trail. */
 @Repository
 public class UserRepository {
 
 	private final JdbcClient jdbc;
+	private final DataCipher cipher;
 
-	public UserRepository(JdbcClient jdbc) {
+	public UserRepository(JdbcClient jdbc, DataCipher cipher) {
 		this.jdbc = jdbc;
+		this.cipher = cipher;
 	}
 
 	/** Emails are stored and compared in lower case. */
@@ -38,10 +43,14 @@ public class UserRepository {
 		jdbc.sql("UPDATE app_users SET last_login_at = now() WHERE id = :id").param("id", userId).update();
 	}
 
-	/** The customer's name, for greeting them. Null for staff. */
+	/** The customer's name, decrypted, for greeting them. Keys first_name and last_name. */
 	public Optional<Map<String, Object>> customerName(UUID customerId) {
 		return jdbc.sql("SELECT first_name, last_name FROM customers WHERE id = :id")
-				.param("id", customerId).query().listOfRows().stream().findFirst();
+				.param("id", customerId)
+				.query((rs, row) -> Map.<String, Object>of(
+						"first_name", cipher.decrypt(rs.getString(1), EncryptPersonalDataMigration.nameContext("first_name", customerId)),
+						"last_name", cipher.decrypt(rs.getString(2), EncryptPersonalDataMigration.nameContext("last_name", customerId))))
+				.optional();
 	}
 
 	/**

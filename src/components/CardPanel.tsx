@@ -2,9 +2,13 @@
 
 import { useRef, useState } from "react";
 import { Snowflake } from "lucide-react";
-import { useCards, useSetCardFrozen } from "@/lib/api/queries";
+import { useAccounts, useCards, useSetCardFrozen, useTransactions } from "@/lib/api/queries";
+import { formatGBP } from "@/lib/money";
+import { AddCard } from "./AddCard";
 import { cardTitle, slideIndexAt } from "@/lib/cards";
 import { QueryError, SkeletonRows } from "./QueryStates";
+import { CategoryIcon } from "./ui/CategoryIcon";
+import { Money } from "./ui/Money";
 import { PaymentCard } from "./ui/PaymentCard";
 
 /**
@@ -19,6 +23,7 @@ import { PaymentCard } from "./ui/PaymentCard";
  */
 export function CardPanel() {
   const { data: cards, isPending, isError, error, refetch } = useCards();
+  const { data: accounts } = useAccounts();
   const setFrozen = useSetCardFrozen();
   const [index, setIndex] = useState(0);
   const scrollerRef = useRef<HTMLUListElement>(null);
@@ -33,6 +38,8 @@ export function CardPanel() {
   const count = cards?.length ?? 0;
   const current = Math.min(index, Math.max(count - 1, 0));
   const card = cards?.[current];
+  // A card spends from an account: a newly added card has its own (e.g. "Travel Card"), so show its balance.
+  const spendsFrom = accounts?.find((a) => a.id === card?.accountId);
 
   /** Scrolls so that card i sits in the centre (smoothly, unless the device asked for less motion). */
   function goTo(i: number) {
@@ -98,12 +105,15 @@ export function CardPanel() {
         <h2 id="card-heading" className="text-lg font-semibold text-heading">
           {count > 1 ? `Your cards (${count})` : "Your card"}
         </h2>
-        {card && (
-          // role="status": screen readers announce the change when the card is (un)frozen.
-          <p role="status" className="rounded-full border border-line px-3 py-1 text-xs font-semibold">
-            {card.frozen ? "Frozen" : "Active"}
-          </p>
-        )}
+        <div className="flex items-center gap-2">
+          {card && (
+            // role="status": screen readers announce the change when the card is (un)frozen.
+            <p role="status" className="rounded-full border border-line px-3 py-1 text-xs font-semibold">
+              {card.frozen ? "Frozen" : "Active"}
+            </p>
+          )}
+          {card && <AddCard label="Add" />}
+        </div>
       </div>
 
       {isPending ? (
@@ -111,7 +121,14 @@ export function CardPanel() {
       ) : isError ? (
         <QueryError message={`We couldn't load your cards. ${error.message}`} onRetry={() => refetch()} />
       ) : !card || !cards ? (
-        <p className="text-sm text-muted">You don&apos;t have a card yet.</p>
+        // A new customer: no cards yet, so the way to add one is the main thing here.
+        <div className="flex flex-1 flex-col items-start justify-center gap-4 rounded-2xl border border-dashed border-line p-6">
+          <div>
+            <p className="font-semibold">No cards yet</p>
+            <p className="mt-1 text-sm text-muted">Add a debit, travel, premier or virtual card. Each one comes with its own balance.</p>
+          </div>
+          <AddCard triggerClassName="flex items-center gap-2 rounded-full btn-primary px-5 py-2.5 text-sm font-semibold" />
+        </div>
       ) : (
         <div className="flex min-w-0 flex-col gap-4">
           {/* aria-roledescription: screen readers say "carousel" and "slide" instead of "list". */}
@@ -154,6 +171,16 @@ export function CardPanel() {
 
           </div>
 
+          {spendsFrom && (
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-sm text-muted">{spendsFrom.name}</p>
+              <p className="text-2xl font-semibold tracking-tight">
+                <Money pence={spendsFrom.balancePence} />
+              </p>
+            </div>
+          )}
+          {card && <CardActivity accountId={card.accountId} />}
+
           <button
             type="button"
             onClick={() => setFrozen.mutate({ cardId: card.id, frozen: !card.frozen })}
@@ -173,5 +200,26 @@ export function CardPanel() {
         </div>
       )}
     </section>
+  );
+}
+
+/** The latest payments on the centred card's account: each card has its own. */
+function CardActivity({ accountId }: { accountId: string }) {
+  const { data: transactions, isPending } = useTransactions(accountId, 3);
+  if (isPending) return <SkeletonRows rows={2} />;
+  if (!transactions || transactions.length === 0) return null;
+  return (
+    <ul aria-label="Latest payments on this card" className="flex flex-col">
+      {transactions.map((t) => (
+        <li key={t.id} className="flex items-center gap-3 py-1.5 text-sm">
+          <CategoryIcon category={t.category} className="h-8 w-8" />
+          <span className="min-w-0 flex-1 truncate font-medium">{t.description}</span>
+          <span className={`tabular-nums font-semibold ${t.amountPence > 0 ? "text-positive" : ""}`}>
+            {t.amountPence > 0 ? "+" : ""}
+            {formatGBP(t.amountPence)}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }

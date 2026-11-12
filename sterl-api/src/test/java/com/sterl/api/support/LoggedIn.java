@@ -75,4 +75,9 @@ public final class LoggedIn {
 	public MockMvcTester.MockMvcRequestBuilder post(String uri) {
 		return mvc.post().uri(uri).cookie(session, csrf).header("X-XSRF-TOKEN", csrf.getValue());
 	}
+
+	/** PATCH with the session AND the CSRF token. */
+	public MockMvcTester.MockMvcRequestBuilder patch(String uri) {
+		return mvc.patch().uri(uri).cookie(session, csrf).header("X-XSRF-TOKEN", csrf.getValue());
+	}
 }

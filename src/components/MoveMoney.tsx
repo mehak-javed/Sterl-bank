@@ -10,6 +10,8 @@ import { TransferForm } from "./TransferForm";
  */
 export async function MoveMoney() {
   const accounts = await getAccounts();
+  // Moving money needs two of your own accounts; a new customer has one, so there's nothing to show.
+  if (accounts.length < 2) return null;
   const current = accounts.find((a) => a.type === "current") ?? accounts[0];
   const saver = accounts.find((a) => a.type === "saver") ?? accounts[1];
 

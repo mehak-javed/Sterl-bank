@@ -18,7 +18,7 @@ public class TransferRepository {
 		this.jdbc = jdbc;
 	}
 
-	record IdempotencyRecord(String requestHash, UUID ledgerTransactionId) {
+	public record IdempotencyRecord(String requestHash, UUID ledgerTransactionId) {
 	}
 
 	record LockedAccount(UUID id, String name) {

@@ -6,12 +6,14 @@
  *
  * Because it's really a public endpoint, treat every argument as untrusted input:
  * anyone could call it with anything. Validate here, on the server, even if the form
- * already checks in the browser. (In the "Security" phase, a login check goes here too.)
+ * already checks in the browser. The Java API checks again, including WHO is asking (the session).
  */
 
 import { refresh } from "next/cache";
 import { formatGBP, toPence } from "@/lib/money";
-import { findAccount, setRoundUpsEnabled, transferBetweenAccounts } from "./bank-db";
+import type { Account } from "@/types/bank";
+import { getAccounts } from "./queries";
+import { apiPost, SterlApiError } from "./sterl-api";
 
 // ---------- Move money between your own accounts ----------
 
@@ -23,7 +25,7 @@ export type TransferFormState = {
   fieldErrors: Partial<Record<TransferField, string>>;
   /** What was typed, sent back so the form can show it again after an error. */
   values: Record<TransferField, string>;
-  /** One key per transfer the user means to make. See `completedTransfers`. */
+  /** One key per transfer the user means to make, sent as the API's Idempotency-Key. */
   idempotencyKey: string;
 };
 
@@ -31,20 +33,14 @@ const MAX_TRANSFER_PENCE = 1_000_000; // £10,000 per transfer
 const MAX_REFERENCE_LENGTH = 18; // the UK Faster Payments limit for a reference
 
 /**
- * IDEMPOTENCY: the same request twice must not move money twice. A double-click, a slow network
- * retry or a refresh could all send the same transfer again. Each form carries a unique key;
- * if we've already completed that key, we send back the original answer and change nothing.
- * (A real bank keeps these keys in its database for about 24 hours. Here, in memory.)
+ * IDEMPOTENCY: the same request twice must not move money twice (a double-click, a slow network retry,
+ * a refresh). Each form carries a unique key, sent to the Java API as the Idempotency-Key header; the
+ * API stores it in PostgreSQL and replays the original answer for a repeat, without moving money again.
  */
-const completedTransfers = new Map<string, TransferFormState>();
 
 function text(formData: FormData, name: TransferField | "idempotencyKey"): string {
   const value = formData.get(name);
   return typeof value === "string" ? value.trim() : ""; // a file upload would not be a string
-}
-
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /** Used with React's useActionState: it receives the previous state and the submitted form. */
@@ -56,11 +52,6 @@ export async function transferMoney(_previous: TransferFormState, formData: Form
     amount: text(formData, "amount"),
     reference: text(formData, "reference"),
   };
-
-  const alreadyDone = completedTransfers.get(idempotencyKey);
-  if (alreadyDone) return alreadyDone;
-
-  await wait(300 + Math.random() * 500); // a realistic pause, so the "Moving…" state is visible
 
   const failed = (fieldErrors: TransferFormState["fieldErrors"], message = "Please check the highlighted fields."): TransferFormState => ({
     status: "error",
@@ -74,8 +65,10 @@ export async function transferMoney(_previous: TransferFormState, formData: Form
 
   // 1. Check every field and collect ALL problems, so the user can fix them in one go.
   const fieldErrors: TransferFormState["fieldErrors"] = {};
-  const from = findAccount(values.from);
-  const to = findAccount(values.to);
+  // Only the customer's own accounts, as the API reports them (it decides who "the customer" is).
+  const accounts: Account[] = await getAccounts();
+  const from = accounts.find((a) => a.id === values.from);
+  const to = accounts.find((a) => a.id === values.to);
   if (!from) fieldErrors.from = "Choose an account to move money from.";
   if (!to) fieldErrors.to = "Choose an account to move money to.";
   else if (values.from === values.to) fieldErrors.to = "Choose a different account from the one you're moving money from.";
@@ -99,40 +92,30 @@ export async function transferMoney(_previous: TransferFormState, formData: Form
 
   if (Object.keys(fieldErrors).length > 0 || !from || !to) return failed(fieldErrors);
 
-  // 2. Move the money. The balance check happens inside, at the same moment as the move.
-  const result = transferBetweenAccounts(from.id, to.id, amountPence, values.reference);
-  if (!result.ok) {
-    if (result.reason === "insufficient_funds") {
-      return failed({ amount: `There isn't enough money in ${from.name}. Its balance is ${formatGBP(from.balancePence)}.` });
+  // 2. Move the money: the Java API locks both accounts, checks the balance and writes both ledger legs
+  //    in ONE database transaction, so a parallel transfer can never overdraw the account.
+  try {
+    await apiPost(
+      "/api/transfers",
+      { fromAccountId: from.id, toAccountId: to.id, amountPence, reference: values.reference || null },
+      { "Idempotency-Key": idempotencyKey },
+    );
+  } catch (error) {
+    if (error instanceof SterlApiError && error.status === 422 && error.detail) {
+      return failed({ amount: error.detail }); // e.g. "There isn't enough money in Everyday Account…"
     }
-    return failed({}, "We couldn't make this transfer. Please try again.");
+    return failed({}, "We couldn't make this transfer. Nothing was moved. Please try again.");
   }
 
   const success: TransferFormState = {
     status: "success",
-    message: `Moved ${formatGBP(amountPence)} from ${result.from.name} to ${result.to.name}.`,
+    message: `Moved ${formatGBP(amountPence)} from ${from.name} to ${to.name}.`,
     fieldErrors: {},
     values: { from: values.from, to: values.to, amount: "", reference: "" },
     idempotencyKey: crypto.randomUUID(), // a fresh key: the NEXT transfer is a new one
   };
-  completedTransfers.set(idempotencyKey, success);
 
   // 3. Re-render the Server Components on screen (balances, account list) with the new data.
   refresh();
   return success;
-}
-
-// ---------- Round-ups on / off ----------
-
-export async function setRoundUps(enabled: boolean): Promise<{ ok: boolean }> {
-  // TypeScript types vanish at runtime: a caller could send anything, so check it.
-  if (typeof enabled !== "boolean") return { ok: false };
-
-  await wait(300 + Math.random() * 500);
-  // Like our API routes, fail about 1 time in 20, so we can see the switch roll back.
-  if (Math.random() < 0.05) return { ok: false };
-
-  setRoundUpsEnabled(enabled);
-  refresh();
-  return { ok: true };
 }

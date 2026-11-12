@@ -2,62 +2,64 @@
 import "server-only";
 
 import { cache } from "react";
-import { connection } from "next/server";
-import { latestSpendingMonth, summariseSpending, type MonthlySpending } from "@/lib/spending";
+import { latestSpendingMonth, summariseSpending, ukMonthOf, type MonthlySpending } from "@/lib/spending";
 import type { Account, Transaction } from "@/types/bank";
-import { findAccount, getRoundUpsEnabled, listAccounts, listTransactions } from "./bank-db";
+import { apiGet } from "./sterl-api";
 
 /**
- * Data functions for SERVER COMPONENTS. They read bank-db directly: no fetch, no API route,
- * no JSON round trip. (Client Components still go through /api/... with TanStack Query.)
- *
- * connection(): with Cache Components on, Next would otherwise run this at BUILD time and bake
- * the balances into static HTML forever. Balances must be fresh, so: run on every request.
- *
- * A short delay keeps the demo honest about loading states. No random failures here: a
- * Server Component that throws replaces the whole page with error.tsx, which is too harsh for a demo.
+ * Data functions for SERVER COMPONENTS: the logged-in customer's own data, from the Java API and
+ * PostgreSQL (see sterl-api.ts). A new customer simply gets an empty list or £0.00, never an error.
  */
-async function simulateServerLatency() {
-  await connection();
-  if (process.env.STERL_SIMULATE_NETWORK === "off") return;
-  await new Promise((resolve) => setTimeout(resolve, 200 + Math.random() * 400));
-}
+
+/** The shape of a page from the Java API (com.sterl.api.common.PageResponse). */
+type Page<T> = { items: T[]; page: number; size: number; totalItems: number; totalPages: number };
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const MAX_PAGE_SIZE = 100; // the API's limit
 
 /**
  * React's cache(): within ONE request, calling getAccounts() twice (BalanceHero and
- * AccountsOverview both do) runs the work once and shares the result. It's forgotten
- * after the request, so the next visitor still gets fresh data.
+ * AccountsOverview both do) asks the API once and shares the result. Forgotten after the request.
  */
-export const getAccounts = cache(async (): Promise<Account[]> => {
-  await simulateServerLatency();
-  return listAccounts();
-});
+export const getAccounts = cache(async (): Promise<Account[]> => (await apiGet<Account[]>("/api/accounts")) ?? []);
 
-export const getAccount = cache(async (id: string): Promise<Account | undefined> => {
-  await simulateServerLatency();
-  return findAccount(id);
-});
-
-export const getRoundUpSetting = cache(async (): Promise<boolean> => {
-  await simulateServerLatency();
-  return getRoundUpsEnabled();
-});
+/** undefined for an id that isn't one of the customer's accounts (the page shows "not found"). */
+export const getAccount = cache(async (id: string): Promise<Account | undefined> =>
+  UUID.test(id) ? apiGet<Account>(`/api/accounts/${id}`) : undefined,
+);
 
 export const getTransactions = cache(async (accountId: string, limit: number): Promise<Transaction[]> => {
-  await simulateServerLatency();
-  return listTransactions(accountId, limit);
+  if (!UUID.test(accountId)) return [];
+  const size = Math.min(Math.max(limit, 1), MAX_PAGE_SIZE);
+  const page = await apiGet<Page<Transaction>>(`/api/accounts/${accountId}/transactions?size=${size}`);
+  return page?.items ?? [];
 });
+
+/**
+ * Newest-first pages of one account's statement, only as far back as the latest month with
+ * spending: usually one or two requests, however long the history is.
+ */
+async function latestMonthsTransactions(accountId: string): Promise<Transaction[]> {
+  const all: Transaction[] = [];
+  for (let page = 0; page < 20; page++) {
+    const result = await apiGet<Page<Transaction>>(`/api/accounts/${accountId}/transactions?size=${MAX_PAGE_SIZE}&page=${page}`);
+    if (!result || result.items.length === 0) break;
+    all.push(...result.items);
+    const month = latestSpendingMonth(all);
+    const oldest = result.items[result.items.length - 1];
+    if (page + 1 >= result.totalPages || (month !== null && ukMonthOf(oldest.date) < month)) break;
+  }
+  return all;
+}
 
 /**
  * Spending by category for the latest month with activity, across the customer's current accounts
  * (savings pots don't have card spending). Summed on the server, so the browser only receives the
- * few totals it draws, not hundreds of transactions.
+ * few totals it draws. null for a customer who hasn't spent anything yet.
  */
 export const getMonthlySpending = cache(async (): Promise<MonthlySpending | null> => {
-  await simulateServerLatency();
-  const spendingTransactions = listAccounts()
-    .filter((a) => a.type === "current")
-    .flatMap((a) => listTransactions(a.id, Number.MAX_SAFE_INTEGER));
-  const month = latestSpendingMonth(spendingTransactions);
-  return month === null ? null : summariseSpending(spendingTransactions, month);
+  const current = (await getAccounts()).filter((a) => a.type === "current");
+  const spending = (await Promise.all(current.map((a) => latestMonthsTransactions(a.id)))).flat();
+  const month = latestSpendingMonth(spending);
+  return month === null ? null : summariseSpending(spending, month);
 });

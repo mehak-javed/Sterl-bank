@@ -1,8 +1,8 @@
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUiStore } from "@/stores/UiStoreProvider";
 import type { ReferenceRates } from "@/lib/fx";
-import type { Account, Card, Transaction } from "@/types/bank";
-import { apiFetch } from "./client";
+import type { Account, Card, CardProduct, Transaction } from "@/types/bank";
+import { apiFetch, apiSend } from "./client";
 
 /**
  * Query keys in one place. A key is the cache address for a piece of server data:
@@ -34,12 +34,15 @@ export function useTransactions(accountId: string | null, limit = 10) {
   return useQuery({
     queryKey: queryKeys.transactions(accountId ?? "none", limit),
     // skipToken = "don't fetch yet" (no account chosen), and keeps the types honest.
+    // The Java API pages statements (at most 100 per page); we only ever show the newest.
     queryFn: accountId
-      ? ({ signal }) =>
-          apiFetch<Transaction[]>(
-            `/api/transactions?${new URLSearchParams({ accountId, limit: String(limit) })}`,
-            { signal },
-          )
+      ? async ({ signal }) =>
+          (
+            await apiFetch<{ items: Transaction[] }>(
+              `/api/accounts/${encodeURIComponent(accountId)}/transactions?size=${Math.min(limit, 100)}`,
+              { signal },
+            )
+          ).items
       : skipToken,
   });
 }
@@ -69,11 +72,7 @@ export function useSetCardFrozen() {
 
   return useMutation({
     mutationFn: ({ cardId, frozen }: { cardId: string; frozen: boolean }) =>
-      apiFetch<Card>(`/api/cards/${encodeURIComponent(cardId)}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ frozen }),
-      }),
+      apiSend<Card>(`/api/cards/${encodeURIComponent(cardId)}`, "PATCH", { frozen }),
 
     onMutate: async ({ cardId, frozen }) => {
       // 1. Stop any in-flight refetch, so an old response can't overwrite our optimistic value.
@@ -96,5 +95,43 @@ export function useSetCardFrozen() {
       // 5. Success or failure, re-fetch so the screen matches the server's truth.
       return queryClient.invalidateQueries({ queryKey: queryKeys.cards });
     },
+  });
+}
+
+/**
+ * Add a card. The API decides everything else (its own account with a starting balance and payments,
+ * name on card, expiry, test number), so the browser only says WHICH card. 409 if they already have it.
+ */
+export function useAddCard() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (product: CardProduct) => apiSend<Card>("/api/cards", "POST", { product }),
+    // A new card comes with its own account, money and payments: refresh all three.
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.cards }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
+        queryClient.invalidateQueries({ queryKey: ["transactions"] }),
+      ]),
+  });
+}
+
+/**
+ * Add money to one of the customer's accounts. The Idempotency-Key is made ONCE per amount the
+ * customer means to add (by the form) and sent again on any retry, so a double tap or a dropped
+ * connection can never add the money twice.
+ */
+export function useAddMoney() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ accountId, amountPence, idempotencyKey }: { accountId: string; amountPence: number; idempotencyKey: string }) =>
+      apiSend<Transaction>(`/api/accounts/${encodeURIComponent(accountId)}/top-ups`, "POST", { amountPence }, {
+        "Idempotency-Key": idempotencyKey,
+      }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
+        queryClient.invalidateQueries({ queryKey: ["transactions"] }),
+      ]),
   });
 }

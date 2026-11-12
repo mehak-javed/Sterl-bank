@@ -139,7 +139,73 @@ public class AccountRepository {
 				rs.getLong("balance_pence"));
 	}
 
-	private static TransactionResponse toTransaction(ResultSet rs, int row) throws SQLException {
+	// ---------- Add money ----------
+
+	/** Locks one of the customer's own accounts for this transaction. False if it isn't theirs. */
+	public boolean lockOwnAccount(UUID customerId, UUID accountId) {
+		return jdbc.sql("""
+				SELECT id FROM accounts
+				 WHERE id = :id AND customer_id = :customerId AND type <> 'internal'
+				   FOR UPDATE
+				""")
+				.param("id", accountId)
+				.param("customerId", customerId)
+				.query(UUID.class)
+				.optional()
+				.isPresent();
+	}
+
+	/** Both legs: out of the bank's INBOUND_PAYMENTS account, into the customer's. Sums to zero. */
+	public void insertMoneyAdded(UUID ledgerTransactionId, UUID accountId, long amountPence) {
+		jdbc.sql("""
+				INSERT INTO ledger_transactions (id, kind, description, category, occurred_at)
+				VALUES (:id, 'top_up', 'Money added', 'Income', now())
+				""")
+				.param("id", ledgerTransactionId)
+				.update();
+		jdbc.sql("""
+				INSERT INTO ledger_entries (id, ledger_transaction_id, account_id, amount_pence)
+				SELECT gen_random_uuid(), :tx, inbound.id, -CAST(:amount AS bigint)
+				  FROM accounts inbound WHERE inbound.code = 'INBOUND_PAYMENTS'
+				UNION ALL
+				SELECT gen_random_uuid(), :tx, :accountId, CAST(:amount AS bigint)
+				""")
+				.param("tx", ledgerTransactionId)
+				.param("accountId", accountId)
+				.param("amount", amountPence)
+				.update();
+	}
+
+	public void auditMoneyAdded(UUID customerId, UUID ledgerTransactionId, UUID accountId, long amountPence, String key) {
+		jdbc.sql("""
+				INSERT INTO audit_log (actor, action, entity_type, entity_id, details)
+				VALUES (:actor, 'money.added', 'ledger_transaction', :entityId,
+				        jsonb_build_object('accountId', CAST(:account AS text), 'amountPence', CAST(:amount AS bigint),
+				                           'idempotencyKey', CAST(:key AS text)))
+				""")
+				.param("actor", "customer:" + customerId)
+				.param("entityId", ledgerTransactionId.toString())
+				.param("account", accountId.toString())
+				.param("amount", amountPence)
+				.param("key", key)
+				.update();
+	}
+
+	/** One account's leg of a ledger transaction, as a statement line (with its running balance). */
+	public Optional<TransactionResponse> findEntry(UUID ledgerTransactionId, UUID accountId) {
+		return jdbc.sql("""
+				SELECT s.entry_id, s.account_id, s.ledger_transaction_id, s.occurred_at, s.kind,
+				       s.description, s.category, s.amount_pence, s.balance_after_pence
+				  FROM account_statement s
+				 WHERE s.ledger_transaction_id = :tx AND s.account_id = :accountId
+				""")
+				.param("tx", ledgerTransactionId)
+				.param("accountId", accountId)
+				.query(AccountRepository::toTransaction)
+				.optional();
+	}
+
+	static TransactionResponse toTransaction(ResultSet rs, int row) throws SQLException {
 		String kind = rs.getString("kind");
 		boolean betweenOwnAccounts = kind.equals("transfer") || kind.equals("roundup");
 		return new TransactionResponse(
