@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { API_ORIGIN } from "@/lib/api-origin";
-import { isProtected } from "@/lib/auth/guard";
+import { isProtected, redirectForRole } from "@/lib/auth/guard";
 
 /**
  * The route guard (Next.js "proxy", formerly middleware): runs before a personal page is served.
@@ -20,7 +20,12 @@ export async function proxy(request: NextRequest) {
         headers: { cookie: `SESSION=${session.value}` },
         cache: "no-store",
       });
-      if (me.ok) return NextResponse.next();
+      if (me.ok) {
+        // Logged in. Now: is this page for THEIR role? (The API checks again on every request.)
+        const { role } = (await me.json()) as { role: string };
+        const elsewhere = redirectForRole(pathname, role);
+        return elsewhere ? NextResponse.redirect(new URL(elsewhere, request.url)) : NextResponse.next();
+      }
     } catch {
       // API unreachable: fall through to the login page.
     }

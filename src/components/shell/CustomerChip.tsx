@@ -3,10 +3,18 @@
 import { initialsOf, useMe } from "@/lib/auth/useMe";
 
 /** Who's logged in: the full chip in the sidebar, or just the initials in the phone top bar. */
+const ROLE_LABELS: Record<string, string> = {
+  customer: "Personal account",
+  risk_officer: "Risk officer",
+  trader: "Trader",
+  admin: "Administrator",
+};
+
 export function CustomerChip({ variant }: { variant: "sidebar" | "avatar" }) {
   const { data: me } = useMe();
-  const name = me ? [me.firstName, me.lastName].filter(Boolean).join(" ") : "";
-  const initials = me ? initialsOf(me.firstName, me.lastName) : "";
+  // Staff have no customer record, so no name: show their work email and role instead.
+  const name = me ? [me.firstName, me.lastName].filter(Boolean).join(" ") || me.email : "";
+  const initials = me ? initialsOf(me.firstName, me.lastName) || me.email.slice(0, 1).toUpperCase() : "";
 
   const avatar = (
     <span aria-hidden="true" className="chip h-9 w-9 text-sm font-semibold">
@@ -21,7 +29,7 @@ export function CustomerChip({ variant }: { variant: "sidebar" | "avatar" }) {
       <span className="min-w-0 text-sm">
         {/* While loading, a quiet placeholder of the same height, so nothing jumps. */}
         <span className="block truncate font-semibold">{name || " "}</span>
-        <span className="block text-xs text-muted">Personal account</span>
+        <span className="block text-xs text-muted">{me ? ROLE_LABELS[me.role] ?? "Personal account" : " "}</span>
       </span>
     </div>
   );

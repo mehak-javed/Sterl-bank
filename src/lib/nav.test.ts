@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NAV_LINKS, isActivePath } from "./nav";
+import { NAV_LINKS, isActivePath, moreLinksFor, navLinksFor, tabBarLinksFor } from "./nav";
 
 describe("isActivePath", () => {
   it("matches the dashboard only on the exact home path", () => {
@@ -41,5 +41,23 @@ describe("the phone tab bar", () => {
 
   it("uses short labels that fit under an icon", () => {
     for (const link of NAV_LINKS) expect(link.short.length).toBeLessThanOrEqual(8);
+  });
+});
+
+describe("the menu for each role", () => {
+  it("shows customers their banking, never the risk desk", () => {
+    const hrefs = navLinksFor("customer").map((l) => l.href);
+    expect(hrefs).toContain("/dashboard");
+    expect(hrefs).not.toContain("/credit-risk");
+  });
+
+  it("shows risk officers the desk, never customers' banking", () => {
+    expect(navLinksFor("risk_officer").map((l) => l.href)).toEqual(["/credit-risk", "/markets"]);
+    expect(tabBarLinksFor("risk_officer").map((l) => l.href)).toEqual(["/credit-risk", "/markets"]);
+    expect(moreLinksFor("risk_officer")).toEqual([]);
+  });
+
+  it("shows nothing until it knows who you are", () => {
+    expect(navLinksFor(undefined)).toEqual([]);
   });
 });

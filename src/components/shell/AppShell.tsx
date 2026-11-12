@@ -1,13 +1,11 @@
 import type { ReactNode } from "react";
 import { Ellipsis, SlidersHorizontal } from "lucide-react";
-import Link from "next/link";
 import { DisplaySettings } from "@/components/DisplaySettings";
 import { SiteNav } from "@/components/SiteNav";
-import { NAV_LINKS } from "@/lib/nav";
 import { BrandMark } from "./BrandMark";
 import { CustomerChip } from "./CustomerChip";
 import { LogoutButton } from "./LogoutButton";
-import { NavIcon } from "./NavIcon";
+import { MoreNavLinks } from "./MoreNavLinks";
 import { Sheet } from "./Sheet";
 
 /**
@@ -18,8 +16,6 @@ import { Sheet } from "./Sheet";
  * Who's logged in comes from the session (CustomerChip), and Log out ends it on the server.
  */
 export function AppShell({ children }: { children: ReactNode }) {
-  const moreLinks = NAV_LINKS.filter((link) => !link.inTabBar);
-
   return (
     <div className="flex w-full flex-1">
       {/* Skip link: keyboard users jump past the navigation. Hidden until it gets focus. */}
@@ -90,14 +86,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             triggerClassName="flex w-full flex-col items-center gap-1 py-2 text-[0.7rem] font-medium text-muted"
           >
             <ul className="flex flex-col gap-1">
-              {moreLinks.map(({ href, label }) => (
-                <li key={href}>
-                  <Link href={href} className="flex items-center gap-3 rounded-xl border border-line px-3 py-3 font-medium">
-                    <NavIcon href={href} className="h-5 w-5 text-heading" />
-                    {label}
-                  </Link>
-                </li>
-              ))}
+              <MoreNavLinks />
             </ul>
             <div className="border-t border-line pt-4">
               <DisplaySettings />

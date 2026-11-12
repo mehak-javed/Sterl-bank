@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   // and every banking request is checked by the API (login, CSRF, "is this yours?").
   // Only /api/fx/* stays the website's own (public exchange rates).
   async rewrites() {
-    return ["auth", "accounts", "cards", "transfers"].flatMap((area) => [
+    return ["auth", "accounts", "cards", "transfers", "risk"].flatMap((area) => [
       { source: `/api/${area}`, destination: `${API_ORIGIN}/api/${area}` },
       { source: `/api/${area}/:path*`, destination: `${API_ORIGIN}/api/${area}/:path*` },
     ]);
