@@ -185,7 +185,7 @@ bars and a word). Errors use `--danger`, linked with `aria-describedby`; a form-
 `role="alert"`.
 **Cookie banner** (`CookieBanner`): shown until a choice is made; "Essential only" and "Accept all" are
 the same size and style (UK ICO: rejecting must be as easy as accepting); choice in `sterl_consent`
-for a year. `/cookies` lists every cookie and storage item. No small "eyebrow" tags above headings and
+for a year. (No separate cookie page: Mehak, Nov 12.) No small "eyebrow" tags above headings and
 no inline bold on public pages (Mehak, Nov 12).
 
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black

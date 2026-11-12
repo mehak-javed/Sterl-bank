@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { logIn, signUp } from "./client";
+import { getMe, logIn, logOut, signUp } from "./client";
 import { loginSchema, passwordStrength, signupSchema } from "./schemas";
 
 const valid = { firstName: "Alex", lastName: "Example", email: "Alex@Example.com", password: "copper kettle river sunrise" };
@@ -92,4 +92,21 @@ describe("the login client", () => {
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.message).toMatch(/couldn't reach Sterl/);
   });
+
+  it("asks who is logged in, and answers null when nobody is", async () => {
+    const me = { userId: "u", customerId: "c", email: "a@example.com", role: "customer", firstName: "Alex", lastName: "Example" };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(me), { status: 200 })));
+    expect(await getMe()).toEqual(me);
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(null, { status: 401 })));
+    expect(await getMe()).toBeNull();
+  });
+
+  it("logs out on the server, with the CSRF token", async () => {
+    const calls = server(204);
+    await logOut();
+    expect(calls[1].url).toBe("/api/auth/logout");
+    expect(calls[1].init?.method).toBe("POST");
+    expect((calls[1].init?.headers as Record<string, string>)["X-XSRF-TOKEN"]).toBe("abc=123");
+  });
 });
+

@@ -21,7 +21,7 @@ service, spam other users, or try to access anything outside this demo.
 | Secrets | **Secret scanning with push protection**: a commit containing a key or token is blocked before it reaches GitHub. Secrets live only in environment variables (`.env.local`, Vercel and AWS settings) |
 | Changes | Branch protection: every change goes through a pull request with lint, typecheck, tests and build passing |
 | API | Bound SQL parameters only; server-side validation of every input; strict JSON (no rounding of money); errors as problem details without internals; only `health` and `info` Actuator endpoints exposed |
-| Login | Spring Security; Argon2id password hashes; sessions stored server-side in PostgreSQL with a 15-minute idle timeout; session cookie HttpOnly, Secure, SameSite=Lax; new session id at login; one answer for wrong password and unknown email; failed-login throttling; every attempt audited |
+| Login | Spring Security; Argon2id password hashes; sessions stored server-side in PostgreSQL with a 1-hour idle timeout; session cookie HttpOnly, Secure, SameSite=Lax; new session id at login; one answer for wrong password and unknown email; failed-login throttling; every attempt audited |
 | Access | Deny by default; every query filtered by the logged-in customer, with tests proving one customer can't read or move another's money (OWASP API1); other customers' ids return 404 |
 | Browser | CSRF token on every state-changing request; CSP `default-src 'none'`, no framing, no MIME sniffing, no referrer, no caching of responses |
 | Money | Double-entry ledger enforced by the database; append-only ledger and audit log; idempotent transfers with row locking |

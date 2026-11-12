@@ -11,7 +11,6 @@ export const PUBLIC_PATHS = [
   "/help",
   "/security",
   "/security/policy",
-  "/cookies",
   "/recruitment-scams",
   "/login",
   "/signup",

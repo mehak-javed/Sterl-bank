@@ -76,3 +76,25 @@ export async function signUp(input: { firstName: string; lastName: string; email
     return { ok: false, message: UNAVAILABLE };
   }
 }
+
+/** Who is logged in, or null if nobody (or the API can't be reached). */
+export type Me = { userId: string; customerId: string | null; email: string; role: string; firstName: string | null; lastName: string | null };
+
+export async function getMe(): Promise<Me | null> {
+  try {
+    const res = await fetch("/api/auth/me", { credentials: "same-origin", cache: "no-store" });
+    return res.ok ? ((await res.json()) as Me) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Ends the session on the server (not just in the browser). Needs the CSRF token like any change. */
+export async function logOut(): Promise<void> {
+  try {
+    await post("/api/auth/logout", {});
+  } catch {
+    // Even if the API can't be reached, the person is sent to the login page; the session then
+    // simply expires on its own after an hour.
+  }
+}

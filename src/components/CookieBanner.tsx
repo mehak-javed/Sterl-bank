@@ -1,7 +1,6 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import Link from "next/link";
 import { Cookie } from "lucide-react";
 import { consentCookie, readConsent, type Consent } from "@/lib/consent";
 
@@ -45,10 +44,7 @@ export function CookieBanner() {
         </h2>
         <p className="mt-1 text-muted">
           We use essential cookies to keep you logged in and secure. With your permission we&apos;d also use optional
-          cookies to improve Sterl.{" "}
-          <Link href="/cookies" className="text-heading underline underline-offset-4">
-            Cookie policy
-          </Link>
+          cookies to improve Sterl.
         </p>
       </div>
       <div className="flex shrink-0 gap-2">

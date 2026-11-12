@@ -32,7 +32,7 @@ export function SignupForm() {
     setMessage(undefined);
     const result = await signUp(values);
     if (result.ok) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
       return;
     }
     setMessage(result.message);
