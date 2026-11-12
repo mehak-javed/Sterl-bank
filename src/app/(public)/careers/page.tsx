@@ -61,7 +61,6 @@ export default function CareersPage() {
   return (
     <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
       {/* Hero */}
-      <p className="eyebrow text-muted">Careers</p>
       <h1 className="mt-2 max-w-4xl text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
         Build what&apos;s next <span className="text-gold-gradient block">in banking</span>
       </h1>
@@ -202,7 +201,7 @@ export default function CareersPage() {
           <ShieldAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-heading" />
           <span>
             We never ask for money or bank details while you apply.{" "}
-            <Link href="/recruitment-scams" className="font-semibold text-heading underline underline-offset-4">
+            <Link href="/recruitment-scams" className="text-heading underline underline-offset-4">
               How to spot a recruitment scam
             </Link>
           </span>

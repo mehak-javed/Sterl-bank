@@ -177,6 +177,17 @@ brand (not impersonating a real bank), `@sterl.example` addresses.
 **Security policy** (`/security/policy`): how to report (security@sterl.example), scope, testing
 rules, response times, safe harbour; machine-readable twin `/.well-known/security.txt` (RFC 9116).
 
+**Log in and Sign up** (`app/(auth)`): a focused layout with only the logo (to the home page): no
+header menu or Log in / Sign up buttons, no footer link lists, no small tags above the heading. One
+glass card: heading, form, one link to the other page. Log in = email + password; Sign up = first
+name, last name, email, password (12–128 characters, no name/email inside, strength meter with four
+bars and a word). Errors use `--danger`, linked with `aria-describedby`; a form-level error is a
+`role="alert"`.
+**Cookie banner** (`CookieBanner`): shown until a choice is made; "Essential only" and "Accept all" are
+the same size and style (UK ICO: rejecting must be as easy as accepting); choice in `sterl_consent`
+for a year. `/cookies` lists every cookie and storage item. No small "eyebrow" tags above headings and
+no inline bold on public pages (Mehak, Nov 12).
+
 **Tab icon:** `src/app/icon.png` (512) and `apple-icon.png` (180): the gold eagle on a near-black
 rounded square, so it shows on light and dark tab bars. Drawn from `public/brand/eagle.png`.
 

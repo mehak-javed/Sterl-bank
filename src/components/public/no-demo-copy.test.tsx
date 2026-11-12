@@ -1,14 +1,18 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import CareersPage from "@/app/(public)/careers/page";
+import CookiesPage from "@/app/(public)/cookies/page";
 import HelpPage from "@/app/(public)/help/page";
-import LoginPage from "@/app/(public)/login/page";
+import LoginPage from "@/app/(auth)/login/page";
 import HomePage from "@/app/(public)/page";
 import RecruitmentScamsPage from "@/app/(public)/recruitment-scams/page";
 import SecurityPolicyPage from "@/app/(public)/security/policy/page";
 import SecurityPage from "@/app/(public)/security/page";
-import SignUpPage from "@/app/(public)/signup/page";
+import SignUpPage from "@/app/(auth)/signup/page";
 import { PublicFooter } from "./PublicFooter";
+
+// The login and sign-up forms use the app router, which only exists inside Next.
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 // next/image needs next.config's allowed hosts, which tests don't load.
 vi.mock("next/image", () => ({
@@ -30,6 +34,7 @@ const PAGES: [string, () => React.ReactElement][] = [
   ["sign up", () => <SignUpPage />],
   ["security", () => <SecurityPage />],
   ["security policy", () => <SecurityPolicyPage />],
+  ["cookies", () => <CookiesPage />],
   ["footer", () => <PublicFooter />],
 ];
 

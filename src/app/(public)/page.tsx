@@ -6,7 +6,7 @@ import { PeopleStories } from "@/components/public/PeopleStories";
 import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
 
 const STEPS = [
-  { title: "Open an account", text: "Sign up in a minute with your email, or with Google." },
+  { title: "Open an account", text: "Sign up in a minute with your name, email and a password." },
   { title: "Look around", text: "See balances, spending, your cards and recent activity at a glance." },
   { title: "Move some money", text: "Transfer between accounts or switch round-ups on and off, and watch it update." },
 ];
@@ -78,7 +78,6 @@ export default function HomePage() {
 
       {/* ---------- How it works ---------- */}
       <section id="how-it-works" aria-labelledby="how-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
-        <p className="eyebrow text-muted">How it works</p>
         <h2 id="how-heading" className="mt-2 text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
           See Sterl in a minute
         </h2>

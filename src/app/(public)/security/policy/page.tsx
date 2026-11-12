@@ -40,8 +40,7 @@ export default function SecurityPolicyPage() {
       <Link href="/security" className="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-foreground">
         <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Security and confidentiality
       </Link>
-      <p className="eyebrow mt-8 text-muted">Security policy</p>
-      <h1 className="mt-2 text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
+      <h1 className="mt-8 text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
         Found a security <span className="text-gold-gradient">problem?</span>
       </h1>
       <p className="mt-5 max-w-2xl text-lg text-muted">
@@ -55,7 +54,7 @@ export default function SecurityPolicyPage() {
           <Mail aria-hidden="true" className="h-7 w-7 shrink-0" /> How to report
         </h2>
         <p className="mt-4 text-lg">
-          Email <span className="font-semibold text-heading">{SECURITY_EMAIL}</span> with:
+          Email <span className="text-heading">{SECURITY_EMAIL}</span> with:
         </p>
         <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[

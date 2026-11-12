@@ -54,7 +54,6 @@ const NEVER = [
 export default function RecruitmentScamsPage() {
   return (
     <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
-      <p className="eyebrow text-muted">Careers</p>
       <h1 className="mt-2 max-w-3xl text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
         Recruitment <span className="text-gold-gradient">scams</span>
       </h1>
@@ -101,17 +100,17 @@ export default function RecruitmentScamsPage() {
         </h2>
         <ol className="mt-6 flex flex-col gap-4 text-lg">
           <li>
-            <strong>Don&apos;t reply, pay or share anything.</strong>{" "}
+            Don&apos;t reply, pay or share anything.{" "}
             <span className="text-muted">Keep the messages: they help an investigation.</span>
           </li>
           <li>
-            <strong>Report it to the police.</strong>{" "}
+            Report it to the police.{" "}
             <span className="text-muted">If you&apos;ve lost money, tell your bank straight away too.</span>
           </li>
           <li>
-            <strong>Tell us.</strong>{" "}
+            Tell us.{" "}
             <span className="text-muted">
-              Forward it to <span className="font-semibold text-foreground">report.phishing@sterl.example</span> so we can warn
+              Forward it to <span className="text-heading">report.phishing@sterl.example</span> so we can warn
               others.
             </span>
           </li>

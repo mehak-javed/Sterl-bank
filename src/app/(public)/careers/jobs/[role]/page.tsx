@@ -67,8 +67,7 @@ async function JobContent({ params }: { params: Promise<{ role: string }> }) {
 
   return (
     <>
-      <p className="eyebrow mt-8 text-muted">{role.team}</p>
-      <h1 className="mt-2 text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">{role.title}</h1>
+      <h1 className="mt-8 text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">{role.title}</h1>
       <p className="mt-5 max-w-3xl text-lg text-muted">{role.summary}</p>
 
       {/* The key facts at a glance */}

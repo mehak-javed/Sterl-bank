@@ -80,7 +80,6 @@ const CONFIDENTIALITY = [
 export default function SecurityPage() {
   return (
     <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
-      <p className="eyebrow text-muted">Security and confidentiality</p>
       <h1 className="mt-2 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
         Your money and your data, <span className="text-gold-gradient">protected</span>
       </h1>
@@ -137,7 +136,7 @@ export default function SecurityPage() {
 
       <p className="mt-8 text-sm text-muted">
         Ready to join?{" "}
-        <Link href="/signup" className="font-semibold text-heading underline underline-offset-4">
+        <Link href="/signup" className="text-heading underline underline-offset-4">
           Open an account
         </Link>
         .

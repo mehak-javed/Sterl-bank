@@ -132,8 +132,8 @@ export function ApplicationForm({ role, roleTitle }: { role: string; roleTitle: 
         <CheckCircle2 aria-hidden="true" className="h-10 w-10 text-heading" />
         <h2 className="text-3xl font-semibold tracking-tight">Application received</h2>
         <p className="text-muted">
-          Thank you for applying for <strong className="text-foreground">{roleTitle}</strong>. Your reference is{" "}
-          <strong className="text-foreground tabular-nums">{reference}</strong>.
+          Thank you for applying for {roleTitle}. Your reference is{" "}
+          {reference}.
         </p>
         <p className="text-muted">Keep your reference for any questions about your application. We will never ask you for money or bank details.</p>
       </div>

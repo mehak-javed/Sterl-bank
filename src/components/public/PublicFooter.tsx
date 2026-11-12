@@ -8,6 +8,7 @@ export const FOOTER_LINKS = [
   { href: "/help", label: "Help" },
   { href: "/recruitment-scams", label: "Recruitment scams" },
   { href: "/security", label: "Security and confidentiality" },
+  { href: "/cookies", label: "Cookies" },
   { href: "/login", label: "Log in" },
   { href: "/signup", label: "Sign up" },
 ] as const;

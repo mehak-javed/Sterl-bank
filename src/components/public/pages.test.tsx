@@ -19,6 +19,7 @@ describe("the public footer", () => {
       "Help",
       "Recruitment scams",
       "Security and confidentiality",
+      "Cookies",
       "Log in",
       "Sign up",
     ]);
@@ -65,7 +66,7 @@ describe("Security and confidentiality", () => {
   const html = renderToStaticMarkup(<SecurityPage />);
 
   it("covers both security and confidentiality", () => {
-    expect(html).toContain("Security and confidentiality");
+    expect(html).toMatch(/>Security<\/h2>/);
     expect(html).toContain('id="confidentiality-heading"');
   });
 
