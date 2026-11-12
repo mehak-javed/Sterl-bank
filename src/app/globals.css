@@ -599,6 +599,12 @@ body::before {
 body:has(.public-site) {
   background: var(--public-bg);
 }
+/* Decorations (the card pouch's 3D tilt, the send-money horizon glow) deliberately poke past the
+   edges; without this the whole page scrolled sideways at some widths. `clip`, not `hidden`:
+   hidden would make this div a scroll container and break the sticky header inside it. */
+.public-site {
+  overflow-x: clip;
+}
 /* Secondary text on public pages is matte silver instead of warm grey. */
 .public-site .text-muted {
   color: var(--public-silver);

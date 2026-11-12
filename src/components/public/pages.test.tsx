@@ -73,3 +73,33 @@ describe("Security and confidentiality", () => {
     expect(html).toContain("Your data, your choice (coming)");
   });
 });
+
+describe("the header menu", () => {
+  it("is Home, Meet our community, Careers, Help (Mehak's choice)", async () => {
+    const { PUBLIC_LINKS } = await import("./PublicHeader");
+    expect(PUBLIC_LINKS.map((l) => [l.label, l.href])).toEqual([
+      ["Home", "/"],
+      ["Meet our community", "/#people"],
+      ["Careers", "/careers"],
+      ["Help", "/#help"],
+    ]);
+  });
+
+  it("has a section on the home page for every link", async () => {
+    const { default: HomePage } = await import("@/app/(public)/page");
+    const html = renderToStaticMarkup(<HomePage />);
+    for (const id of ["people", "security", "help"]) expect(html).toContain(`id="${id}"`);
+  });
+
+  it("no longer promises Face ID or Touch ID (dropped Nov 12)", async () => {
+    const { default: HomePage } = await import("@/app/(public)/page");
+    const html = renderToStaticMarkup(<HomePage />) + renderToStaticMarkup(<SecurityPage />);
+    expect(html).not.toMatch(/Face ID|Touch ID/);
+  });
+
+  it("keeps the full Security and Help pages for the footer", () => {
+    const labels = FOOTER_LINKS.map((l) => l.href);
+    expect(labels).toContain("/security");
+    expect(labels).toContain("/help");
+  });
+});

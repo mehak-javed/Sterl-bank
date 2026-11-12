@@ -3,17 +3,21 @@ import { Menu } from "lucide-react";
 import { BrandMark } from "@/components/shell/BrandMark";
 import { Sheet } from "@/components/shell/Sheet";
 
+/**
+ * The menu (Mehak, Nov 12): Home, Meet our community and Help scroll to sections of the home page;
+ * Careers is its own page. The full /security and /help pages are in the footer.
+ */
 export const PUBLIC_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/#people", label: "People" },
-  { href: "/security", label: "Security" }, // footer: "Security and confidentiality"
-  { href: "/help", label: "Help" },
+  { href: "/#people", label: "Meet our community" },
+  { href: "/careers", label: "Careers" },
+  { href: "/#help", label: "Help" },
 ] as const;
 
 /**
  * The top bar of the public (logged-out) site: a frosted-glass strip like the hero card below it.
  * Desktop: links in the middle, Log in + Sign up on the right.
- * Phones: logo, Log in, Sign up, and a Menu sheet with the links.
+ * Phones and tablets (below 1024px, where "Meet our community" would wrap): a Menu sheet with the links.
  */
 export function PublicHeader() {
   return (
@@ -21,11 +25,11 @@ export function PublicHeader() {
       <div className="glass flex items-center justify-between gap-2 rounded-2xl px-3 py-3 sm:gap-4 sm:px-5">
         <BrandMark href="/" label="Sterl home" />
 
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {PUBLIC_LINKS.map(({ href, label }) => (
               <li key={href}>
-                <Link href={href} className="rounded-lg px-3 py-2 text-sm font-medium text-muted hover:text-foreground">
+                <Link href={href} className="rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap text-muted hover:text-foreground">
                   {label}
                 </Link>
               </li>
@@ -49,7 +53,7 @@ export function PublicHeader() {
           >
             Sign up
           </Link>
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet
               title="Menu"
               triggerLabel="Menu"

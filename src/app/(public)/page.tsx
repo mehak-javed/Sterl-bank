@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, PlayCircle } from "lucide-react";
+import { HelpQuestions } from "@/components/public/HelpQuestions";
 import { CardPouch } from "@/components/public/CardPouch";
 import { FloatingOrbs } from "@/components/public/FloatingOrbs";
 import { PeopleStories } from "@/components/public/PeopleStories";
+import { HighlightGrid, PROTECTIONS } from "@/components/public/SecurityHighlights";
 import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
 
 const STEPS = [
@@ -17,7 +19,9 @@ const STEPS = [
  *
  * Look: a dark, restrained fintech landing page (Mehak's direction): near-black page, matte-silver
  * text, gold accents. Sections: hero ("Work that matters, every single day") with the card pouch, send money,
- * "Meet our people" stories, how it works. Layout ideas from references Mehak shared; Sterl's own
+ * "Meet our people" stories, how it works, security, help. The header's Meet our community
+ * and Help links scroll to these sections; the full /security and /help pages stay as their own pages.
+ * Layout ideas from references Mehak shared; Sterl's own
  * name and words. The team members and their stories are fictional; the photos are Unsplash stock
  * photos of models, credited on the page.
  */
@@ -92,6 +96,32 @@ export default function HomePage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* ---------- Security (the full page, with confidentiality, is /security) ---------- */}
+      <section id="security" aria-labelledby="security-heading" className="mt-32 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
+        <h2 id="security-heading" className="text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
+          Your money, <span className="text-gold-gradient">protected</span>
+        </h2>
+        <p className="mt-4 max-w-2xl text-lg text-muted">What protects every Sterl account, in plain words.</p>
+        <div className="mt-10">
+          <HighlightGrid items={PROTECTIONS} />
+        </div>
+        <Link href="/security" className="mt-8 inline-flex items-center gap-2 font-semibold text-heading">
+          Security and confidentiality <ArrowRight aria-hidden="true" className="h-4 w-4" />
+        </Link>
+      </section>
+
+      {/* ---------- Help ---------- */}
+      <section
+        id="help"
+        aria-labelledby="help-heading"
+        className="mt-32 grid w-full scroll-mt-28 grid-cols-1 gap-10 px-4 sm:px-8 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:px-12"
+      >
+        <h2 id="help-heading" className="text-3xl font-semibold tracking-tight text-heading sm:text-4xl">
+          Questions, <span className="text-gold-gradient">answered</span>
+        </h2>
+        <HelpQuestions />
       </section>
     </>
   );
