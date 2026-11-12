@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ScrollBackdrop } from "@/components/public/ScrollBackdrop";
 import { BrandMark } from "@/components/shell/BrandMark";
 
 /**
@@ -9,6 +10,7 @@ import { BrandMark } from "@/components/shell/BrandMark";
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="public-site flex w-full flex-1 flex-col">
+      <ScrollBackdrop />
       <header className="px-4 pt-6 sm:px-8 lg:px-12">
         <BrandMark href="/" label="Sterl home" />
       </header>
