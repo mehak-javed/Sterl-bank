@@ -87,6 +87,12 @@ public class PaymentRepository {
 				.param("id", id).param("customerId", customerId).query(PaymentRepository::toRow).optional();
 	}
 
+	/** The customer's latest payments, newest first. */
+	public List<PaymentRow> recentForCustomer(UUID customerId, int limit) {
+		return jdbc.sql(PAYMENT_COLUMNS + " WHERE p.customer_id = :customerId ORDER BY p.created_at DESC LIMIT :limit")
+				.param("customerId", customerId).param("limit", limit).query(PaymentRepository::toRow).list();
+	}
+
 	/** Money out: the customer's account down, the bank's OUTBOUND_PAYMENTS account up. Sums to zero. */
 	public void insertLedgerPayment(UUID ledgerTransactionId, UUID accountId, long amountPence, String description) {
 		jdbc.sql("""

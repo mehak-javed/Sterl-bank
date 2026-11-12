@@ -1,7 +1,7 @@
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUiStore } from "@/stores/UiStoreProvider";
 import type { ReferenceRates } from "@/lib/fx";
-import type { Account, Card, CardProduct, Transaction } from "@/types/bank";
+import type { Account, Card, CardProduct, HeldPayment, Payment, SavedPayee, Transaction } from "@/types/bank";
 import { apiFetch, apiSend } from "./client";
 
 /**
@@ -13,6 +13,9 @@ export const queryKeys = {
   transactions: (accountId: string, limit: number) => ["transactions", accountId, { limit }] as const,
   cards: ["cards"] as const,
   fxReference: ["fx", "reference"] as const,
+  payees: ["payees"] as const,
+  payments: ["payments"] as const,
+  heldPayments: ["risk", "held-payments"] as const,
 };
 
 export function useAccounts() {
@@ -133,5 +136,62 @@ export function useAddMoney() {
         queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
         queryClient.invalidateQueries({ queryKey: ["transactions"] }),
       ]),
+  });
+}
+
+// ---------- Paying someone ----------
+
+export function usePayees() {
+  return useQuery({ queryKey: queryKeys.payees, queryFn: ({ signal }) => apiFetch<SavedPayee[]>("/api/payees", { signal }) });
+}
+
+export function useAddPayee() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payee: { name: string; type: string; sortCode: string; accountNumber: string }) =>
+      apiSend<SavedPayee>("/api/payees", "POST", payee),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.payees }),
+  });
+}
+
+export function usePayments() {
+  return useQuery({ queryKey: queryKeys.payments, queryFn: ({ signal }) => apiFetch<Payment[]>("/api/payments", { signal }) });
+}
+
+/**
+ * Pay a payee. The form makes ONE Idempotency-Key per payment it means to make and sends it again on
+ * any retry, so a double tap can never pay twice. The bank screens the payment and answers "settled"
+ * (sent) or "held" (paused for a security check).
+ */
+export function usePay() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ idempotencyKey, ...body }: { fromAccountId: string; payeeId: string; amountPence: number; reference: string | null; idempotencyKey: string }) =>
+      apiSend<Payment>("/api/payments", "POST", body, { "Idempotency-Key": idempotencyKey }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.payments }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
+        queryClient.invalidateQueries({ queryKey: ["transactions"] }),
+      ]),
+  });
+}
+
+// ---------- Risk desk: held payments (staff only) ----------
+
+export function useHeldPayments() {
+  return useQuery({
+    queryKey: queryKeys.heldPayments,
+    queryFn: ({ signal }) => apiFetch<HeldPayment[]>("/api/risk/payments/held", { signal }),
+  });
+}
+
+/** Release (the money moves) or reject (it never does). A reason is required: it goes in the audit log. */
+export function useReviewPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, action, note }: { id: string; action: "release" | "reject"; note: string }) =>
+      apiSend<HeldPayment>(`/api/risk/payments/${encodeURIComponent(id)}/${action}`, "POST", { note }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.heldPayments }),
   });
 }

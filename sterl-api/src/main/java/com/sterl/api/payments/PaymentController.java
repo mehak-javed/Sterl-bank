@@ -52,6 +52,12 @@ public class PaymentController {
 				: ResponseEntity.accepted().location(location).body(body);
 	}
 
+	/** GET /api/payments: the latest 20, newest first, each with its customer message. */
+	@GetMapping
+	public java.util.List<PaymentResponse> recent() {
+		return service.recent().stream().map(p -> PaymentResponse.of(p, explanations.recorded(p.id(), p))).toList();
+	}
+
 	@GetMapping("/{id}")
 	public PaymentResponse get(@PathVariable UUID id) {
 		PaymentRepository.PaymentRow payment = service.get(id);

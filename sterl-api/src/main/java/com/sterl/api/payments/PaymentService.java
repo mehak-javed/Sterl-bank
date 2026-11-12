@@ -84,6 +84,10 @@ public class PaymentService {
 		return new Decided(payments.findCustomerPayment(customerId, paymentId).orElseThrow(), facts, result, false);
 	}
 
+	public java.util.List<PaymentRepository.PaymentRow> recent() {
+		return payments.recentForCustomer(currentCustomer.id(), 20);
+	}
+
 	public PaymentRepository.PaymentRow get(UUID id) {
 		return payments.findCustomerPayment(currentCustomer.id(), id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));

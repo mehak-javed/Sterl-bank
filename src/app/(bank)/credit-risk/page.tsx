@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HeldPaymentsQueue } from "@/components/risk/HeldPaymentsQueue";
 
 export const metadata: Metadata = { title: "Credit risk" };
 
@@ -20,6 +21,9 @@ export default function CreditRiskPage() {
   return (
     <>
       <h1 className="text-3xl font-semibold tracking-tight text-heading">Credit risk</h1>
+
+      {/* Payments paused by the screening checks, waiting for a person's decision. */}
+      <HeldPaymentsQueue />
 
       <section aria-labelledby="coming-heading" className="glass rounded-2xl p-4">
         <h2 id="coming-heading" className="mb-2 text-lg font-semibold text-heading">
