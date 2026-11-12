@@ -29,7 +29,12 @@ class SignupApiTests {
 
 	private static final String GOOD_PASSWORD = "copper kettle river sunrise";
 
-	/** Each test signs up from its own address, so the per-address limit never mixes tests up. */
+	/**
+	 * Each test signs up from its own address, so the per-address limit never mixes tests up.
+	 * 192.0.2.x (a range reserved for documentation): the login limiter is in memory and shared by
+	 * every test class in the run, and AuthApiTests deliberately locks out 203.0.113.x addresses.
+	 * Sharing that range made these tests fail only when AuthApiTests happened to run first (CI).
+	 */
 	private static final AtomicInteger NEXT_IP = new AtomicInteger(10);
 
 	@Autowired
@@ -143,7 +148,7 @@ class SignupApiTests {
 	// ---------- helpers ----------
 
 	private static String nextIp() {
-		return "203.0.113." + NEXT_IP.getAndIncrement();
+		return "192.0.2." + NEXT_IP.getAndIncrement();
 	}
 
 	private static String json(String first, String last, String email, String password) {
