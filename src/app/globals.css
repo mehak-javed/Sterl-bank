@@ -568,11 +568,13 @@ body::before {
   }
 
   /* The headline reveals left to right, once, when the page loads. */
+  /* 1.8 s with an even ease (Mehak, Nov 12: 0.9 s with a fast start felt rushed). The second line
+     starts 0.6 s later, so the two lines read one after the other. */
   .wipe-in {
-    animation: wipe-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: wipe-in 1.8s cubic-bezier(0.45, 0, 0.15, 1) both;
   }
   .wipe-in-late {
-    animation: wipe-in 0.9s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: wipe-in 1.8s 0.6s cubic-bezier(0.45, 0, 0.15, 1) both;
   }
   @keyframes wipe-in {
     from {
