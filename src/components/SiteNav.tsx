@@ -3,7 +3,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NAV_LINKS, isActivePath } from "@/lib/nav";
+import { useMe } from "@/lib/auth/useMe";
+import { isActivePath, navLinksFor, tabBarLinksFor } from "@/lib/nav";
 import { NavIcon } from "./shell/NavIcon";
 
 /**
@@ -29,11 +30,13 @@ function CurrentNavLinks({ variant }: { variant: "sidebar" | "tabbar" }) {
 }
 
 function NavLinks({ variant, pathname }: { variant: "sidebar" | "tabbar"; pathname: string | null }) {
-  const links = variant === "tabbar" ? NAV_LINKS.filter((link) => link.inTabBar) : NAV_LINKS;
+  // Only the sections this person may use: customers' banking, or the staff desks.
+  const role = useMe().data?.role;
+  const links = variant === "tabbar" ? tabBarLinksFor(role) : navLinksFor(role);
 
   if (variant === "tabbar") {
     return (
-      <ul className="grid grid-cols-4">
+      <ul className="grid" style={{ gridTemplateColumns: `repeat(${Math.max(links.length, 1)}, minmax(0, 1fr))` }}>
         {links.map(({ href, short }) => (
           <li key={href}>
             <Link

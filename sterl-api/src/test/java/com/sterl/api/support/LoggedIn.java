@@ -24,6 +24,9 @@ public final class LoggedIn {
 	public static final String DEMO_PASSWORD = "sterl demo passphrase";
 	public static final String TOMAS_EMAIL = "tomas.reyes@example.com";
 	public static final String TOMAS_PASSWORD = "sterl test passphrase 1";
+	/** Staff: the risk officer seeded in V10 (no customer record). */
+	public static final String RISK_OFFICER_EMAIL = "morgan.ellis@sterl.example";
+	public static final String RISK_OFFICER_PASSWORD = "sterl risk passphrase";
 
 	private final MockMvcTester mvc;
 	private final Cookie session;

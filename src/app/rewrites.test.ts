@@ -5,7 +5,7 @@ describe("which /api paths go to the Java API", () => {
   it("sends every banking path to the API, so it checks the login on each request", async () => {
     const rewrites = (await nextConfig.rewrites!()) as { source: string; destination: string }[];
     const sources = rewrites.map((r) => r.source);
-    for (const area of ["auth", "accounts", "cards", "transfers"]) {
+    for (const area of ["auth", "accounts", "cards", "transfers", "risk"]) {
       expect(sources).toContain(`/api/${area}`);
       expect(sources).toContain(`/api/${area}/:path*`);
     }

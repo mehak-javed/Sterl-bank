@@ -2,11 +2,46 @@
  * Which pages need a login, and where to send people afterwards. Pure functions: easy to test.
  */
 
-/** The personal banking pages. Anything under these needs a logged-in customer. */
-export const PROTECTED_PREFIXES = ["/dashboard", "/accounts", "/transactions", "/payments", "/cards", "/markets", "/credit-risk"] as const;
+import { NAV_LINKS, type Role } from "@/lib/nav";
+
+/**
+ * Every page that needs a login, and WHO may open it: the menu's sections, plus account pages
+ * (customers only). Customers never reach the risk desk; risk staff never reach customers' banking.
+ */
+const AREAS: readonly { prefix: string; roles: readonly string[] }[] = [
+  ...NAV_LINKS.map((link) => ({ prefix: link.href, roles: link.roles })),
+  { prefix: "/accounts", roles: ["customer"] },
+];
+
+export const PROTECTED_PREFIXES = AREAS.map((area) => area.prefix);
+
+const under = (pathname: string, prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`);
 
 export function isProtected(pathname: string): boolean {
-  return PROTECTED_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  return PROTECTED_PREFIXES.some((prefix) => under(pathname, prefix));
+}
+
+/** Where each kind of user starts: their own home page. */
+export function homeFor(role: string): string {
+  if (role === "risk_officer" || role === "admin") return "/credit-risk";
+  if (role === "trader") return "/markets";
+  return "/dashboard";
+}
+
+/**
+ * For a logged-in user: null if they may open this page, otherwise where to send them instead (their
+ * own home). A risk officer following a /dashboard link lands on the risk desk, and the other way round.
+ */
+export function redirectForRole(pathname: string, role: Role | string): string | null {
+  const allowed = (path: string) => {
+    const area = AREAS.find((a) => under(path, a.prefix));
+    return !area || area.roles.includes(role);
+  };
+  if (allowed(pathname)) return null;
+  // Never redirect to a page they can't open either: that would bounce forever. A role with no
+  // pages of its own (or one we don't know) goes to the public home page.
+  const home = homeFor(role);
+  return allowed(home) ? home : "/";
 }
 
 /**
