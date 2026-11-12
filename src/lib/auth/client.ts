@@ -98,3 +98,16 @@ export async function logOut(): Promise<void> {
     // simply expires on its own after an hour.
   }
 }
+
+/**
+ * Log out, then leave with a FULL page load to the login page (not an in-app jump).
+ *
+ * Why a full load: Next.js keeps recently visited pages alive in the background so Back is instant.
+ * After an in-app jump, the old page (open menus, button states, cached data) came back on the next
+ * login; the Log out button was found stuck on "Logging out…". A full load throws all of that away,
+ * which is also what a bank wants: nothing of the last person stays in this tab's memory.
+ */
+export async function logOutAndLeave(go: (url: string) => void = (url) => window.location.assign(url)): Promise<void> {
+  await logOut(); // ends the session on the server; never throws
+  go("/login");
+}

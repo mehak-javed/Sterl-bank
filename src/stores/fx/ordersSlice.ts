@@ -13,7 +13,7 @@ export type Order = {
   rate: number; // snapshot of the rate at the moment of the order
   quoteAmountMinor: number; // the other side, in that currency's minor units
   placedAt: string; // ISO time
-  status: "filled"; // mock orders fill instantly; real ones also go "pending", "rejected"...
+  status: "filled"; // paper orders fill instantly; real ones also go "pending", "rejected"...
 };
 
 type OrdersState = { orders: Order[] };

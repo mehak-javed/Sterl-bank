@@ -3,7 +3,7 @@
 import { randomBytes } from "node:crypto";
 import { findRole } from "@/lib/careers/roles";
 import { applicationSchema, checkResumeFile, detectResumeKind } from "@/lib/careers/application";
-import { demoCareersInbox } from "./careers-inbox";
+import { loggingCareersInbox } from "./careers-inbox";
 
 export type ApplyResult =
   | { ok: true; reference: string }
@@ -45,6 +45,6 @@ export async function submitApplication(formData: FormData): Promise<ApplyResult
 
   // A short, unguessable reference for the applicant, e.g. "STL-4F9A2C1B".
   const reference = `STL-${randomBytes(4).toString("hex").toUpperCase()}`;
-  await demoCareersInbox.deliver({ reference, application: parsed.data, resume: { name: resume.name, kind, bytes } });
+  await loggingCareersInbox.deliver({ reference, application: parsed.data, resume: { name: resume.name, kind, bytes } });
   return { ok: true, reference };
 }

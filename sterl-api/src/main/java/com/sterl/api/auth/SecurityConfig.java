@@ -53,7 +53,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
 						.requestMatchers("/error").permitAll()
 						// Banking: customers only. Staff never see customers' accounts, cards or payments.
-						.requestMatchers("/api/accounts/**", "/api/transfers/**", "/api/cards/**").hasRole("CUSTOMER")
+						.requestMatchers("/api/accounts/**", "/api/transfers/**", "/api/cards/**", "/api/payments/**", "/api/payees/**").hasRole("CUSTOMER")
 						// The Credit Risk desk: staff only. Customers never see the bank's lending book.
 						.requestMatchers("/api/risk/**").hasAnyRole("RISK_OFFICER", "ADMIN")
 						// Everything else: logged in, at least.

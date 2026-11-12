@@ -44,11 +44,13 @@ export type Category =
   | "Income"
   | "Savings"
   | "Round-ups"
-  | "Opening balance";
+  | "Opening balance"
+  | "Payments";
 
 export type TransactionKind =
   | "opening_balance"
   | "top_up" // "Add money"
+  | "payment" // to a saved payee
   | "card"
   | "direct_debit"
   | "standing_order"
@@ -105,4 +107,40 @@ export type BankData = {
   transactions: Transaction[]; // newest first
   payees: Payee[];
   cards: Card[];
+};
+
+/** A payee as the API returns it: only the last 4 digits of their account number. */
+export type SavedPayee = {
+  id: string;
+  name: string;
+  type: "person" | "business";
+  sortCode: string;
+  accountNumberLast4: string;
+  createdAt: string;
+};
+
+/**
+ * A payment to a payee. "held" = paused for a security check (no money has moved); a risk officer then
+ * "released" it (sent) or "rejected" it (never sent). The message is written for the customer.
+ */
+export type PaymentStatus = "settled" | "held" | "released" | "rejected";
+export type Payment = {
+  id: string;
+  status: PaymentStatus;
+  amountPence: Pence;
+  payeeName: string;
+  reference?: string | null;
+  message: string;
+  createdAt: string;
+};
+
+/** A held payment in the risk officers' queue: the reasons, never the customer's name. */
+export type HeldPayment = {
+  id: string;
+  status: PaymentStatus;
+  amountPence: Pence;
+  riskScore: number;
+  ruleHits: string[];
+  reviewerNote: string;
+  createdAt: string;
 };

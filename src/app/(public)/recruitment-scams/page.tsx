@@ -59,7 +59,7 @@ export default function RecruitmentScamsPage() {
       </h1>
       <p className="mt-5 max-w-2xl text-lg text-muted">
         Thank you for your interest in working at Sterl. Sadly, criminals sometimes pose as well-known companies, using real
-        names and official-looking letters to run fake interviews and offers. They&apos;re after your money or your personal
+        names and official-looking letters to run sham interviews and offers. They&apos;re after your money or your personal
         details. Here&apos;s how to spot them.
       </p>
 

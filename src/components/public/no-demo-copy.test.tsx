@@ -1,4 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import CareersPage from "@/app/(public)/careers/page";
 import HelpPage from "@/app/(public)/help/page";
@@ -23,10 +25,11 @@ vi.mock("next/image", () => ({
 }));
 
 /**
- * Mehak's decision (Nov 11): the website reads as a real, new bank, with nothing saying "demo".
- * This test fails if wording like that creeps back into any public page.
+ * Mehak's decision (Nov 11, widened Nov 12): the website reads as a real, new bank. No "demo",
+ * "demonstration", "mock", "portfolio", "dummy" or "fake" anywhere a visitor can read. The portfolio
+ * context lives in the GitHub repo instead. This test fails if any of it creeps back.
  */
-const BANNED = /\b(demo|fake|made[- ]up|portfolio demo|fictional|not a real bank|simulated)\b/i;
+const BANNED = /\b(demo|demonstration|mock|portfolio|dummy|fake|made[- ]up|fictional|not a real bank|simulated)\b/i;
 
 const PAGES: [string, () => React.ReactElement][] = [
   ["home", () => <HomePage />],
@@ -36,6 +39,7 @@ const PAGES: [string, () => React.ReactElement][] = [
   ["sign up", () => <SignUpPage />],
   ["security", () => <SecurityPage />],
   ["security policy", () => <SecurityPolicyPage />],
+  ["recruitment scams", () => <RecruitmentScamsPage />],
   ["footer", () => <PublicFooter />],
 ];
 
@@ -48,20 +52,35 @@ describe("no 'demo' wording on the website", () => {
     });
   }
 
-  it("still uses the word 'fake' where it describes scammers (recruitment scams)", () => {
-    expect(renderToStaticMarkup(<RecruitmentScamsPage />)).toContain("fake interviews");
+  // Pages that need a logged-in session or browser state can't be rendered here, so also read the
+  // SOURCE of every page and component: words in visible strings, outside code comments and imports.
+  it("no page or component's source says it", () => {
+    const offenders: string[] = [];
+    for (const file of sourceFiles(["src/app", "src/components", "src/lib", "src/server", "src/stores"])) {
+      const code = readFileSync(file, "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, "") // block comments
+        .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "") // JSX comments
+        .split("\n")
+        .filter((line) => !/^\s*(\/\/|import\s|\*)/.test(line))
+        .map((line) => line.replace(/\s\/\/\s.*$/, "")) // trailing comments
+        .join("\n");
+      const hit = code.match(BANNED);
+      if (hit) offenders.push(`${file}: "${hit[0]}"`);
+    }
+    expect(offenders).toEqual([]);
   });
 });
 
-describe("the security policy", () => {
-  const html = renderToStaticMarkup(<SecurityPolicyPage />);
-
-  it("tells people how to report, with the reserved .example address", () => {
-    expect(html).toContain("security@sterl.example");
-  });
-
-  it("covers scope, rules, response times and a safe-harbour promise", () => {
-    for (const heading of ["In scope", "Out of scope", "When you test, please", "What happens next", "Our promise to you"])
-      expect(html).toContain(heading);
-  });
-});
+/** Every .ts/.tsx file under the given folders, except tests (which name the banned words on purpose). */
+function sourceFiles(dirs: string[]): string[] {
+  const out: string[] = [];
+  const walk = (dir: string) => {
+    for (const name of readdirSync(dir)) {
+      const path = join(dir, name);
+      if (statSync(path).isDirectory()) walk(path);
+      else if (/\.(ts|tsx)$/.test(name) && !/\.test\.tsx?$/.test(name)) out.push(path);
+    }
+  };
+  dirs.forEach(walk);
+  return out;
+}

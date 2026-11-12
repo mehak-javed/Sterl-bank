@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getMe, logIn, logOut, signUp } from "./client";
+import { getMe, logIn, logOut, logOutAndLeave, signUp } from "./client";
 import { loginSchema, passwordStrength, signupSchema } from "./schemas";
 
 const valid = { firstName: "Alex", lastName: "Example", email: "Alex@Example.com", password: "copper kettle river sunrise" };
@@ -107,6 +107,13 @@ describe("the login client", () => {
     expect(calls[1].url).toBe("/api/auth/logout");
     expect(calls[1].init?.method).toBe("POST");
     expect((calls[1].init?.headers as Record<string, string>)["X-XSRF-TOKEN"]).toBe("abc=123");
+  });
+
+  it("after logging out, loads the login page fresh, only once the server has ended the session", async () => {
+    const calls = server(204);
+    const visited: string[] = [];
+    await logOutAndLeave((url) => visited.push(`${url} after ${calls.length} requests`));
+    expect(visited).toEqual(["/login after 2 requests"]); // csrf + logout, THEN leave
   });
 });
 

@@ -191,7 +191,7 @@ export function ApplicationForm({ role, roleTitle }: { role: string; roleTitle: 
           </select>
         </Field>
         <div className="sm:col-span-2">
-          <Field id={f("linkedin")} label="LinkedIn or portfolio (optional)" error={errors.linkedin?.message}>
+          <Field id={f("linkedin")} label="LinkedIn or website (optional)" error={errors.linkedin?.message}>
             <input {...register("linkedin")} {...a11y(f("linkedin"), errors.linkedin)} type="url" inputMode="url" className={inputClass} />
           </Field>
         </div>

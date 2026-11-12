@@ -77,6 +77,13 @@
 			<artifactId>bcprov-jdk18on</artifactId>
 			<version>1.86</version>
 		</dependency>
+		<!-- Claude API (Anthropic's official Java SDK): writes the plain-English explanation of a payment
+		     screening decision. 3.3.0 = newest release at least two weeks old (23 Oct 2026). -->
+		<dependency>
+			<groupId>com.anthropic</groupId>
+			<artifactId>anthropic-java</artifactId>
+			<version>3.3.0</version>
+		</dependency>
 
 		<!-- Test-only: JUnit 5, AssertJ, MockMvc. Never shipped in the app. -->
 		<dependency>

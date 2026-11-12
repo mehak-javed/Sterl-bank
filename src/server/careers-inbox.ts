@@ -22,8 +22,8 @@ export interface CareersInbox {
  * Sterl isn't really hiring, and a real CV is personal data (UK GDPR): collecting it for jobs that
  * don't exist would be wrong. Only a one-line log with the reference, never the person's details.
  */
-export const demoCareersInbox: CareersInbox = {
+export const loggingCareersInbox: CareersInbox = {
   async deliver({ reference, application, resume }) {
-    console.info(`[careers] application ${reference} received for ${application.role} (${resume.kind}, ${resume.bytes.length} bytes); demo: not sent or stored`);
+    console.info(`[careers] application ${reference} received for ${application.role} (${resume.kind}, ${resume.bytes.length} bytes); not sent or stored yet`);
   },
 };

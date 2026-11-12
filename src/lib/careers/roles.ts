@@ -96,7 +96,7 @@ export const ROLES: Role[] = [
       "Grow and look after our design system",
     ],
     requirements: [
-      "A portfolio showing product design work and your process",
+      "Examples of your product design work and your process",
       "Strong skills in Figma or similar tools",
       "Understanding of accessible design",
     ],
