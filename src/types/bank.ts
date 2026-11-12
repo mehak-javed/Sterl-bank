@@ -23,9 +23,12 @@ export type Account = {
   sortCode: string; // "12-34-56"
   accountNumber: string; // 8 digits, kept as a string so leading zeros survive
   currency: "GBP";
-  openingBalancePence: Pence; // balance before the first transaction in the data
-  balancePence: Pence; // openingBalancePence + every transaction on this account
+  balancePence: Pence; // the sum of every ledger entry on this account
 };
+
+/** An account in the generator's JSON fixtures, which also records the balance before the first transaction. */
+export type FixtureAccount = Account & { openingBalancePence: Pence };
+
 
 export type SpendCategory =
   | "Groceries"
@@ -40,9 +43,12 @@ export type Category =
   | "Bills"
   | "Income"
   | "Savings"
-  | "Round-ups";
+  | "Round-ups"
+  | "Opening balance";
 
 export type TransactionKind =
+  | "opening_balance"
+  | "top_up" // "Add money"
   | "card"
   | "direct_debit"
   | "standing_order"
@@ -95,7 +101,7 @@ export type Card = {
 
 export type BankData = {
   customer: Customer;
-  accounts: Account[];
+  accounts: FixtureAccount[];
   transactions: Transaction[]; // newest first
   payees: Payee[];
   cards: Card[];

@@ -11,13 +11,13 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Account, Customer, Payee, Transaction } from "@/types/bank";
+import type { FixtureAccount, Customer, Payee, Transaction } from "@/types/bank";
 
 const dataDir = join(import.meta.dirname, "data");
 const read = <T>(name: string): T => JSON.parse(readFileSync(join(dataDir, name), "utf8")) as T;
 
 const customer = read<Customer>("customer.json");
-const accounts = read<Account[]>("accounts.json");
+const accounts = read<FixtureAccount[]>("accounts.json");
 const payees = read<Payee[]>("payees.json");
 const transactions = read<Transaction[]>("transactions.json");
 

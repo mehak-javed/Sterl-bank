@@ -1,6 +1,7 @@
 import { Coins } from "lucide-react";
 import { formatGBP, sumPence } from "@/lib/money";
 import { getAccounts } from "@/server/queries";
+import { AddMoney } from "./AddMoney";
 import { Money } from "./ui/Money";
 
 /** Three shades of the dark text colour, so each account has its own band on the gold. */
@@ -27,9 +28,16 @@ export async function BalanceHero() {
           <p className="mt-2 text-5xl font-semibold tracking-tight sm:text-6xl">
             <Money pence={total} />
           </p>
-          <p className="mt-2 text-sm font-medium opacity-80">Across {accounts.length} accounts</p>
+          <p className="mt-2 text-sm font-medium opacity-80">
+            {total === 0
+              ? "Your account is ready. Add money to get started."
+              : accounts.length === 1
+                ? `In your ${accounts[0].name}`
+                : `Across ${accounts.length} accounts`}
+          </p>
         </div>
-        {roundUps && (
+        <AddMoney triggerClassName="flex items-center gap-2 rounded-full bg-hero-button px-4 py-2 text-sm font-semibold text-hero-button-foreground shadow-sm" />
+        {roundUps && roundUps.balancePence > 0 && (
           <p className="flex items-center gap-2 rounded-full bg-hero-foreground/10 px-3 py-1.5 text-sm font-semibold">
             <Coins aria-hidden="true" className="h-4 w-4" strokeWidth={2} />
             {formatGBP(roundUps.balancePence)} saved from round-ups

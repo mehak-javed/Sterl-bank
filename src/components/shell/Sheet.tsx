@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 
 /**
@@ -22,9 +22,13 @@ export function Sheet({
   triggerClassName?: string;
   /** Required when the trigger is only an icon: without it, screen readers hear an unnamed button. */
   triggerLabel?: string;
-  children: ReactNode;
+  /** Or a function, given close(), for a form that should close the sheet once it succeeds. */
+  children: ReactNode | ((close: () => void) => ReactNode);
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  // The same <dialog>, kept in state too, for the close() handed to children: React's rules say a ref
+  // mustn't be read while rendering, and building children() happens during render.
+  const [element, setElement] = useState<HTMLDialogElement | null>(null);
   const titleId = useId();
 
   return (
@@ -40,7 +44,10 @@ export function Sheet({
       </button>
 
       <dialog
-        ref={dialog}
+        ref={(node) => {
+          dialog.current = node;
+          setElement(node);
+        }}
         aria-labelledby={titleId}
         // A click on the dimmed backdrop lands on the <dialog> itself (the panel is a child), so it closes.
         onClick={(event) => {
@@ -64,7 +71,7 @@ export function Sheet({
               <X aria-hidden="true" className="h-4 w-4" />
             </button>
           </div>
-          {children}
+          {typeof children === "function" ? children(() => element?.close()) : children}
         </div>
       </dialog>
     </>

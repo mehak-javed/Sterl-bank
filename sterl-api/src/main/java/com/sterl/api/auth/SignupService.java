@@ -9,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sterl.api.common.DataCipher;
+import com.sterl.api.common.EncryptPersonalDataMigration;
+
 /**
  * Opening an account: a customer (the banking relationship), their first account, and a login,
  * all created together or not at all (@Transactional).
@@ -17,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignupService {
 
 	/** Sterl's sort code: every Sterl account shares it, like a real bank's branch code. */
-	static final String STERL_SORT_CODE = "04-00-75";
+	public static final String STERL_SORT_CODE = "04-00-75";
 
 	/** Thrown when the email already has an account (the controller answers 409 Conflict). */
 	public static class EmailTakenException extends RuntimeException {
@@ -28,11 +31,13 @@ public class SignupService {
 
 	private final JdbcClient jdbc;
 	private final PasswordEncoder passwords;
+	private final DataCipher cipher;
 	private final SecureRandom random = new SecureRandom();
 
-	public SignupService(JdbcClient jdbc, PasswordEncoder passwords) {
+	public SignupService(JdbcClient jdbc, PasswordEncoder passwords, DataCipher cipher) {
 		this.jdbc = jdbc;
 		this.passwords = passwords;
+		this.cipher = cipher;
 	}
 
 	public record NewCustomer(UUID userId, UUID customerId, UUID accountId) {
@@ -55,10 +60,11 @@ public class SignupService {
 		}
 
 		UUID customerId = UUID.randomUUID();
+		// Names are personal data: stored encrypted (DataCipher), tied to this customer's row.
 		jdbc.sql("INSERT INTO customers (id, first_name, last_name, email) VALUES (:id, :first, :last, :email)")
 				.param("id", customerId)
-				.param("first", firstName.strip())
-				.param("last", lastName.strip())
+				.param("first", cipher.encrypt(firstName.strip(), EncryptPersonalDataMigration.nameContext("first_name", customerId)))
+				.param("last", cipher.encrypt(lastName.strip(), EncryptPersonalDataMigration.nameContext("last_name", customerId)))
 				.param("email", cleanEmail)
 				.update();
 

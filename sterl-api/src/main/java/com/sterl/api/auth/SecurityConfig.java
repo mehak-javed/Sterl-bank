@@ -53,7 +53,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
 						.requestMatchers("/error").permitAll()
 						// Banking: customers only. (Staff areas get their own roles in Week 3.)
-						.requestMatchers("/api/accounts/**", "/api/transfers/**").hasRole("CUSTOMER")
+						.requestMatchers("/api/accounts/**", "/api/transfers/**", "/api/cards/**").hasRole("CUSTOMER")
 						// Everything else: logged in, at least.
 						.anyRequest().authenticated())
 

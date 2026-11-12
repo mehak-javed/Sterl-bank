@@ -1,7 +1,7 @@
 import { fakerEN_GB as faker } from "@faker-js/faker";
 import { assertPence, roundUp, type Pence } from "@/lib/money";
 import type {
-  Account,
+  FixtureAccount,
   AccountType,
   BankData,
   Card,
@@ -175,7 +175,7 @@ export function generateBank(): BankData {
  * The bank's golden rules, checked every time we generate. If either fails we
  * refuse to write the data rather than ship a bank whose numbers don't add up.
  */
-function checkBooksBalance(accounts: Account[], transactions: Transaction[]): void {
+function checkBooksBalance(accounts: FixtureAccount[], transactions: Transaction[]): void {
   for (const account of accounts) {
     const sum = transactions
       .filter((t) => t.accountId === account.id)
@@ -224,7 +224,7 @@ function makePayees(): Payee[] {
   return [...people, ...businesses];
 }
 
-function makeAccount(customerId: string, type: AccountType, name: string, openingBalancePence: Pence): Account {
+function makeAccount(customerId: string, type: AccountType, name: string, openingBalancePence: Pence): FixtureAccount {
   return {
     id: faker.string.uuid(),
     customerId,

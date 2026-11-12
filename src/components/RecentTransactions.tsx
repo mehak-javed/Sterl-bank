@@ -32,7 +32,7 @@ export function RecentTransactions() {
       ) : isError ? (
         <QueryError message={`We couldn't load your transactions. ${error.message}`} onRetry={() => refetch()} />
       ) : transactions.length === 0 ? (
-        <p className="text-sm text-muted">No transactions yet.</p>
+        <p className="text-sm text-muted">No payments yet. Money you add or spend will show up here.</p>
       ) : (
         <div className="flex flex-col gap-5">
           {groupByUkDay(transactions).map((day) => (

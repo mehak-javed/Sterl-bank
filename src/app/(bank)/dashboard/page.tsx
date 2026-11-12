@@ -1,24 +1,25 @@
 import { CustomerFirstName } from "@/components/shell/CustomerChip";
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeftRight, CreditCard, Send } from "lucide-react";
+import { CreditCard, Send } from "lucide-react";
+import { AddCard } from "@/components/AddCard";
+import { AddMoney } from "@/components/AddMoney";
 import { BalanceHero, BalanceHeroSkeleton } from "@/components/BalanceHero";
 import { AccountsOverview, AccountsOverviewSkeleton } from "@/components/AccountsOverview";
 import { CardPanel } from "@/components/CardPanel";
 import { MoveMoney, MoveMoneySkeleton } from "@/components/MoveMoney";
 import { RecentTransactions } from "@/components/RecentTransactions";
-import { RoundUpSetting, RoundUpSettingSkeleton } from "@/components/RoundUpSetting";
 import { SpendingSummary, SpendingSummarySkeleton } from "@/components/SpendingSummary";
 
 const QUICK_ACTIONS = [
-  { href: "#move-money", label: "Move money", icon: ArrowLeftRight },
   { href: "/payments", label: "Pay someone", icon: Send },
   { href: "/cards", label: "Card controls", icon: CreditCard },
 ] as const;
 
 /**
- * The dashboard: Server Components (balances, accounts, spending) and Client Components (card,
- * activity, forms) side by side. Each server block that waits for data has its own <Suspense>,
+ * The dashboard: the logged-in customer's own data from the Java API. Server Components (balances,
+ * accounts, spending) and Client Components (cards, activity, forms) side by side. A new customer sees
+ * £0.00, no payments and "Add money" / "Add a card", never anyone else's data. Each server block that waits for data has its own <Suspense>,
  * so the page appears at once and each block streams in when ready.
  *
  * Layout: one column on phones; a 12-column grid on large screens, the most important thing
@@ -34,6 +35,13 @@ export default function DashboardPage() {
         </div>
         <nav aria-label="Quick actions">
           <ul className="flex gap-2 overflow-x-auto">
+            {/* Add money and Add a card: how a new customer fills an empty account. */}
+            <li>
+              <AddMoney />
+            </li>
+            <li>
+              <AddCard />
+            </li>
             {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
               <li key={href}>
                 <Link
@@ -78,9 +86,6 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-6 lg:col-span-5">
           <Suspense fallback={<MoveMoneySkeleton />}>
             <MoveMoney />
-          </Suspense>
-          <Suspense fallback={<RoundUpSettingSkeleton />}>
-            <RoundUpSetting />
           </Suspense>
         </div>
       </div>

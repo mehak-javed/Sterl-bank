@@ -1,5 +1,6 @@
 "use client"; // usePathname reads the browser URL, so this must run in the browser
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS, isActivePath } from "@/lib/nav";
@@ -14,7 +15,20 @@ import { NavIcon } from "./shell/NavIcon";
  * and the accessibility can never disagree.
  */
 export function SiteNav({ variant }: { variant: "sidebar" | "tabbar" }) {
-  const pathname = usePathname();
+  // The URL is only known per request on personal pages (e.g. /accounts/<your account id>), so the
+  // part that reads it waits in <Suspense>. Meanwhile the same links show, just without "you are here".
+  return (
+    <Suspense fallback={<NavLinks variant={variant} pathname={null} />}>
+      <CurrentNavLinks variant={variant} />
+    </Suspense>
+  );
+}
+
+function CurrentNavLinks({ variant }: { variant: "sidebar" | "tabbar" }) {
+  return <NavLinks variant={variant} pathname={usePathname()} />;
+}
+
+function NavLinks({ variant, pathname }: { variant: "sidebar" | "tabbar"; pathname: string | null }) {
   const links = variant === "tabbar" ? NAV_LINKS.filter((link) => link.inTabBar) : NAV_LINKS;
 
   if (variant === "tabbar") {
@@ -24,7 +38,7 @@ export function SiteNav({ variant }: { variant: "sidebar" | "tabbar" }) {
           <li key={href}>
             <Link
               href={href}
-              aria-current={isActivePath(pathname, href) ? "page" : undefined}
+              aria-current={pathname !== null && isActivePath(pathname, href) ? "page" : undefined}
               className="flex flex-col items-center gap-1 py-2 text-[0.7rem] font-medium text-muted aria-[current=page]:text-heading"
             >
               <NavIcon href={href} className="h-5 w-5" />
@@ -42,7 +56,7 @@ export function SiteNav({ variant }: { variant: "sidebar" | "tabbar" }) {
         <li key={href}>
           <Link
             href={href}
-            aria-current={isActivePath(pathname, href) ? "page" : undefined}
+            aria-current={pathname !== null && isActivePath(pathname, href) ? "page" : undefined}
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-foreground aria-[current=page]:btn-primary aria-[current=page]:font-semibold"
           >
             <NavIcon href={href} className="h-[1.15rem] w-[1.15rem]" />
