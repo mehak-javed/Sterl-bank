@@ -145,13 +145,44 @@ your local database can't be read again. On a server the key comes from the `STE
 Every encrypted value is tied to its row: copy one customer's encrypted name onto another customer's row and
 decryption fails rather than showing it (the row id is the GCM "associated data").
 
-## 6. Rules the database enforces (so you can't break it by accident)
+## 6. The Credit Risk lending book
+
+500 invented companies, 2,236 facilities and 9,462 drawdowns and repayments (`V11` schema, `V12` seed, generated
+by `npm run seed:risk`). Exposure is never stored: it is the sum of a facility's movements.
+
+```sql
+-- The 10 most-used facilities: exposure, limit and utilisation (integer maths: 10,000 basis points = 100%).
+SELECT c.name, c.rating, f.type, f.limit_pence,
+       COALESCE(SUM(d.amount_pence), 0) AS exposure_pence,
+       COALESCE(SUM(d.amount_pence), 0) * 10000 / NULLIF(f.limit_pence, 0) AS utilisation_bp
+  FROM facilities f
+  JOIN counterparties c ON c.id = f.counterparty_id
+  LEFT JOIN drawdowns d ON d.facility_id = f.id
+ GROUP BY c.name, c.rating, f.id
+ ORDER BY utilisation_bp DESC NULLS LAST
+ LIMIT 10;
+
+-- Lending by sector: how concentrated is the book?
+SELECT c.sector, COUNT(DISTINCT c.id) AS companies, SUM(d.amount_pence) AS exposure_pence
+  FROM counterparties c
+  JOIN facilities f ON f.counterparty_id = c.id
+  JOIN drawdowns d ON d.facility_id = f.id
+ GROUP BY c.sector
+ ORDER BY exposure_pence DESC;
+```
+
+`NULLIF(limit, 0)` turns a zero limit (a cancelled facility) into NULL, so the division gives NULL instead of
+a "division by zero" error. Utilisation bands: under 7,500 fine, 7,500–10,000 warning, over 10,000 breach.
+
+## 7. Rules the database enforces (so you can't break it by accident)
 
 - `ledger_entries`, `ledger_transactions` and `audit_log` are **append-only**: `UPDATE` and `DELETE` are refused.
   Money is corrected by a new reversing entry, the way banks do it.
 - Every ledger transaction must balance to zero, checked at commit.
 - A card's network must match its product, and a card can only hang off a customer account.
 - Names and card details can only be stored encrypted (a CHECK refuses plain values).
+- A facility can't be repaid more than was drawn (checked at commit), drawdowns can't be edited or deleted,
+  and a drawdown must be positive and a repayment negative.
 
 **Starting over** (deletes all local data, then the API rebuilds and re-seeds it on the next start):
 

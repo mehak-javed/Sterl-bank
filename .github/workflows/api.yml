@@ -57,12 +57,14 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # The seed SQL is generated from the front end's JSON fixtures. If someone changed the JSON
-      # but forgot `npm run seed:sql`, the database would hold a different bank: fail early.
-      - name: Check the seed SQL matches the JSON fixtures
+      # The seed SQL is generated: the bank from the front end's JSON fixtures, the risk desk's lending
+      # book from src/mocks/risk-book.ts. If someone changed either but forgot to regenerate
+      # (`npm run seed:sql`, `npm run seed:risk`), the database would hold different data: fail early.
+      - name: Check the seed SQL is up to date
         working-directory: .
         run: |
           npx --yes tsx@4 src/mocks/seed-sql.ts
+          npx --yes tsx@4 src/mocks/risk-book.ts
           git diff --exit-code -- sterl-api/src/main/resources/db/seed/
 
       - uses: actions/setup-java@v6
