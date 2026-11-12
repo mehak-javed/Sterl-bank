@@ -7,7 +7,7 @@ import { placeOrder, type OrderSide } from "@/stores/fx/ordersSlice";
 import { useFxDispatch, useFxSelector } from "@/stores/fx/store";
 import { selectWatchlist } from "@/stores/fx/watchlistSlice";
 
-const MAX_ORDER_PENCE: Pence = 100_000_000; // £1,000,000 limit per mock order
+const MAX_ORDER_PENCE: Pence = 100_000_000; // £1,000,000 limit per paper order
 
 /** Returns pence, or an error message the user can act on. */
 function parseAmount(text: string): { pence: Pence } | { error: string } {
@@ -63,7 +63,7 @@ export function OrderTicket({ rates }: { rates: Map<QuoteCurrency, ReferenceRate
   return (
     <section aria-labelledby="ticket-heading" className="glass rounded-2xl p-4">
       <h2 id="ticket-heading" className="text-lg font-semibold text-heading">Order ticket</h2>
-      <p className="mb-3 text-sm text-muted">Mock orders only: nothing is traded and no money moves.</p>
+      <p className="mb-3 text-sm text-muted">Paper orders only: nothing is traded and no money moves.</p>
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
@@ -117,7 +117,7 @@ export function OrderTicket({ rates }: { rates: Map<QuoteCurrency, ReferenceRate
         )}
 
         <button type="submit" className="rounded-xl btn-primary px-4 py-2 font-semibold">
-          Place mock order
+          Place paper order
         </button>
 
         <p role="status" className="text-sm">{confirmation}</p>
