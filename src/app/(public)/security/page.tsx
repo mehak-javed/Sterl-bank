@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Eye, Fingerprint, KeyRound, ListChecks, LockKeyhole, ShieldCheck, Timer } from "lucide-react";
+import {
+  ArrowRight,
+  Database,
+  Download,
+  Eye,
+  FileLock2,
+  Fingerprint,
+  HandHeart,
+  KeyRound,
+  ListChecks,
+  LockKeyhole,
+  ShieldCheck,
+  Timer,
+} from "lucide-react";
 
-export const metadata: Metadata = { title: "Security" };
+export const metadata: Metadata = { title: "Security and confidentiality" };
 
 const PROTECTIONS = [
   {
@@ -37,29 +50,73 @@ const PROTECTIONS = [
   },
 ];
 
+/**
+ * How Sterl treats information. Every line must stay TRUE to what is built: planned items say "coming".
+ * (Demo data is fake; the audit log is append-only in PostgreSQL; display settings live in the browser.)
+ */
+const CONFIDENTIALITY = [
+  {
+    icon: Database,
+    title: "Only what's needed",
+    text: "Sterl keeps only what running your account needs, and your display settings stay in your own browser.",
+  },
+  {
+    icon: HandHeart,
+    title: "Never sold, never shared",
+    text: "Your information isn't sold, rented or passed to advertisers. Ever.",
+  },
+  {
+    icon: FileLock2,
+    title: "A record that can't be rewritten",
+    text: "Every login and payment goes into an audit log that can only be added to, never edited or deleted.",
+  },
+  {
+    icon: Download,
+    title: "Your data, your choice (coming)",
+    text: "Download a copy of everything Sterl holds about you, or close your account and have it removed.",
+  },
+];
+
 export default function SecurityPage() {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pt-12 sm:px-6">
-      <p className="eyebrow text-muted">Security</p>
-      <h1 className="mt-2 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
-        Your money, <span className="text-gold-gradient">protected</span>
+    <div className="w-full px-4 pt-12 sm:px-8 lg:px-12">
+      <h1 className="mt-2 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+        Your money and your data, <span className="text-gold-gradient">protected</span>
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-muted">
-        Sterl is a portfolio demo with fake data, but it&apos;s engineered the way a bank is. Here&apos;s what
-        protects every account, in plain words.
+        Here&apos;s what protects every Sterl account, and how we treat your information, in plain words.
       </p>
 
-      <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <h2 className="mt-14 text-3xl font-semibold tracking-tight text-heading">Security</h2>
+
+      <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {PROTECTIONS.map(({ icon: Icon, title, text }) => (
           <li key={title} className="panel flex flex-col gap-3 rounded-3xl p-6">
             <span aria-hidden="true" className="chip h-11 w-11">
               <Icon className="h-5 w-5" strokeWidth={1.75} />
             </span>
-            <h2 className="text-lg font-semibold">{title}</h2>
+            <h3 className="text-lg font-semibold">{title}</h3>
             <p className="text-sm text-muted">{text}</p>
           </li>
         ))}
       </ul>
+
+      <section aria-labelledby="confidentiality-heading" className="mt-20">
+        <h2 id="confidentiality-heading" className="text-3xl font-semibold tracking-tight text-heading">
+          Confidentiality
+        </h2>
+        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {CONFIDENTIALITY.map(({ icon: Icon, title, text }) => (
+            <li key={title} className="panel flex flex-col gap-3 rounded-3xl p-6">
+              <span aria-hidden="true" className="chip h-11 w-11">
+                <Icon className="h-5 w-5" strokeWidth={1.75} />
+              </span>
+              <h3 className="text-lg font-semibold">{title}</h3>
+              <p className="text-sm text-muted">{text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <div className="panel mt-12 flex flex-col gap-4 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="flex items-start gap-3">
@@ -70,7 +127,7 @@ export default function SecurityPage() {
           </span>
         </p>
         <a
-          href="https://github.com/mehak-javed/Sterl-bank/blob/main/SECURITY.md"
+          href="/security/policy"
           className="flex shrink-0 items-center gap-2 font-semibold text-heading"
         >
           Security policy <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -78,9 +135,9 @@ export default function SecurityPage() {
       </div>
 
       <p className="mt-8 text-sm text-muted">
-        Want to see it for yourself?{" "}
-        <Link href="/dashboard" className="font-semibold text-heading underline underline-offset-4">
-          Try the demo
+        Ready to join?{" "}
+        <Link href="/signup" className="text-heading underline underline-offset-4">
+          Open an account
         </Link>
         .
       </p>

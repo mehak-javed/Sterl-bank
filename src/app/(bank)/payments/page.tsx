@@ -8,7 +8,7 @@ export default function PaymentsPage() {
     <>
       <h1 className="text-3xl font-semibold tracking-tight text-heading">Payments</h1>
       <p className="glass rounded-2xl p-4 text-muted">
-        Coming soon: send money to a payee, with a checked form and a simulated name check.
+        Coming soon: send money to a payee, with a checked form and a payee name check.
       </p>
     </>
   );

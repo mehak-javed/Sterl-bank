@@ -32,8 +32,6 @@
   --hero-foreground: #1a1406;
   --hero-button: #1a1406;
   --hero-button-foreground: #f7dd8b;
-  --banner: #1a1a1a;
-  --banner-foreground: #e2c15a;
   --accent: #d4af37;
   --focus: #8a6a1f;
   --positive: #047857;
@@ -47,10 +45,14 @@
   /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
   --logo-1: #8a6a1f;
   --logo-2: #5c4612;
-  --glass: rgb(255 255 255 / 0.78);
-  --glass-border: rgb(255 255 255 / 0.8);
+  --glass: rgb(255 255 255 / 0.42);
+  --glass-border: rgb(255 255 255 / 0.85);
   --glass-highlight: rgb(255 255 255 / 0.9);
   --glass-shadow: rgb(26 26 26 / 0.06);
+  /* Public site (light: ivory page; dark silver-grey text, 7.8:1). */
+  --public-bg: var(--background);
+  --public-silver: #4a4d52;
+  --danger: #b42318; /* form errors */
   --glow-1: rgb(233 210 138 / 0.45);
   --glow-2: rgb(243 227 179 / 0.45);
   --glow-3: rgb(217 192 138 / 0.45);
@@ -72,8 +74,6 @@
     --hero-foreground: #1a1406;
     --hero-button: #1a1406;
     --hero-button-foreground: #f7dd8b;
-    --banner: #d4af37;
-    --banner-foreground: #1a1406;
     --accent: #d4af37;
     --focus: #f7dd8b;
     --positive: #6ee7b7;
@@ -87,10 +87,14 @@
     /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
     --logo-1: #f7dd8b;
     --logo-2: #c9a13b;
-    --glass: rgb(22 22 25 / 0.74);
-    --glass-border: rgb(212 175 55 / 0.14);
-    --glass-highlight: rgb(247 221 139 / 0.07);
+    --glass: rgb(22 22 25 / 0.34);
+    --glass-border: rgb(247 221 139 / 0.22);
+    --glass-highlight: rgb(255 255 255 / 0.16);
     --glass-shadow: rgb(0 0 0 / 0.45);
+    /* Public site (dark: near-black page, matte silver text, 10.5:1). */
+    --public-bg: #030405;
+    --public-silver: #b8bcc2;
+    --danger: #ff8a80; /* form errors */
     --glow-1: rgb(212 175 55 / 0.22);
     --glow-2: rgb(138 106 31 / 0.22);
     --glow-3: rgb(247 221 139 / 0.22);
@@ -110,8 +114,6 @@
   --hero-foreground: #1a1406;
   --hero-button: #1a1406;
   --hero-button-foreground: #f7dd8b;
-  --banner: #d4af37;
-  --banner-foreground: #1a1406;
   --accent: #d4af37;
   --focus: #f7dd8b;
   --positive: #6ee7b7;
@@ -125,10 +127,14 @@
   /* The logo's gold, light end to dark end (checked: readable on this theme's background). */
   --logo-1: #f7dd8b;
   --logo-2: #c9a13b;
-  --glass: rgb(22 22 25 / 0.74);
-  --glass-border: rgb(212 175 55 / 0.14);
-  --glass-highlight: rgb(247 221 139 / 0.07);
+  --glass: rgb(22 22 25 / 0.34);
+  --glass-border: rgb(247 221 139 / 0.22);
+  --glass-highlight: rgb(255 255 255 / 0.16);
   --glass-shadow: rgb(0 0 0 / 0.45);
+  /* Public site (dark: near-black page, matte silver text, 10.5:1). */
+  --public-bg: #030405;
+  --public-silver: #b8bcc2;
+  --danger: #ff8a80; /* form errors */
   --glow-1: rgb(212 175 55 / 0.22);
   --glow-2: rgb(138 106 31 / 0.22);
   --glow-3: rgb(247 221 139 / 0.22);
@@ -149,8 +155,6 @@
   --hero-foreground: var(--background);
   --hero-button: var(--background);
   --hero-button-foreground: var(--foreground);
-  --banner: #000000;
-  --banner-foreground: #ffffff;
   --accent: #000000;
   --focus: #000000;
   --positive: #000000;
@@ -167,6 +171,10 @@
   --glass-border: var(--line);
   --glass-highlight: transparent;
   --glass-shadow: transparent;
+  /* Public site (high contrast: plain). */
+  --public-bg: var(--background);
+  --public-silver: var(--foreground);
+  --danger: var(--foreground); /* form errors */
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;
@@ -185,8 +193,6 @@
     --hero-foreground: var(--background);
     --hero-button: var(--background);
     --hero-button-foreground: var(--foreground);
-    --banner: #ffffff;
-    --banner-foreground: #000000;
     --accent: #ffffff;
     --focus: #ffffff;
     --positive: #ffffff;
@@ -203,6 +209,10 @@
     --glass-border: var(--line);
     --glass-highlight: transparent;
     --glass-shadow: transparent;
+    /* Public site (high contrast: plain). */
+    --public-bg: var(--background);
+    --public-silver: var(--foreground);
+    --danger: var(--foreground); /* form errors */
     --glow-1: transparent;
     --glow-2: transparent;
     --glow-3: transparent;
@@ -221,8 +231,6 @@
   --hero-foreground: var(--background);
   --hero-button: var(--background);
   --hero-button-foreground: var(--foreground);
-  --banner: #ffffff;
-  --banner-foreground: #000000;
   --accent: #ffffff;
   --focus: #ffffff;
   --positive: #ffffff;
@@ -239,6 +247,10 @@
   --glass-border: var(--line);
   --glass-highlight: transparent;
   --glass-shadow: transparent;
+  /* Public site (high contrast: plain). */
+  --public-bg: var(--background);
+  --public-silver: var(--foreground);
+  --danger: var(--foreground); /* form errors */
   --glow-1: transparent;
   --glow-2: transparent;
   --glow-3: transparent;
@@ -263,8 +275,6 @@
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-banner: var(--banner);
-  --color-banner-foreground: var(--banner-foreground);
   --color-accent: var(--accent);
   --color-positive: var(--positive);
   --color-surface-2: var(--surface-2);
@@ -277,6 +287,20 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-cinzel);
+}
+
+:root {
+  --sheen: linear-gradient(
+    125deg,
+    rgb(255 255 255 / 0.14) 0%,
+    rgb(255 255 255 / 0.04) 28%,
+    transparent 42%,
+    transparent 70%,
+    rgb(255 255 255 / 0.05) 100%
+  );
+}
+:root[data-contrast="high"] {
+  --sheen: none; /* accessibility beats branding: solid, plain panels */
 }
 
 body {
@@ -308,12 +332,17 @@ body::before {
  */
 @utility glass {
   background-color: var(--glass);
+  /* The mirror: a diagonal band of reflected light across the glass, brightest top-left.
+     background-image sits ON TOP of background-color, so the tint stays see-through. */
+  background-image: var(--sheen);
   border: 1px solid var(--glass-border);
   box-shadow:
     0 8px 32px var(--glass-shadow),
-    inset 0 1px 0 var(--glass-highlight); /* thin light edge along the top, like real glass */
-  -webkit-backdrop-filter: blur(18px) saturate(140%); /* Safari */
-  backdrop-filter: blur(18px) saturate(140%);
+    inset 0 1px 0 var(--glass-highlight), /* bright top edge, like the lip of real glass */
+    inset 0 0 0 1px rgb(255 255 255 / 0.03);
+  /* Light blur: the gold spheres stay recognisable through the glass, but text above stays crisp. */
+  -webkit-backdrop-filter: blur(12px) saturate(160%); /* Safari */
+  backdrop-filter: blur(12px) saturate(160%);
 }
 
 /*
@@ -327,8 +356,10 @@ body::before {
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .glass {
+  .glass,
+  .panel {
     background-color: var(--surface);
+    background-image: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -393,6 +424,41 @@ body::before {
     0 18px 40px rgb(0 0 0 / 0.35),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
+/*
+ * The four card designs (src/lib/cards.ts). Each one only re-sets the card's three colour tokens,
+ * so PaymentCard's layout never changes. They are pictures of physical cards, so they keep their
+ * colours in every theme. Text contrast checked on each: see docs/design-system.md.
+ */
+@utility card-design-black {
+  --card-fill: linear-gradient(135deg, #1a1a1c 0%, #050506 60%, #000 100%);
+  --card-foreground: #f5f1e6;
+  --card-accent: #d4af37;
+}
+@utility card-design-gold {
+  --card-fill: linear-gradient(135deg, #f7dd8b 0%, #d4af37 45%, #b08a2a 100%);
+  --card-foreground: #1a1406;
+  --card-accent: #1a1406;
+}
+@utility card-design-black-gold {
+  /* Black, with a band of gold across the middle (behind the chip and eagle, away from the text). */
+  --card-fill: linear-gradient(
+    176deg,
+    #0b0b0c 0% 27%,
+    #8a6a1f 27%,
+    #f0d27a 40%,
+    #b8902e 53%,
+    #0b0b0c 53% 100%
+  );
+  --card-foreground: #f5f1e6;
+  --card-accent: #1a1406; /* the chip and eagle sit on the gold band */
+  --card-wordmark: #e2c15a; /* STERL sits on black */
+}
+@utility card-design-jolly {
+  --card-fill: linear-gradient(120deg, #ff8fb1 0%, #ffb36b 30%, #ffe066 52%, #7fe0b8 76%, #7cc4ff 100%);
+  --card-foreground: #14110a;
+  --card-accent: #14110a;
+}
+
 :root[data-contrast="high"] .payment-card {
   box-shadow: none;
   border: 2px solid var(--line);
@@ -422,7 +488,9 @@ body::before {
  * and `panel` everywhere else, including panels inside a glass card.
  */
 @utility panel {
-  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
+  /* See-through like the glass (the page's glow shows through), with the same reflection. */
+  background-color: color-mix(in srgb, var(--surface) 45%, transparent);
+  background-image: var(--sheen);
   border: 1px solid var(--glass-border);
   box-shadow:
     0 8px 32px var(--glass-shadow),
@@ -430,6 +498,24 @@ body::before {
 }
 
 /* ---------- Public site (logged-out pages) ---------- */
+
+/*
+ * The Sterl eagle (components/brand/Eagle.tsx): the PNG is a stencil, the colour is the theme's logo
+ * gold. mask-image takes only the picture's transparency; whatever "background" is paints through it.
+ */
+@utility eagle-mark {
+  display: block;
+  flex-shrink: 0;
+  aspect-ratio: 378 / 232;
+  background: var(--eagle-fill, linear-gradient(135deg, var(--logo-1), var(--logo-2)));
+  -webkit-mask: url("/brand/eagle.png") center / contain no-repeat; /* Safari */
+  mask: url("/brand/eagle.png") center / contain no-repeat;
+}
+/* On a payment card: the card's own gold (the card is dark in every theme, like a real card).
+   It sets a variable rather than `background`, so it never depends on which utility comes first. */
+@utility eagle-on-card {
+  --eagle-fill: linear-gradient(135deg, var(--card-accent), color-mix(in srgb, var(--card-accent) 70%, #000));
+}
 
 /* Gold, metallic text for the second line of a headline. Plain text in high contrast. */
 @utility text-gold-gradient {
@@ -504,4 +590,345 @@ body::before {
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* ---------- Public site look (dark, silver, restrained; Mehak's Orvia-inspired direction) ---------- */
+
+/* The public pages get a deeper near-black page. :has() lets the body change colour only while a
+   public page is showing, so the banking app keeps its own background. */
+body:has(.public-site) {
+  background: var(--public-bg);
+}
+/* Secondary text on public pages is matte silver instead of warm grey. */
+.public-site .text-muted {
+  color: var(--public-silver);
+}
+
+/* ---------- Landing page: the send-money showcase (components/public/SendMoneyShowcase.tsx) ---------- */
+
+/* The frame: dark glass with a gold horizon glowing up from the bottom (like light over a planet's edge). */
+.send-showcase {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 55%, transparent), transparent);
+}
+.send-showcase-horizon {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  top: 72%;
+  height: 120%;
+  border-radius: 50%;
+  border-top: 1px solid rgb(247 221 139 / 0.55);
+  background: radial-gradient(60% 40% at 50% 0%, rgb(212 175 55 / 0.35), transparent 70%);
+  box-shadow: 0 -18px 60px rgb(212 175 55 / 0.25);
+  pointer-events: none;
+}
+/* The screen: a frosted panel lit from the top with a soft gold glow. */
+.send-showcase-screen {
+  background:
+    radial-gradient(70% 45% at 50% 0%, rgb(212 175 55 / 0.22), transparent 70%),
+    color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 24px 50px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+/* The small previews inside the three feature cards: lit from the top, like the screen. */
+.send-showcase-mini {
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgb(212 175 55 / 0.16), transparent 70%),
+    var(--surface-2);
+  border: 1px solid var(--line);
+}
+:root[data-contrast="high"] .send-showcase-horizon {
+  display: none;
+}
+:root[data-contrast="high"] .send-showcase-screen,
+:root[data-contrast="high"] .send-showcase-mini {
+  background: var(--surface);
+}
+
+/* ---------- Landing page: Meet our people (components/public/PeopleStories.tsx) ---------- */
+
+/* A portrait's frame: a hairline gold-tinted border, a soft shadow, and a dark caption strip. */
+.people-frame {
+  border: 1px solid var(--glass-border);
+  background: var(--surface);
+  box-shadow:
+    0 18px 40px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
+/* ---------- Landing page: the card pouch (components/public/CardPouch.tsx) ---------- */
+
+/*
+ * A black-and-gold metal pouch holding all four cards, on one loop (see the timeline below):
+ *   open → cards fly out and off the screen → flap closes → flap opens → cards drop back in →
+ *   flap closes over them → flap opens.
+ * Flat layers inside one tilted scene, painted in order: BACK panel, cards, FRONT panel, FLAP. A card
+ * below the front panel's top edge is hidden (in the pouch); the closed flap covers the opening.
+ * The scene is tilted as a whole (one perspective), so the layers keep their order.
+ *
+ * TIMELINE (% of --pouch-cycle; the cards and the flap share it, so they stay in sync):
+ *    0– 8  open, cards resting                  50–60   cards drop back in (ease-out: they land softly)
+ *    8–20  cards fly up and fade out            66–72   flap snaps shut over the cards
+ *          (ease-in: they speed up as they go)  72–82   closed, hold
+ *   26–32  flap snaps shut (pouch empty)        82–88   flap opens; 88–100 open, hold
+ *   32–44  closed, hold;  44–50 flap opens
+ * Each card is --stagger later (up to 0.45s), so the last one lands before the flap starts at 66%.
+ *
+ * HOW TO ADJUST:
+ *   --pouch-cycle  the whole loop. Bigger = slower and calmer (every step scales with it).
+ *   --pouch-fly    how far the cards fly up when they leave, as a % of a card's height.
+ *   --pouch-yaw / --pouch-pitch / --pouch-roll  the pouch's 3D angle (turn, tip back, lean).
+ *   per card (POUCH in CardPouch.tsx): fan = its angle while resting, shift = left/right spread.
+ *   Each card starts 0.15s after the one behind it (--stagger), so they leave and return one by one.
+ */
+.card-pouch {
+  --pouch-cycle: 10s; /* was 14s: Mehak found it slow */
+  --pouch-fly: 320%;
+  --pouch-yaw: -16deg;
+  --pouch-pitch: 8deg;
+  --pouch-roll: -5deg;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* The tilted scene: everything inside shares one 3D angle. */
+.card-pouch-scene {
+  position: absolute;
+  inset: 0;
+  transform: perspective(1300px) rotateY(var(--pouch-yaw)) rotateX(var(--pouch-pitch)) rotate(var(--pouch-roll));
+}
+
+/* A soft shadow on the "floor" under the pouch. */
+.card-pouch-floor {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 3%;
+  height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), transparent);
+  filter: blur(6px);
+}
+
+/* The back panel: taller than the front, so the cards stand in front of it. */
+.card-pouch-back {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 12%;
+  height: 50%;
+  border-radius: 1.4rem;
+  background: linear-gradient(160deg, #2a2a2e 0%, #121214 55%, #050506 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(247 221 139 / 0.25),
+    inset 0 0 0 1px rgb(212 175 55 / 0.18);
+}
+
+/* Each card: inside the pouch, fanned out at its own angle, peeking over the front panel. */
+.card-pouch-card {
+  position: absolute;
+  /* 56% wide (was 62%): with the fan, the outer cards' top corners must stay inside the pouch
+     (11%–89%). Measured in the browser after the gold card's corner was seen hanging outside. */
+  left: 22%;
+  width: 56%;
+  /* 25%: each resting card peeks well over the front panel (whose top edge is at 46%), so the
+     fan of four is visible even while no card is out. */
+  bottom: 25%;
+  transform: translateX(var(--shift)) rotate(var(--fan));
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 10px 16px rgb(0 0 0 / 0.45));
+}
+
+/* The front panel: brushed black metal with a gold rim, a gold strap and the Sterl eagle. */
+.card-pouch-front {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 10%;
+  height: 36%;
+  border-radius: 1.2rem 1.2rem 1.6rem 1.6rem;
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.07) 45%, transparent 60%),
+    linear-gradient(170deg, #26262a 0%, #0d0d0f 60%, #050506 100%);
+  box-shadow:
+    0 24px 40px rgb(0 0 0 / 0.55),
+    inset 0 1px 0 rgb(247 221 139 / 0.45),
+    inset 0 0 0 1px rgb(212 175 55 / 0.35);
+  overflow: hidden;
+}
+.card-pouch-strap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16%;
+  height: 14%;
+  background: linear-gradient(90deg, #8a6a1f, #f0d27a 45%, #b8902e 70%, #8a6a1f);
+  opacity: 0.9;
+}
+.card-pouch-brand {
+  position: absolute;
+  left: 7%;
+  bottom: 14%;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: clamp(0.9rem, 2.4vw, 1.4rem);
+  letter-spacing: 0.08em;
+  color: #e2c15a;
+}
+/* The flap: hinged at its top edge, folding down over the opening. Open = turned edge-on (90deg,
+   seen from its hinge, so it disappears); closed = flat, covering the opening and the cards' tops. */
+.card-pouch-flap {
+  position: absolute;
+  /* 7% each side: wider than the front panel, so the fanned cards' outer corners (Premier leans
+     furthest left) stay under the flap when it closes. At 11% a gold corner stuck out. */
+  left: 7%;
+  right: 7%;
+  bottom: 40%;
+  height: 31%; /* from 40% up to 71%: over the front panel's top edge and every resting card */
+  border-radius: 1.2rem 1.2rem 2.2rem 2.2rem;
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.07) 45%, transparent 60%),
+    linear-gradient(175deg, #2c2c30 0%, #111113 70%, #070708 100%);
+  box-shadow:
+    0 14px 24px rgb(0 0 0 / 0.5),
+    inset 0 1px 0 rgb(247 221 139 / 0.45),
+    inset 0 0 0 1px rgb(212 175 55 / 0.35);
+  transform-origin: 50% 0%;
+  transform: perspective(700px) rotateX(90deg); /* open (at rest, and for reduced motion) */
+  opacity: 0;
+}
+/* The gold snap clasp at the bottom of the flap. */
+.card-pouch-clasp {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  width: 11%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #d4af37 45%, #8a6a1f 100%);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.5);
+}
+
+/* The eagle on the pouch uses the card gold, whatever the page theme. */
+.card-pouch-brand .eagle-mark {
+  --eagle-fill: linear-gradient(135deg, #f7dd8b, #c9a13b);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The cards and the flap run on the same clock (--pouch-cycle). --stagger delays each card by a
+     fraction of a second, so they leave and come back one after another. */
+  .card-pouch-card {
+    animation: pouch-card var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) var(--stagger) infinite both;
+  }
+  .card-pouch-flap {
+    animation: pouch-flap var(--pouch-cycle) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  /* The whole pouch floats gently, on its own slower rhythm. */
+  .card-pouch-scene {
+    animation: pouch-float 7s ease-in-out infinite;
+  }
+  .card-pouch-floor {
+    animation: pouch-floor 7s ease-in-out infinite;
+  }
+}
+
+/* A card's journey (see TIMELINE above). An animation-timing-function inside a keyframe sets the
+   easing of the stretch that STARTS there, so each move gets its own feel. */
+@keyframes pouch-card {
+  0%,
+  8% {
+    transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.2); /* ease-in: speeds up as it leaves */
+  }
+  20%,
+  50% {
+    transform: translateX(calc(var(--shift) * 2.5)) translateY(calc(var(--pouch-fly) * -1)) rotate(calc(var(--fan) * 2.5));
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); /* ease-out: lands softly */
+  }
+  60%,
+  100% {
+    transform: translateX(var(--shift)) translateY(0) rotate(var(--fan));
+    opacity: 1;
+  }
+}
+
+/* The flap (see TIMELINE above): open → snaps shut (empty) → opens → snaps shut over the cards → opens.
+   Closing uses a small overshoot (a y-value above 1 in the curve), so it shuts with a little "click";
+   opening is a quick ease-out. */
+@keyframes pouch-flap {
+  /* open (edge-on, invisible) */
+  0%,
+  26%,
+  66%,
+  100% {
+    transform: perspective(700px) rotateX(90deg);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+  50%,
+  88% {
+    transform: perspective(700px) rotateX(90deg);
+    opacity: 0;
+  }
+  /* visible while it swings */
+  27%,
+  67% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+  49%,
+  87% {
+    opacity: 1;
+  }
+  /* closed: 32–44 (empty) and 72–82 (over the cards) */
+  32%,
+  72% {
+    transform: perspective(700px) rotateX(0deg);
+    opacity: 1;
+  }
+  44%,
+  82% {
+    transform: perspective(700px) rotateX(0deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); /* opens with a quick ease-out */
+  }
+}
+
+@keyframes pouch-float {
+  0%,
+  100% {
+    transform: perspective(1300px) rotateY(var(--pouch-yaw)) rotateX(var(--pouch-pitch)) rotate(var(--pouch-roll))
+      translateY(0);
+  }
+  50% {
+    transform: perspective(1300px) rotateY(calc(var(--pouch-yaw) + 4deg)) rotateX(var(--pouch-pitch))
+      rotate(var(--pouch-roll)) translateY(-10px);
+  }
+}
+
+/* The floor shadow tightens as the pouch floats up. */
+@keyframes pouch-floor {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.75;
+  }
+}
+
+:root[data-contrast="high"] .card-pouch-floor {
+  display: none;
 }

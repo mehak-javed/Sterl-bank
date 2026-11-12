@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Cinzel, Geist, Geist_Mono } from "next/font/google";
-import { DemoBanner } from "@/components/DemoBanner";
+import { CookieBanner } from "@/components/CookieBanner";
 import { QueryProvider } from "@/components/QueryProvider";
 import { ReduxProvider } from "@/stores/fx/ReduxProvider";
+import { SITE_URL } from "@/lib/site";
 import { UiStoreProvider } from "@/stores/UiStoreProvider";
 import "./globals.css";
 
@@ -27,7 +28,9 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   // Pages set just their own name ("Cards"); the template turns it into "Cards · Sterl".
   title: { default: "Sterl", template: "%s · Sterl" },
-  description: "Sterl is a portfolio demo bank. Not a real bank. All data is fake.",
+  description: "Modern personal banking: every balance at a glance, savings that build themselves.",
+  // The full address, so links in search results and shares (and the sitemap) are absolute.
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -44,8 +47,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <QueryProvider>
             {/* Root level, so FX orders survive moving between Banking and Markets. */}
             <ReduxProvider>
-              <DemoBanner />
               {children}
+              <CookieBanner />
             </ReduxProvider>
           </QueryProvider>
         </UiStoreProvider>

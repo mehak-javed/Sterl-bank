@@ -73,14 +73,19 @@ export type Payee = {
   accountNumber: string;
 };
 
+/** The kinds of card Sterl offers. Each one's name, look and network live in src/lib/cards.ts. */
+export type CardProduct = "debit" | "virtual" | "travel" | "premier";
+
 /**
- * A debit card. Only the last four digits are stored: 4242 comes from the published
- * test card number 4242 4242 4242 4242, never a real card.
+ * A card. Only the last four digits are stored, and they come from PUBLISHED test card numbers
+ * (e.g. 4242 4242 4242 4242), never a real card.
  */
 export type Card = {
   id: string;
   accountId: string;
-  brand: "Visa";
+  product: CardProduct;
+  /** The card network. Always the one its product uses (checked by a test). */
+  brand: "Visa" | "Mastercard";
   nameOnCard: string;
   last4: string;
   expiryMonth: number; // 1-12

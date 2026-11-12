@@ -26,8 +26,8 @@ export default function CreditRiskPage() {
           Coming soon
         </h2>
         <p className="text-muted">
-          A desk for lending to companies: 500 fictional borrowers, their credit limits and exposure, limit
-          breaches that need review, and where the bank&apos;s lending is concentrated. All companies are fake.
+          A desk for lending to companies: 500 corporate borrowers, their credit limits and exposure, limit
+          breaches that need review, and where the bank&apos;s lending is concentrated.
         </p>
       </section>
 
