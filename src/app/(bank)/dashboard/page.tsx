@@ -1,7 +1,7 @@
+import { CustomerFirstName } from "@/components/shell/CustomerChip";
 import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeftRight, CreditCard, Send } from "lucide-react";
-import customer from "@/mocks/data/customer.json";
 import { BalanceHero, BalanceHeroSkeleton } from "@/components/BalanceHero";
 import { AccountsOverview, AccountsOverviewSkeleton } from "@/components/AccountsOverview";
 import { CardPanel } from "@/components/CardPanel";
@@ -30,7 +30,7 @@ export default function DashboardPage() {
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="eyebrow text-muted">Welcome back</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-heading sm:text-4xl">{customer.firstName}</h1>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-heading sm:text-4xl"><CustomerFirstName /></h1>
         </div>
         <nav aria-label="Quick actions">
           <ul className="flex gap-2 overflow-x-auto">

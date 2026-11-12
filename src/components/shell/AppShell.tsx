@@ -5,6 +5,8 @@ import { DisplaySettings } from "@/components/DisplaySettings";
 import { SiteNav } from "@/components/SiteNav";
 import { NAV_LINKS } from "@/lib/nav";
 import { BrandMark } from "./BrandMark";
+import { CustomerChip } from "./CustomerChip";
+import { LogoutButton } from "./LogoutButton";
 import { NavIcon } from "./NavIcon";
 import { Sheet } from "./Sheet";
 
@@ -13,13 +15,9 @@ import { Sheet } from "./Sheet";
  * - Desktop (lg and up): a fixed sidebar with every section, display settings and who's signed in.
  * - Phones: a slim top bar, and a bottom tab bar within thumb reach, like a banking app.
  * The page itself scrolls; the navigation stays put.
+ * Who's logged in comes from the session (CustomerChip), and Log out ends it on the server.
  */
-export function AppShell({ customerName, children }: { customerName: string; children: ReactNode }) {
-  const initials = customerName
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2);
+export function AppShell({ children }: { children: ReactNode }) {
   const moreLinks = NAV_LINKS.filter((link) => !link.inTabBar);
 
   return (
@@ -53,15 +51,8 @@ export function AppShell({ customerName, children }: { customerName: string; chi
           >
             <DisplaySettings />
           </Sheet>
-          <div className="flex items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3">
-            <span aria-hidden="true" className="chip h-9 w-9 text-sm font-semibold">
-              {initials}
-            </span>
-            <span className="min-w-0 text-sm">
-              <span className="block truncate font-semibold">{customerName}</span>
-              <span className="block text-xs text-muted">Personal account</span>
-            </span>
-          </div>
+          <LogoutButton className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted hover:bg-surface-2 hover:text-foreground disabled:opacity-60" />
+          <CustomerChip variant="sidebar" />
         </div>
       </aside>
 
@@ -69,9 +60,7 @@ export function AppShell({ customerName, children }: { customerName: string; chi
         {/* ---------- Phone top bar ---------- */}
         <header className="flex items-center justify-between px-4 pt-4 lg:hidden">
           <BrandMark />
-          <span aria-hidden="true" className="chip h-9 w-9 text-sm font-semibold">
-            {initials}
-          </span>
+          <CustomerChip variant="avatar" />
         </header>
 
         {/* The one <main> per page lives here, so pages don't render their own.
@@ -113,6 +102,7 @@ export function AppShell({ customerName, children }: { customerName: string; chi
             <div className="border-t border-line pt-4">
               <DisplaySettings />
             </div>
+            <LogoutButton className="flex w-full items-center justify-center gap-2 rounded-xl border border-line px-3 py-3 font-medium disabled:opacity-60" />
           </Sheet>
         </div>
       </nav>

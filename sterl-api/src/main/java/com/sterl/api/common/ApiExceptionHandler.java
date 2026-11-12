@@ -44,8 +44,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		String detail = describeFields(ex.getBindingResult().getFieldErrors()).sorted().collect(Collectors.joining("; "));
-		return handleExceptionInternal(ex, ProblemDetail.forStatusAndDetail(status, detail), headers, status, request);
+		List<FieldError> fields = ex.getBindingResult().getFieldErrors();
+		String detail = describeFields(fields).sorted().collect(Collectors.joining("; "));
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
+		// Also as a map, field -> message, so a form can show each message under the right box
+		// (e.g. the sign-up form). The first message per field wins.
+		problem.setProperty("errors", fields.stream().collect(Collectors.toMap(
+				FieldError::getField, error -> String.valueOf(error.getDefaultMessage()), (first, second) -> first,
+				java.util.TreeMap::new)));
+		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
 	private static Stream<String> describe(ParameterValidationResult result) {

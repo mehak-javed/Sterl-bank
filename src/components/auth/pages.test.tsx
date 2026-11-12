@@ -1,20 +1,25 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+const { QueryClient, QueryClientProvider } = await import("@tanstack/react-query");
+const withQuery = (node: React.ReactNode) => <QueryClientProvider client={new QueryClient()}>{node}</QueryClientProvider>;
 const { default: LoginPage } = await import("@/app/(auth)/login/page");
 const { default: SignUpPage } = await import("@/app/(auth)/signup/page");
 const { default: AuthLayout } = await import("@/app/(auth)/layout");
 
 describe("log in and sign up pages", () => {
   it("log in asks for email and password only", () => {
-    const html = renderToStaticMarkup(<LoginPage />);
+    const html = renderToStaticMarkup(withQuery(<LoginPage />));
     expect(html.match(/<input/g)).toHaveLength(2);
     expect(html).toContain("current-password");
   });
 
   it("sign up asks for first name, last name, email and password only", () => {
-    const html = renderToStaticMarkup(<SignUpPage />);
+    const html = renderToStaticMarkup(withQuery(<SignUpPage />));
     expect(html.match(/<input/g)).toHaveLength(4);
     for (const label of ["First name", "Last name", "Email", "Password"]) expect(html).toContain(`>${label}</label>`);
   });

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = { title: "Log in" };
@@ -9,7 +10,10 @@ export default function LoginPage() {
     <>
       <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
       <div className="mt-6">
-        <LoginForm />
+        {/* Suspense: the form reads ?next= from the address, which is only known in the browser. */}
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
       <p className="mt-6 text-center text-sm text-muted">
         New to Sterl?{" "}

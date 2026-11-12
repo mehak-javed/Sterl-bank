@@ -50,7 +50,7 @@ public class SecurityConfig {
 						// Public: health checks, the CSRF token, logging in, and Spring's error page.
 						.requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/auth/csrf").permitAll()
-						.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
 						.requestMatchers("/error").permitAll()
 						// Banking: customers only. (Staff areas get their own roles in Week 3.)
 						.requestMatchers("/api/accounts/**", "/api/transfers/**").hasRole("CUSTOMER")

@@ -31,7 +31,7 @@ const PROTECTIONS = [
   {
     icon: Timer,
     title: "Idle sessions end",
-    text: "Step away for 15 minutes and you're logged out on the server, not just in the browser.",
+    text: "Step away for an hour and you're logged out on the server, not just in the browser.",
   },
   {
     icon: LockKeyhole,

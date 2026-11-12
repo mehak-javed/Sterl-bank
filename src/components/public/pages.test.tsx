@@ -19,7 +19,6 @@ describe("the public footer", () => {
       "Help",
       "Recruitment scams",
       "Security and confidentiality",
-      "Cookies",
       "Log in",
       "Sign up",
     ]);
