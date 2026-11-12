@@ -25,9 +25,9 @@ service, spam other users, or try to access anything outside this demo.
 | Access | Deny by default; every query filtered by the logged-in customer, with tests proving one customer can't read or move another's money (OWASP API1); other customers' ids return 404 |
 | Browser | CSRF token on every state-changing request; CSP `default-src 'none'`, no framing, no MIME sniffing, no referrer, no caching of responses |
 | Money | Double-entry ledger enforced by the database; append-only ledger and audit log; idempotent transfers with row locking |
-| Data | 100% fake data generated with a fixed seed (ADR-002). Login with passkeys never sends biometric data to Sterl |
+| Data | 100% fake data generated with a fixed seed (ADR-002). |
 
-Coming next: two-factor authentication and passkeys, account lockout, inactivity logout, step-up
+Coming next: two-factor authentication, account lockout, step-up
 authentication for sensitive actions, and "sign out of all devices".
 
 ## Supported versions
