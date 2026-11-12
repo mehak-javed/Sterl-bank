@@ -18,7 +18,7 @@ const STEPS = [
  * as plain HTML; only the "Meet our people" stories (PeopleStories) run in the browser.
  *
  * Look: a dark, restrained fintech landing page (Mehak's direction): near-black page, matte-silver
- * text, gold accents. Sections: hero ("Work that matters, every single day") with the card pouch, send money,
+ * text, gold accents. Sections: hero ("Everyday money, made effortless") with the card pouch, send money,
  * "Meet our people" stories, how it works, security, help. The header's Meet our community
  * and Help links scroll to these sections; the full /security and /help pages stay as their own pages.
  * Layout ideas from references Mehak shared; Sterl's own
@@ -37,12 +37,12 @@ export default function HomePage() {
 
         <div>
           <h1 id="hero-heading" className="text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
-            <span className="wipe-in block">Work that matters,</span>
-            <span className="wipe-in-late text-gold-gradient block">every single day</span>
+            <span className="wipe-in block">Everyday money,</span>
+            <span className="wipe-in-late text-gold-gradient block">made effortless</span>
           </h1>
           <p className="mt-6 max-w-lg text-lg text-muted">
-            At Sterl there&apos;s a place for everyone: room to learn, room to grow, and the chance to make a
-            real difference for the people we serve, wherever they are.
+            Pay anyone in seconds, put money aside without thinking about it, and always know exactly where you
+            stand.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">

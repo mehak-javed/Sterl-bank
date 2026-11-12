@@ -568,11 +568,13 @@ body::before {
   }
 
   /* The headline reveals left to right, once, when the page loads. */
+  /* 1.8 s with an even ease (Mehak, Nov 12: 0.9 s with a fast start felt rushed). The second line
+     starts 0.6 s later, so the two lines read one after the other. */
   .wipe-in {
-    animation: wipe-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: wipe-in 1.8s cubic-bezier(0.45, 0, 0.15, 1) both;
   }
   .wipe-in-late {
-    animation: wipe-in 0.9s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: wipe-in 1.8s 0.6s cubic-bezier(0.45, 0, 0.15, 1) both;
   }
   @keyframes wipe-in {
     from {
@@ -936,5 +938,151 @@ body:has(.public-site) {
 }
 
 :root[data-contrast="high"] .card-pouch-floor {
+  display: none;
+}
+
+/* ---------- Scroll backdrop (components/public/ScrollBackdrop.tsx) ---------- */
+
+/* Behind everything on the public pages. z-index -1 inside .public-site (which makes no stacking
+   context) paints above the page colour and below all content. */
+.scroll-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  --sb-ring: rgb(212 175 55 / 0.22);
+}
+.sb-layer {
+  position: absolute;
+  will-change: transform, opacity;
+}
+/* Each glow is a radial gradient that fades to nothing: a soft light with no blur filter (blur on
+   large layers is slow and failed to paint earlier in this project). */
+.sb-glow-gold {
+  width: 75vmax;
+  height: 75vmax;
+  left: -22vmax;
+  top: -28vmax;
+  background: radial-gradient(closest-side, rgb(212 175 55 / 0.30), rgb(212 175 55 / 0.09) 55%, transparent 74%);
+}
+.sb-glow-amber {
+  width: 62vmax;
+  height: 62vmax;
+  right: -26vmax;
+  top: 18vh;
+  opacity: 0.55;
+  background: radial-gradient(closest-side, rgb(255 150 40 / 0.22), rgb(160 85 15 / 0.08) 55%, transparent 74%);
+}
+.sb-glow-silver {
+  width: 58vmax;
+  height: 58vmax;
+  left: 8vw;
+  top: 70vh;
+  opacity: 0;
+  background: radial-gradient(closest-side, rgb(184 188 194 / 0.16), rgb(120 128 140 / 0.05) 55%, transparent 74%);
+}
+.sb-rings {
+  width: 130vmax;
+  height: 130vmax;
+  left: calc(50% - 65vmax);
+  top: calc(30% - 65vmax);
+  opacity: 0.55;
+}
+/* A warm wash over the middle of the page, like the reference's amber sections. */
+.sb-veil {
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 0%, rgb(70 42 8 / 0.28) 55%, transparent 100%);
+}
+
+/* Older browsers (no scroll-linked animations yet): the light still breathes slowly on a timer. */
+@media (prefers-reduced-motion: no-preference) {
+  .sb-glow-gold {
+    animation: sb-breathe 18s ease-in-out infinite alternate;
+  }
+  .sb-glow-amber {
+    animation: sb-breathe 24s ease-in-out -6s infinite alternate-reverse;
+  }
+  .sb-rings {
+    animation: sb-turn 120s linear infinite;
+  }
+}
+@keyframes sb-breathe {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(6vw, 5vh, 0) scale(1.12); }
+}
+@keyframes sb-turn {
+  to { transform: rotate(360deg); }
+}
+
+/* Modern browsers: every layer moves WITH the scroll. Progress 0% = top of the page, 100% = bottom,
+   so fast scrolling moves the light fast and stopping stops it. Each layer travels a different
+   distance: that difference is the depth (parallax). */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sb-glow-gold,
+    .sb-glow-amber,
+    .sb-glow-silver,
+    .sb-rings,
+    .sb-veil {
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-iteration-count: 1;
+      animation-direction: normal;
+      animation-delay: 0s;
+      animation-timeline: scroll(root block);
+    }
+    .sb-glow-gold { animation-name: sb-gold; }
+    .sb-glow-amber { animation-name: sb-amber; }
+    .sb-glow-silver { animation-name: sb-silver; }
+    .sb-rings { animation-name: sb-rings; }
+    .sb-veil { animation-name: sb-veil; }
+  }
+}
+@keyframes sb-gold {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  45% { transform: translate3d(38vw, 22vh, 0) scale(1.3); opacity: 0.75; }
+  100% { transform: translate3d(8vw, 52vh, 0) scale(0.9); opacity: 0.45; }
+}
+@keyframes sb-amber {
+  0% { transform: translate3d(0, 0, 0) scale(0.85); opacity: 0.35; }
+  50% { transform: translate3d(-34vw, 16vh, 0) scale(1.25); opacity: 1; }
+  100% { transform: translate3d(-12vw, -18vh, 0) scale(1); opacity: 0.4; }
+}
+@keyframes sb-silver {
+  0%, 35% { transform: translate3d(0, 20vh, 0) scale(0.8); opacity: 0; }
+  100% { transform: translate3d(30vw, -40vh, 0) scale(1.2); opacity: 1; }
+}
+@keyframes sb-rings {
+  0% { transform: rotate(0deg) scale(0.85); opacity: 0.55; }
+  60% { opacity: 0.35; }
+  100% { transform: translate3d(0, 25vh, 0) rotate(110deg) scale(1.25); opacity: 0.5; }
+}
+@keyframes sb-veil {
+  0%, 15% { opacity: 0; }
+  50% { opacity: 1; }
+  85%, 100% { opacity: 0.2; }
+}
+
+/* Sections ease up into view as they scroll in (like the reference's cards). ScrollReveal.tsx marks
+   sections that start BELOW the window "pending" and lets them in when they're about to appear. A
+   transition, not a scroll-timeline: whole-section scroll timelines stopped the content painting in
+   testing. Sections on screen at load are never hidden, and without JavaScript nothing is. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-pending {
+    opacity: 0;
+    transform: translate3d(0, 48px, 0);
+  }
+  .reveal-in {
+    transition:
+      opacity 0.9s ease-out,
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+/* High contrast: plain page, nothing moving behind the text. */
+:root[data-contrast="high"] .scroll-backdrop {
   display: none;
 }

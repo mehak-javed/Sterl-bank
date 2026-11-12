@@ -17,7 +17,7 @@ const ACCOUNTS = [
 ];
 
 /**
- * "Everyday money, made effortless": a public landing-page section. Left: a headline, short
+ * Send money: a public landing-page section (its old "Everyday money, made effortless" heading is now the hero). Left: a headline, short
  * paragraph and a gold button. Right: a picture of Sterl's send-money screen in a frosted-glass
  * frame over a gold horizon glow. Below: three feature cards (Analytics, Budgeting, Accounts),
  * each with a small preview of the app.
@@ -31,20 +31,12 @@ const ACCOUNTS = [
 export function SendMoneyShowcase() {
   return (
     <section id="send-money" aria-labelledby="send-heading" className="mt-24 w-full scroll-mt-28 px-4 sm:px-8 lg:px-12">
-      <div className="text-center">
-        <h2 id="send-heading" className="text-4xl font-semibold tracking-tight sm:text-5xl">
-          Everyday money,
-          <span className="text-gold-gradient block">made effortless</span>
-        </h2>
-        <p className="mt-4 text-lg text-muted">Pay, save and keep track, all in one calm place.</p>
-      </div>
-
-      <div className="mt-14 grid items-center gap-12 lg:grid-cols-2">
+      <div className="grid items-center gap-12 lg:grid-cols-2">
         {/* Left: the message. */}
         <div>
-          <h3 className="max-w-lg text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
+          <h2 id="send-heading" className="max-w-lg text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
             Send money in seconds, and never twice
-          </h3>
+          </h2>
           <p className="mt-4 max-w-lg text-lg text-muted">
             Choose who to pay, check the amount, confirm. Every payment is checked, recorded, and can only
             ever happen once, even if you tap twice.

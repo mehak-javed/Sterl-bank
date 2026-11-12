@@ -103,3 +103,22 @@ describe("the header menu", () => {
     expect(labels).toContain("/help");
   });
 });
+
+describe("the home page hero (Mehak, Nov 12)", () => {
+  it("leads with Everyday money, made effortless, written for customers", async () => {
+    const { default: HomePage } = await import("@/app/(public)/page");
+    const html = renderToStaticMarkup(<HomePage />);
+    const h1 = html.slice(html.indexOf("<h1"), html.indexOf("</h1>"));
+    expect(h1).toContain("Everyday money,");
+    expect(h1).toContain("made effortless");
+    expect(html.match(/Everyday money,/g)).toHaveLength(1); // not repeated further down
+  });
+
+  it("no longer has the careers-style line or the 'calm place' line", async () => {
+    const { default: HomePage } = await import("@/app/(public)/page");
+    const html = renderToStaticMarkup(<HomePage />);
+    expect(html).not.toContain("Work that matters");
+    expect(html).not.toContain("room to learn");
+    expect(html).not.toContain("all in one calm place");
+  });
+});
