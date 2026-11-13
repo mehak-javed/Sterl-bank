@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { API_ORIGIN } from "@/lib/api-origin";
+import { forwardedApiHeaders, isForwardedApiPath } from "@/lib/api-forwarding";
 import { isProtected, redirectForRole } from "@/lib/auth/guard";
 
 /**
@@ -11,6 +12,12 @@ import { isProtected, redirectForRole } from "@/lib/auth/guard";
  */
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  // Banking API calls: pass the visitor's address on to the API (next.config.ts then forwards them).
+  if (isForwardedApiPath(pathname)) {
+    return NextResponse.next({
+      request: { headers: forwardedApiHeaders(request.headers, process.env.STERL_PROXY_SECRET) },
+    });
+  }
   if (!isProtected(pathname)) return NextResponse.next();
 
   const session = request.cookies.get("SESSION");
@@ -36,7 +43,10 @@ export async function proxy(request: NextRequest) {
   return NextResponse.redirect(login);
 }
 
-/** Only run for the personal banking pages (and never for static files or images). */
+/** Only run for the personal banking pages and the forwarded API (never for static files or images). */
 export const config = {
-  matcher: ["/dashboard/:path*", "/accounts/:path*", "/transactions/:path*", "/payments/:path*", "/cards/:path*", "/markets/:path*", "/credit-risk/:path*"],
+  matcher: [
+    "/api/auth/:path*", "/api/accounts/:path*", "/api/cards/:path*", "/api/transfers/:path*",
+    "/api/risk/:path*", "/api/payees/:path*", "/api/payments/:path*",
+    "/dashboard/:path*", "/accounts/:path*", "/transactions/:path*", "/payments/:path*", "/cards/:path*", "/markets/:path*", "/credit-risk/:path*"],
 };

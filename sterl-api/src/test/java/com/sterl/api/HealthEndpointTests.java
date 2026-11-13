@@ -61,10 +61,10 @@ class HealthEndpointTests {
 	}
 
 	@Test
-	void infoCarriesTheDemoDisclaimer() {
+	void infoCarriesTheDisclaimer() {
 		assertThat(mvc.get().uri("/actuator/info"))
 				.hasStatusOk()
 				.bodyJson().extractingPath("$.app.disclaimer")
-				.isEqualTo("Sterl is a portfolio demo. Not a real bank. All data is fake.");
+				.isEqualTo("Sterl is a portfolio project, not a real bank. All data is invented.");
 	}
 }
