@@ -27,8 +27,9 @@ export function forwardedApiHeaders(incoming: Headers, secret: string | undefine
   headers.delete(SECRET_HEADER);
   headers.delete(CLIENT_IP_HEADER);
   const visitor = incoming.get("x-forwarded-for")?.split(",")[0]?.trim() || incoming.get("x-real-ip")?.trim();
-  if (secret && visitor) {
-    headers.set(SECRET_HEADER, secret);
+  const cleanSecret = secret?.trim(); // a value pasted with a line break must still match the API's
+  if (cleanSecret && visitor) {
+    headers.set(SECRET_HEADER, cleanSecret);
     headers.set(CLIENT_IP_HEADER, visitor);
   }
   return headers;

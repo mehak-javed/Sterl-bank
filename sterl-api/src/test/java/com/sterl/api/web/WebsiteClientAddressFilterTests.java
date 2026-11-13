@@ -75,6 +75,19 @@ class WebsiteClientAddressFilterTests {
 		assertThat(WebsiteClientAddressFilter.ipLiteralOrNull(null)).isNull();
 	}
 
+	@Test
+	void aSecretPastedWithALineBreakStillMatches() throws Exception {
+		var filter = new WebsiteClientAddressFilter(SECRET + "\n");
+		var request = new org.springframework.mock.web.MockHttpServletRequest();
+		request.setRemoteAddr(WEBSITE_SERVER);
+		request.addHeader(WebsiteClientAddressFilter.SECRET_HEADER, SECRET);
+		request.addHeader(WebsiteClientAddressFilter.CLIENT_IP_HEADER, "203.0.113.60");
+		var seen = new String[1];
+		filter.doFilter(request, new org.springframework.mock.web.MockHttpServletResponse(),
+				(req, res) -> seen[0] = req.getRemoteAddr());
+		assertThat(seen[0]).isEqualTo("203.0.113.60");
+	}
+
 	// ---------- helpers ----------
 
 	/** Tests share one database, so each test only reads the audit rows it wrote itself. */

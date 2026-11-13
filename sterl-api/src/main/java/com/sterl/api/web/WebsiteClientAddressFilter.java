@@ -45,7 +45,8 @@ public class WebsiteClientAddressFilter extends OncePerRequestFilter {
 	private final byte[] secret;
 
 	public WebsiteClientAddressFilter(@Value("${sterl.proxy.shared-secret:}") String secret) {
-		this.secret = secret.isBlank() ? null : secret.getBytes(StandardCharsets.UTF_8);
+		// strip(): a value pasted into a hosting dashboard with a line break must still match the website's.
+		this.secret = secret.isBlank() ? null : secret.strip().getBytes(StandardCharsets.UTF_8);
 	}
 
 	@Override
