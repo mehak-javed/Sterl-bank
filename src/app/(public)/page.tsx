@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { HelpQuestions } from "@/components/public/HelpQuestions";
 import { CardPouch } from "@/components/public/CardPouch";
-import { FloatingOrbs } from "@/components/public/FloatingOrbs";
 import { PeopleStories } from "@/components/public/PeopleStories";
 import { HighlightGrid, PROTECTIONS } from "@/components/public/SecurityHighlights";
 import { SendMoneyShowcase } from "@/components/public/SendMoneyShowcase";
@@ -33,8 +32,6 @@ export default function HomePage() {
         aria-labelledby="hero-heading"
         className="relative isolate grid items-center gap-10 px-4 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[1fr_1.1fr] lg:px-12"
       >
-        <FloatingOrbs />
-
         <div>
           <h1 id="hero-heading" className="text-5xl leading-[1.04] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
             <span className="wipe-in block">Everyday money,</span>

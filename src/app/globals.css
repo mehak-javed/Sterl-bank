@@ -484,7 +484,7 @@ body::before {
 /*
  * The glass LOOK without the blur. backdrop-filter is expensive: on a long page with many blurred
  * panels the browser failed to paint some of them at all (found while checking the home page).
- * So: real blur only where something sits behind to blur (the header, the hero over the orbs),
+ * So: real blur only where something sits behind to blur (the header),
  * and `panel` everywhere else, including panels inside a glass card.
  */
 @utility panel {
@@ -539,34 +539,7 @@ body::before {
   }
 }
 
-/* A polished gold sphere (pure CSS, no image). Decoration only: hidden in high contrast. */
-@utility orb {
-  border-radius: 9999px;
-  background: radial-gradient(circle at 32% 28%, #fff3c4 0%, #f0d27a 14%, #d4af37 38%, #8a6a1f 70%, #2b220c 100%);
-  box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
-}
-:root[data-contrast="high"] .orb {
-  display: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  /* Slow floating, like the objects drifting around the glass card. */
-  .float-slow {
-    animation: float 7s ease-in-out infinite;
-  }
-  .float-slower {
-    animation: float 10s ease-in-out infinite reverse;
-  }
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-14px) rotate(3deg);
-    }
-  }
-
   /* The headline reveals left to right, once, when the page loads. */
   /* 1.8 s with an even ease (Mehak, Nov 12: 0.9 s with a fast start felt rushed). The second line
      starts 0.6 s later, so the two lines read one after the other. */
@@ -944,88 +917,179 @@ body:has(.public-site) {
 /* ---------- Scroll backdrop (components/public/ScrollBackdrop.tsx) ---------- */
 
 /* Behind everything on the public pages. z-index -1 inside .public-site (which makes no stacking
-   context) paints above the page colour and below all content. */
+   context) paints above the page colour and below all content. Calm and modern on purpose
+   (Mehak, Nov 12: no stars, orbits or planets): soft washes of light, a faint grid, fine lines. */
 .scroll-backdrop {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  --sb-ring: rgb(212 175 55 / 0.22);
 }
 .sb-layer {
   position: absolute;
   will-change: transform, opacity;
 }
-/* Each glow is a radial gradient that fades to nothing: a soft light with no blur filter (blur on
-   large layers is slow and failed to paint earlier in this project). */
-.sb-glow-gold {
-  width: 75vmax;
-  height: 75vmax;
-  left: -22vmax;
-  top: -28vmax;
-  background: radial-gradient(closest-side, rgb(212 175 55 / 0.30), rgb(212 175 55 / 0.09) 55%, transparent 74%);
+/* Wide, flat ellipses of light (a "mesh gradient"), not round suns. Each fades to nothing: a soft
+   light with no blur filter (blur on large layers is slow and failed to paint earlier in this project). */
+.sb-wash-gold {
+  width: 110vw;
+  height: 70vh;
+  left: -30vw;
+  top: -22vh;
+  background: radial-gradient(ellipse closest-side, rgb(212 175 55 / 0.20), rgb(212 175 55 / 0.06) 60%, transparent 100%);
 }
-.sb-glow-amber {
-  width: 62vmax;
-  height: 62vmax;
-  right: -26vmax;
-  top: 18vh;
-  opacity: 0.55;
-  background: radial-gradient(closest-side, rgb(255 150 40 / 0.22), rgb(160 85 15 / 0.08) 55%, transparent 74%);
+.sb-wash-amber {
+  width: 95vw;
+  height: 60vh;
+  right: -35vw;
+  top: 30vh;
+  opacity: 0.6;
+  background: radial-gradient(ellipse closest-side, rgb(230 140 40 / 0.14), rgb(140 80 20 / 0.05) 60%, transparent 100%);
 }
-.sb-glow-silver {
-  width: 58vmax;
-  height: 58vmax;
-  left: 8vw;
-  top: 70vh;
+.sb-wash-silver {
+  width: 100vw;
+  height: 65vh;
+  left: 0;
+  top: 60vh;
   opacity: 0;
-  background: radial-gradient(closest-side, rgb(184 188 194 / 0.16), rgb(120 128 140 / 0.05) 55%, transparent 74%);
+  background: radial-gradient(ellipse closest-side, rgb(184 188 194 / 0.10), transparent 100%);
 }
-.sb-rings {
-  width: 130vmax;
-  height: 130vmax;
-  left: calc(50% - 65vmax);
-  top: calc(30% - 65vmax);
-  opacity: 0.55;
+/* A very faint 56 px grid, like a ledger or a chart, fading out towards the edges (mask). */
+.sb-grid {
+  inset: -10vh -10vw;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgb(212 175 55 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(212 175 55 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, black 0%, transparent 75%);
 }
 /* A warm wash over the middle of the page, like the reference's amber sections. */
 .sb-veil {
   inset: 0;
   opacity: 0;
-  background: linear-gradient(180deg, transparent 0%, rgb(70 42 8 / 0.28) 55%, transparent 100%);
+  background: linear-gradient(180deg, transparent 0%, rgb(70 42 8 / 0.24) 55%, transparent 100%);
+}
+/* A soft band of light that glides across now and then, like light catching brushed metal. */
+.sb-sweep {
+  inset: -20% -60%;
+  opacity: 0;
+  background: linear-gradient(105deg, transparent 42%, rgb(247 221 139 / 0.06) 48%, rgb(247 221 139 / 0.10) 50%,
+      rgb(247 221 139 / 0.06) 52%, transparent 58%);
 }
 
-/* Older browsers (no scroll-linked animations yet): the light still breathes slowly on a timer. */
+/* Long soft ribbons of light that sway and cross: a modern gradient, not glowing circles. */
+.sb-ribbon {
+  width: 150vw;
+  height: 26vh;
+  left: -25vw;
+  border-radius: 50%;
+}
+.sb-ribbon-1 {
+  top: 18vh;
+  background: radial-gradient(ellipse closest-side, rgb(212 175 55 / 0.16), rgb(212 175 55 / 0.05) 55%, transparent 100%);
+  transform: rotate(-16deg);
+}
+.sb-ribbon-2 {
+  top: 52vh;
+  background: radial-gradient(ellipse closest-side, rgb(230 130 40 / 0.13), rgb(150 85 20 / 0.04) 55%, transparent 100%);
+  transform: rotate(12deg);
+}
+/* Glass cards: translucent, a thin gold edge, a light catch along the top. No blur filter (cost). */
+.sb-depth {
+  inset: 0;
+}
+.sb-card {
+  position: absolute;
+  aspect-ratio: 1.586; /* a real bank card's shape */
+  border-radius: 18px;
+  border: 1px solid rgb(212 175 55 / 0.20);
+  background:
+    linear-gradient(160deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.015) 45%, rgb(212 175 55 / 0.05)),
+    linear-gradient(180deg, rgb(247 221 139 / 0.10), transparent 18%);
+  box-shadow: 0 30px 60px rgb(0 0 0 / 0.35);
+  transform: rotate(var(--sb-r, 0deg));
+}
+.sb-depth-far .sb-card {
+  opacity: 0.45;
+  scale: 0.8;
+}
+.sb-depth-near .sb-card {
+  opacity: 0.6;
+}
+/* The chart across the lower screen. pathLength="1" lets the "draw" run from 1 (hidden) to 0 (drawn). */
+.sb-chart {
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 38vh;
+  opacity: 0.8;
+}
+.sb-chart-line {
+  stroke: rgb(212 175 55 / 0.55);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* Slow loops that move on their own (and the fallback for browsers without scroll-linked animation). */
 @media (prefers-reduced-motion: no-preference) {
-  .sb-glow-gold {
-    animation: sb-breathe 18s ease-in-out infinite alternate;
+  .sb-wash-gold {
+    animation: sb-breathe 22s ease-in-out infinite alternate;
   }
-  .sb-glow-amber {
-    animation: sb-breathe 24s ease-in-out -6s infinite alternate-reverse;
+  .sb-wash-amber {
+    animation: sb-breathe 28s ease-in-out -8s infinite alternate-reverse;
   }
-  .sb-rings {
-    animation: sb-turn 120s linear infinite;
+  /* Ribbons sway slowly, out of step with each other. */
+  .sb-ribbon-1 { animation: sb-sway-1 26s ease-in-out infinite alternate; }
+  .sb-ribbon-2 { animation: sb-sway-2 32s ease-in-out infinite alternate; }
+  /* Each card floats on its own cycle (--sb-f) around its own tilt (--sb-r). */
+  .sb-card { animation: sb-float var(--sb-f, 18s) ease-in-out infinite alternate; }
+  /* Every 16 s a band of light crosses the screen in about 4.5 s, then rests. */
+  .sb-sweep {
+    animation: sb-sweep 16s ease-in-out 3s infinite;
   }
 }
 @keyframes sb-breathe {
   from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(6vw, 5vh, 0) scale(1.12); }
+  to { transform: translate3d(5vw, 4vh, 0) scale(1.08); }
 }
-@keyframes sb-turn {
-  to { transform: rotate(360deg); }
+@keyframes sb-sway-1 {
+  from { transform: translate3d(-6vw, 0, 0) rotate(-16deg); }
+  to { transform: translate3d(8vw, 4vh, 0) rotate(-10deg); }
+}
+@keyframes sb-sway-2 {
+  from { transform: translate3d(6vw, 0, 0) rotate(12deg); }
+  to { transform: translate3d(-8vw, -5vh, 0) rotate(7deg); }
+}
+@keyframes sb-float {
+  from { transform: translate3d(0, 0, 0) rotate(var(--sb-r, 0deg)); }
+  to { transform: translate3d(0, -18px, 0) rotate(calc(var(--sb-r, 0deg) + 3deg)); }
+}
+@keyframes sb-sweep {
+  0% { transform: translate3d(-40%, 0, 0); opacity: 0; }
+  8% { opacity: 1; }
+  28% { transform: translate3d(40%, 0, 0); opacity: 0; }
+  100% { transform: translate3d(40%, 0, 0); opacity: 0; }
 }
 
-/* Modern browsers: every layer moves WITH the scroll. Progress 0% = top of the page, 100% = bottom,
-   so fast scrolling moves the light fast and stopping stops it. Each layer travels a different
-   distance: that difference is the depth (parallax). */
+/* Modern browsers: the washes, grid and veil move WITH the scroll. Progress 0% = top of the page,
+   100% = bottom: scroll fast and the light moves fast, stop and it stops. Each layer travels a
+   different distance: that difference is the depth (parallax). */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .sb-glow-gold,
-    .sb-glow-amber,
-    .sb-glow-silver,
-    .sb-rings,
-    .sb-veil {
+    .sb-wash-gold,
+    .sb-wash-amber,
+    .sb-wash-silver,
+    .sb-grid,
+    .sb-veil,
+    .sb-depth-far,
+    .sb-depth-near,
+    .sb-chart-line,
+    .sb-chart-area {
       animation-duration: auto;
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -1034,31 +1098,54 @@ body:has(.public-site) {
       animation-delay: 0s;
       animation-timeline: scroll(root block);
     }
-    .sb-glow-gold { animation-name: sb-gold; }
-    .sb-glow-amber { animation-name: sb-amber; }
-    .sb-glow-silver { animation-name: sb-silver; }
-    .sb-rings { animation-name: sb-rings; }
+    .sb-wash-gold { animation-name: sb-gold; }
+    .sb-wash-amber { animation-name: sb-amber; }
+    .sb-wash-silver { animation-name: sb-silver; }
+    .sb-grid { animation-name: sb-grid; }
     .sb-veil { animation-name: sb-veil; }
+    .sb-depth-far { animation-name: sb-depth-far; }
+    .sb-depth-near { animation-name: sb-depth-near; }
+    .sb-chart-line { animation-name: sb-chart-draw; }
+    .sb-chart-area { animation-name: sb-chart-glow; }
   }
+}
+/* Near cards travel further than far ones over the page: that difference is the depth. */
+@keyframes sb-depth-far {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -60vh, 0); }
+}
+@keyframes sb-depth-near {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -150vh, 0); }
+}
+/* The chart draws itself over the first 70% of the page, then stays. */
+@keyframes sb-chart-draw {
+  0% { stroke-dashoffset: 1; }
+  70%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes sb-chart-glow {
+  0%, 10% { opacity: 0; }
+  70%, 100% { opacity: 1; }
 }
 @keyframes sb-gold {
   0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
-  45% { transform: translate3d(38vw, 22vh, 0) scale(1.3); opacity: 0.75; }
-  100% { transform: translate3d(8vw, 52vh, 0) scale(0.9); opacity: 0.45; }
+  45% { transform: translate3d(30vw, 18vh, 0) scale(1.15); opacity: 0.7; }
+  100% { transform: translate3d(10vw, 45vh, 0) scale(0.95); opacity: 0.4; }
 }
 @keyframes sb-amber {
-  0% { transform: translate3d(0, 0, 0) scale(0.85); opacity: 0.35; }
-  50% { transform: translate3d(-34vw, 16vh, 0) scale(1.25); opacity: 1; }
-  100% { transform: translate3d(-12vw, -18vh, 0) scale(1); opacity: 0.4; }
+  0% { transform: translate3d(0, 0, 0) scale(0.9); opacity: 0.35; }
+  50% { transform: translate3d(-28vw, 12vh, 0) scale(1.15); opacity: 1; }
+  100% { transform: translate3d(-10vw, -15vh, 0) scale(1); opacity: 0.4; }
 }
 @keyframes sb-silver {
-  0%, 35% { transform: translate3d(0, 20vh, 0) scale(0.8); opacity: 0; }
-  100% { transform: translate3d(30vw, -40vh, 0) scale(1.2); opacity: 1; }
+  0%, 35% { transform: translate3d(0, 20vh, 0) scale(0.9); opacity: 0; }
+  100% { transform: translate3d(15vw, -35vh, 0) scale(1.1); opacity: 1; }
 }
-@keyframes sb-rings {
-  0% { transform: rotate(0deg) scale(0.85); opacity: 0.55; }
-  60% { opacity: 0.35; }
-  100% { transform: translate3d(0, 25vh, 0) rotate(110deg) scale(1.25); opacity: 0.5; }
+/* The grid glides up a little slower than the page: a quiet sense of depth. */
+@keyframes sb-grid {
+  0% { transform: translate3d(0, 0, 0); opacity: 0.5; }
+  50% { opacity: 0.35; }
+  100% { transform: translate3d(0, -8vh, 0); opacity: 0.45; }
 }
 @keyframes sb-veil {
   0%, 15% { opacity: 0; }

@@ -35,8 +35,14 @@ describe("the moving background", () => {
     const keyframes = backdropCss.match(/@keyframes sb-[\s\S]*?\n\}/g) ?? [];
     expect(keyframes.length).toBeGreaterThan(5);
     for (const block of keyframes) {
+      // The one exception: the chart line "draws" by moving its dash, a cheap paint on one small path.
+      const allowed = block.startsWith("@keyframes sb-chart-draw") ? ["stroke-dashoffset"] : ["transform", "opacity"];
       const properties = [...block.matchAll(/([a-z-]+):/g)].map((m) => m[1]);
-      for (const property of properties) expect(["transform", "opacity"]).toContain(property);
+      for (const property of properties) expect(allowed).toContain(property);
     }
+  });
+
+  it("is calm, not a space scene: no stars, orbits or planets", () => {
+    expect(html).not.toMatch(/sb-speck|sb-rings|<circle|class="orb/);
   });
 });
