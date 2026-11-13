@@ -26,8 +26,8 @@ Live: **https://sterl-bank.vercel.app** · Built by **Mehak Javed** as a portfol
 | Risk officer (staff) | `morgan.ellis@sterl.example` | `sterl risk passphrase` | **Credit risk** → release or reject the held payment, with a reason |
 | New customer | Sign up with any `@example.com` email | 12+ characters | An empty account: Add money, Add a card, pay someone |
 
-These are public logins for invented people ([docs/demo-accounts.md](docs/demo-accounts.md)). The banking
-pages need the Java API, which runs locally today (see [Run it locally](#run-it-locally)); the public site is live.
+These are public logins for invented people ([docs/demo-accounts.md](docs/demo-accounts.md)). The Java API runs
+on a free plan that sleeps when idle, so the first login after a quiet spell can take about a minute.
 
 | | |
 | --- | --- |

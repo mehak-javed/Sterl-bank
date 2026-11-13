@@ -62,6 +62,9 @@ software engineering role in wholesale credit risk. All data is invented; see [R
   protect: Java API + SQL, then the Credit Risk desk, then CI and tests, then deployment.
 - Done: personal banking on the Java API (sign-up, login, accounts, transfers, cards, Add money, payees),
   AI payment screening with a staff review queue, the risk officer login and the lending book (CR1, CR2).
-- Next: deploy the API; then AI stories #42 (cash flow), #41 (policy Q&A), #43 (with "Explore as a guest":
+- Live (Nov 13): website https://sterl-bank.vercel.app (Vercel project `sterl-bank`; `sterl-bank-1195` is a
+  duplicate to remove), API https://sterl-bank-v1.onrender.com (Render, Docker, Frankfurt, free, sleeps when idle),
+  PostgreSQL on Neon (Frankfurt). Setup in `docs/deploy.md`.
+- Next: AI stories #42 (cash flow), #41 (policy Q&A), #43 (with "Explore as a guest":
   a real guest login, sample data, deleted after 7 days); then Credit Risk CR3–CR6 (exposure engine, SQL
   reports, AG Grid desk, breach alerts); then Google sign-in and saved job applications.

@@ -8,6 +8,11 @@ describe("forwardedApiHeaders", () => {
     expect(out.get(CLIENT_IP_HEADER)).toBe("203.0.113.9");
   });
 
+  it("ignores a line break pasted after the secret", () => {
+    const out = forwardedApiHeaders(new Headers({ "x-forwarded-for": "203.0.113.9" }), "s3cret\n");
+    expect(out.get(SECRET_HEADER)).toBe("s3cret");
+  });
+
   it("falls back to x-real-ip", () => {
     const out = forwardedApiHeaders(new Headers({ "x-real-ip": "198.51.100.4" }), "s3cret");
     expect(out.get(CLIENT_IP_HEADER)).toBe("198.51.100.4");
