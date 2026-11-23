@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.2</version>
+		<version>4.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sterl</groupId>
@@ -75,14 +75,14 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk18on</artifactId>
-			<version>1.86</version>
+			<version>1.87</version>
 		</dependency>
 		<!-- Claude API (Anthropic's official Java SDK): writes the plain-English explanation of a payment
 		     screening decision. 3.3.0 = newest release at least two weeks old (23 Oct 2026). -->
 		<dependency>
 			<groupId>com.anthropic</groupId>
 			<artifactId>anthropic-java</artifactId>
-			<version>3.3.0</version>
+			<version>3.11.0</version>
 		</dependency>
 
 		<!-- Test-only: JUnit 5, AssertJ, MockMvc. Never shipped in the app. -->
